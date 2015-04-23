@@ -1,0 +1,106 @@
+package com.mangolion.epicmangorpg.frames;
+
+import java.awt.EventQueue;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+import javax.swing.JScrollPane;
+import javax.swing.JList;
+
+import com.mangolion.epicmangorpg.skills.Skill;
+import com.mangolion.epicmangorpg.steps.Step;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class FrameSkillInfo extends JFrame {
+
+	public Skill skill;
+	
+	JList<Step>listSteps;
+	DefaultListModel<Step>modelSteps = new DefaultListModel<Step>();
+	JTextArea lblDesc;
+	JLabel lblTotalTime, lblCost, lblTotalDamage, lblProficiency;
+	private JLabel lblCp;
+	public FrameSkillInfo(final Skill skill) {
+		this.skill = skill;
+		setSize(346, 456);
+		getContentPane().setLayout(null);
+		
+		lblDesc = new 	JTextArea("Desc:");
+		lblDesc.setEditable(false);
+		lblDesc.setLineWrap(true);
+		lblDesc.setBounds(10, 11, 312, 70);
+		getContentPane().add(lblDesc);
+		
+		lblTotalTime = new JLabel("Total Time:");
+		lblTotalTime.setBounds(10, 92, 312, 14);
+		getContentPane().add(lblTotalTime);
+		
+		lblCost = new JLabel("Costs:");
+		lblCost.setBounds(10, 117, 312, 14);
+		getContentPane().add(lblCost);
+		
+		lblTotalDamage = new JLabel("Total Damage:");
+		lblTotalDamage.setBounds(10, 142, 312, 14);
+		getContentPane().add(lblTotalDamage);
+		
+		JScrollPane scrollSteps = new JScrollPane();
+		scrollSteps.setBounds(10, 192, 312, 215);
+		getContentPane().add(scrollSteps);
+		
+		JLabel lblSteps = new JLabel("Steps");
+		lblSteps.setHorizontalAlignment(SwingConstants.CENTER);
+		scrollSteps.setColumnHeaderView(lblSteps);
+		
+		listSteps = new JList<Step>(modelSteps);
+		listSteps.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+						FrameStepInfo info = new FrameStepInfo(listSteps.getSelectedValue());
+						info.setVisible(true);
+				}
+				super.mouseClicked(e);
+			}
+		});
+		scrollSteps.setViewportView(listSteps);
+		
+		lblProficiency = new JLabel("Proficiency:");
+		lblProficiency.setBounds(10, 167, 312, 14);
+		getContentPane().add(lblProficiency);
+		
+		lblCp = new JLabel("CP:");
+		lblCp.setBounds(160, 167, 160, 14);
+		getContentPane().add(lblCp);
+		
+		JButton btnViewStatBuffs = new JButton("View Stat Buffs");
+		btnViewStatBuffs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new FrameBuffInfo(skill, skill.getProf());
+			}
+		});
+		btnViewStatBuffs.setBounds(213, 138, 107, 23);
+		getContentPane().add(btnViewStatBuffs);
+		refresh();
+	}
+	
+	public void refresh(){
+		setTitle(skill.name);
+		lblDesc.setText( skill.desc);
+		lblTotalTime.setText("Total Time: " + skill.getTotalTime() + " seconds");
+		lblCost.setText("Cost: [hp - " + skill.getTotalHPCost() + "] [mp - " + skill.getTotalMPCost() + "] [sp - "+ skill.getTotalSPCost() + "] [bal - " +skill.getTotalBalCost()+"]");
+		lblTotalDamage.setText("Damage: " + skill.getTotalDamage() + "(" + skill.getTotalDamagePercent()*100 + "%)");
+		lblCp.setText("CP: " + skill.getCP());
+		lblProficiency.setText("Prof: "+ skill.getProf()*100 + "%" );
+		modelSteps.clear();
+		for (Step step: skill.steps)
+			modelSteps.addElement(step);
+	}
+}

@@ -1,0 +1,42 @@
+Welcome to Epic Mango RPG!
+This game was inspired from Iyouboushi's mIRC BattleArena bot - https://github.com/Iyouboushi/mIRC-BattleArena
+
+Overview:
+Its more or less a dungeon crawling game, you fight monsters and procceeds to the lower floors, with stronger ones. 
+
+Combat system:
+The combat system is much more dynamic than the traditional turn-based game. Instead of having each side takes turn one after another, Mango RPG uses a continuous time line. For example, in 4 seconds, one character can use 3 fast skills whereareas another can use 1 slow skill.
+
+Skills:
+Skills are what the character use mainly in battle, even normal attacks are skills. A skill is composed of one or many steps, each step is independent and can be cancelled/interupted at anytime. For example, the skill sword combo composes of 3 slashes(steps), each slash deals more damage than the last, however, if the player is stunned or interupted while executing one of those 3 slashes, the skill is cancelled at the current slash(step). You may also cancel a skill mannually (not implemented). Each step has a damage modifier (%) of your base attack. Your base attack is calculated by your weapon's base damage and your str/int. For example, if a step deals 200% of your base damage, it means that step deals the same damage as 2 normal hits.
+
+Skill interuption: when a character is attacked while its loading a skill, there is a chance that its skill will be cancelled, the higher the % of balance that character has, the lower the chances of interuption.
+
+Skill parry/block/miss: most offensive skill has a chance of missing. When two melee skills are executed at the same time, there is a chance that these two skills will block or parry each other. Some skills cannot be blocked or parried, but most of the time dodged.
+
+
+Commmands:
+for using skills on targets: 
+	Use skill [skillname] on [targetname]
+some skills can be executed for a desired time (Block and Wait): 
+	Use skill [skillname] on [targetname] for [# of seconds]
+Using items:
+	Use [itemname]
+or:
+	Use [itemname] on [targetname]
+
+Stats:
+hp - your health
+mp - mana
+sp - stamina
+bal - balance determines some skills's damage, it also prevent your skills from being interupted. When its below 10%, you have a chance of receiving the knockdown status when attacked (not implemented)
+str - increase damage of melee attacks
+int -  increase damage of magic attacks
+dex - decrease the miss chance, increase the success chance of life skills such as scavenging
+agi - decrease skills load/execution/cooldown time, increase enemy's miss chance when attacking you
+def - the damage you received is first subtracted by your defense
+prot - after defense is subtracted, its reduced by % of your protection, prot also reduces the chance of receiving a critical hit.
+
+Tactics:
+If you think that the enemy's attack is not too dangerous, you can execute your attack and expect to receive the enemy's attack. If the incomming attack is dangerous and might kill you, the most effective way is to use parry, because it negates the enemy attack and also has a low cooldown which allows you to strike back. However, many skills cannot be parried (jump atk, body slam) then use block. Parry and block has the same weakness, that is their rather slow loading time (0.4 sec) which doesn't allow you to defend against many faster attacks. If all else fails, use dodge, while dodge can be used against most attacks that are not AOE, it has a much lower success rate than the other 2 defensive skills, but it loads twice as fast.
+Over success rate: block (100%) parry (80%) dodge (50%)
