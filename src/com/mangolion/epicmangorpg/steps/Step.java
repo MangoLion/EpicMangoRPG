@@ -7,6 +7,8 @@ import javax.swing.JOptionPane;
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.characters.CharacterPlayer;
 import com.mangolion.epicmangorpg.components.ActionType;
+import com.mangolion.epicmangorpg.components.Element;
+import com.mangolion.epicmangorpg.components.Elements;
 import com.mangolion.epicmangorpg.components.LogMsg;
 import com.mangolion.epicmangorpg.components.Proficiency;
 import com.mangolion.epicmangorpg.components.StatBuff;
@@ -32,13 +34,18 @@ public abstract class Step implements Cloneable, StatBuff {
 	public float prof = 0, timeLoad, timeExecute, timeCooldown, hpCost = 0, balCost = 0,
 			mpCost = 0, stamCost = 0, value = 0, chanceStatus = 0, cp = 0, dmgBase = 0;
 	protected float  dmgPercent = 0;
-
+	public Element element;
 	public Status status;
 
 	public boolean cancelfromStun = true, strBased = true, intBased = false;;
 	
 	public void init(){
 		
+	}
+	
+	public Step setElement(Element element){
+		this.element = element;
+		return this;
 	}
 	
 	public Step setStatus(Status status, float chance){
@@ -99,7 +106,17 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 
 	public void damage(Character target){
-		float dmg = getDamage();
+		float eleMult = -2;
+		for (Element element: target.elements){
+			if (this.element != null)
+				eleMult = (eleMult == -2)? element.type.calculate(this.element.type): (eleMult + element.type.calculate(this.element.type))/2;
+				else
+					eleMult = (eleMult == -2)? element.type.calculate(getCharacter().elements.getFirst().type): (eleMult + element.type.calculate(getCharacter().elements.getFirst().type))/2;
+		}
+		System.out.println(getCharacter().name + " " + eleMult);
+		if (eleMult == -2)
+			eleMult = 1;
+		float dmg = getDamage()*eleMult;
 			target.setDamage(getCharacter(), dmg);
 			if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus)
 				target.addStatus(getStatus());

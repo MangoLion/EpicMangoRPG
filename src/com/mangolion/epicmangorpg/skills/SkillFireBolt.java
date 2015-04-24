@@ -4,6 +4,8 @@ import java.util.LinkedList;
 
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.components.ActionType;
+import com.mangolion.epicmangorpg.components.Element;
+import com.mangolion.epicmangorpg.components.Elements;
 import com.mangolion.epicmangorpg.events.Event;
 import com.mangolion.epicmangorpg.events.EventArrow;
 import com.mangolion.epicmangorpg.events.EventRange;
@@ -16,12 +18,13 @@ public class SkillFireBolt extends Skill {
 
 	public SkillFireBolt() {
 		super("FireBolt", "Condesing the water vapor from the air and freeze them into a large chunk of ice crystals",Weapons.ALL, ActionType.Magic);
-		addSteps(new Step(this, "FireBolt", "",ActionType.Magic, 0.5f, 0.1f, 0.1f, 0, 00, 0, 20,1f){
+		addSteps(new Step(this, "FireBolt", "",ActionType.Magic, 0.3f, 0.1f, 0.1f, 0, 00, 0, 20,1f){
 			@Override
 			public void init() {
 			strBased = false;
 			intBased = true;
 			dmgBase = 10;
+			setElement(new Element(Elements.Fire, 1));
 				super.init();
 			}
 			@Override

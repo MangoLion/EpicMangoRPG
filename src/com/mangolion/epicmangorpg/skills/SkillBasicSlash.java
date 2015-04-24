@@ -3,6 +3,8 @@ package com.mangolion.epicmangorpg.skills;
 import java.util.Random;
 
 import com.mangolion.epicmangorpg.components.ActionType;
+import com.mangolion.epicmangorpg.components.Element;
+import com.mangolion.epicmangorpg.components.Elements;
 import com.mangolion.epicmangorpg.frames.FrameGame;
 import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.steps.Step;
@@ -21,7 +23,7 @@ public class SkillBasicSlash extends Skill {
 				// TODO Auto-generated method stub
 				return prof * 10;
 			}
-		});
+		}.setElement(new Element(Elements.Fire, 1)));
 		weapons.add(Weapons.Dagger);
 		weapons.add(Weapons.GreatSword);
 	}

@@ -4,6 +4,8 @@ import java.util.LinkedList;
 
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.components.ActionType;
+import com.mangolion.epicmangorpg.components.Element;
+import com.mangolion.epicmangorpg.components.Elements;
 import com.mangolion.epicmangorpg.components.LogMsg;
 import com.mangolion.epicmangorpg.components.Proficiency;
 import com.mangolion.epicmangorpg.steps.Step;
@@ -40,7 +42,7 @@ public class SkillBasicHeal extends Skill {
 				LogMsg.appendLog(", \n " + name + " gained " + add + "% proficiency" );
 				//super.addProf(p);
 			}
-		});
+		}.setElement(new Element(Elements.Light, 1)));
 		
 	}
 

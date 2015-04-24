@@ -2,6 +2,8 @@ package com.mangolion.epicmangorpg.characters;
 
 import com.mangolion.epicmangorpg.ais.AIHealer;
 import com.mangolion.epicmangorpg.ais.AISimple;
+import com.mangolion.epicmangorpg.components.Element;
+import com.mangolion.epicmangorpg.components.Elements;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.SkillBasicHeal;
 import com.mangolion.epicmangorpg.skills.SkillBasicKick;
@@ -23,6 +25,7 @@ public class HealSlime extends Character{
 	public HealSlime() {
 		super("Heal Slime", "A small and cute pink slime, it only knows how to heal its allies.",40, 0, 40, 30, 10, 30, 10, 10, 0, 0,new Weapon("Slimes", 0, 100, Weapons.BareHand, 1, 1, 1),   new SkillBlock(), new SkillDodge(), new SkillBasicHeal());
 		ai = new AIHealer(this);
+		addElements(new Element(Elements.Plant, 1));
 		isSupporter = true;
 		cpBase = 50;
 	}

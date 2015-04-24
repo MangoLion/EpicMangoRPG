@@ -8,6 +8,7 @@ import javax.rmi.CORBA.Util;
 
 import com.mangolion.epicmangorpg.ais.AI;
 import com.mangolion.epicmangorpg.components.ActionType;
+import com.mangolion.epicmangorpg.components.Element;
 import com.mangolion.epicmangorpg.components.GeneralType;
 import com.mangolion.epicmangorpg.components.LogMsg;
 import com.mangolion.epicmangorpg.frames.FrameGame;
@@ -45,6 +46,7 @@ public class Character implements Cloneable {
 
 	public float str, agi,  inte, dex, maxHP, maxMP, maxSP, maxBal, prot, def, meleeSpeedMod = 1, magicSpeedMod = 1, hpRegen = 0, mpRegen =0.01f, spRegen = 0.02f, balRegen = 0.05f, cpBase = 0 , learnRate = 0;;
 	float hp, mp, sp, bal;
+	public LinkedList<Element> elements = new LinkedList<Element>();
 	
 
 
@@ -80,6 +82,11 @@ public class Character implements Cloneable {
 		}
 	}
 	
+	public void addElements(Element... elements) {
+		if (elements != null) {
+			this.elements.addAll(Arrays.asList(elements));
+		}
+	}
 	
 	public void equip (Weapon weapon){
 		this.weapon = weapon;

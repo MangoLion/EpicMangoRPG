@@ -2,6 +2,8 @@ package com.mangolion.epicmangorpg.characters;
 
 import java.util.LinkedList;
 
+import com.mangolion.epicmangorpg.components.Element;
+import com.mangolion.epicmangorpg.components.Elements;
 import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.items.Items;
 import com.mangolion.epicmangorpg.skills.Skill;
@@ -38,6 +40,7 @@ public class CharacterPlayer extends Character {
 		instance = this;
 		inventory.addItem(Items.potionSmall, 5);
 		learnRate = 0.5f;
+		addElements(new Element(Elements.Fire, 1));
 	}
 
 	@Override

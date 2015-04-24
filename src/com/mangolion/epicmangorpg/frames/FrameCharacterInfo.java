@@ -20,6 +20,8 @@ import javax.swing.JScrollPane;
 
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.characters.CharacterPlayer;
+import com.mangolion.epicmangorpg.components.Element;
+import com.mangolion.epicmangorpg.components.Elements;
 import com.mangolion.epicmangorpg.components.LogMsg;
 import com.mangolion.epicmangorpg.components.Proficiency;
 import com.mangolion.epicmangorpg.game.Game;
@@ -70,12 +72,47 @@ public class FrameCharacterInfo extends JFrame {
 		for (Status status:character.statuses)
 			modelStatus.addElement(status);
 		
+		//update elements
+		String str;
+		
+		if (character.elements.size()>0){
+		str  = "Element: ";
+		System.out.println("sasda");
+		float ice = -2, water = -2, lightning = -2, fire = -2, lava = -2, earth = -2, wind = -2, light = -2, dark = -2;
+		for (Element element: character.elements){
+			str += element.type.name + " ";
+			ice = (ice == -2)? element.type.calculate(Elements.Ice): (ice + element.type.calculate(Elements.Ice))/2;
+			water = (water == -2)? element.type.calculate(Elements.Water): (water + element.type.calculate(Elements.Water))/2;
+			lightning = (lightning == -2)? element.type.calculate(Elements.Lava): (lightning + element.type.calculate(Elements.Lightning))/2;
+			fire = (fire == -2)? element.type.calculate(Elements.Fire): (fire + element.type.calculate(Elements.Fire))/2;
+			lava = (lava == -2)? element.type.calculate(Elements.Lava): (lava + element.type.calculate(Elements.Lava))/2;
+			earth = (earth == -2)? element.type.calculate(Elements.Earth): (earth + element.type.calculate(Elements.Earth))/2;
+			wind = (wind == -2)? element.type.calculate(Elements.Wind): (wind + element.type.calculate(Elements.Wind))/2;
+			light = (light == -2)? element.type.calculate(Elements.Light): (light + element.type.calculate(Elements.Light))/2;
+			dark = (dark == -2)? element.type.calculate(Elements.Dark): (dark + element.type.calculate(Elements.Dark))/2;
+		}
+		lblElement.setText(str);
+		lblIce.setText("Ice: " + ice*100 + "%");
+		lblWater.setText("Water: " + water*100 + "%");
+		lblLightning.setText("Lightning: " + lightning*100 + "%");
+		lblFire.setText("Fire: " + fire*100 + "%");
+		lblLava.setText("Lava: " + lava*100 + "%");
+		lblEarth.setText("Earth: " + earth*100 + "%");
+		lblWind.setText("Wind: " + wind*100 + "%");
+		lblLight.setText("Light: " + light*100 + "%");
+		lblDark.setText("Dark: " + dark*100 + "%");
+
+		}
+		
+		//update current skill
 		if (Game.getInstance().findTick(character) == null)
 			return;
 		tfCurrent.setText("");
+		
+
 		if (character.skillCurrent != null){
 			Skill skill = character.skillCurrent;
-			String str = skill.name;
+			str = skill.name;
 			if (skill.steps.size() > 1)
 				 str += ": " +character.getCurrentStep().name + "(step "+ skill.stepCurrent + ")\n";
 			else
@@ -89,10 +126,13 @@ public class FrameCharacterInfo extends JFrame {
 			str += " for " + Game.getInstance().findTick(character).time + " seconds";
 			tfCurrent.setText(str);		
 		}
+		
+
 	}
 	
 	JProgressBar pbSP, pbHP, pbMP, pbBal;
-	JLabel lblStr, lblAgi, lblInt, lblDex, lblDef, lblProt, lblCp;
+	JLabel lblStr, lblAgi, lblInt, lblDex, lblDef, lblProt, lblCp,
+		lblIce, lblWater, lblLightning, lblFire, lblEarth, lblWind, lblLava, lblLight, lblDark, lblElement;
 	JList<Skill>listSkill;
 	JList<Status>listStatus;
 	DefaultListModel<Status> modelStatus = new DefaultListModel<Status>();
@@ -107,7 +147,7 @@ public class FrameCharacterInfo extends JFrame {
 		this.character = character;
 		setTitle(character.name);
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setBounds(100, 100, 476, 516);
+		setBounds(100, 100, 688, 516);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -255,6 +295,51 @@ public class FrameCharacterInfo extends JFrame {
 		pbHunger.setString("0.0/0.0");
 		pbHunger.setBounds(41, 111, 150, 16);
 		contentPane.add(pbHunger);
+		
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setOrientation(SwingConstants.VERTICAL);
+		separator_1.setBounds(468, 0, 17, 487);
+		contentPane.add(separator_1);
+		
+		lblElement = new JLabel("Element: ");
+		lblElement.setBounds(495, 11, 159, 14);
+		contentPane.add(lblElement);
+		
+		lblIce = new JLabel("Ice:");
+		lblIce.setBounds(495, 36, 159, 14);
+		contentPane.add(lblIce);
+		
+		lblWater = new JLabel("Water:");
+		lblWater.setBounds(495, 61, 159, 14);
+		contentPane.add(lblWater);
+		
+		lblLightning = new JLabel("Lightning:");
+		lblLightning.setBounds(495, 86, 159, 14);
+		contentPane.add(lblLightning);
+		
+		lblEarth = new JLabel("Earth:");
+		lblEarth.setBounds(495, 109, 159, 14);
+		contentPane.add(lblEarth);
+		
+		lblFire = new JLabel("Fire:");
+		lblFire.setBounds(495, 134, 159, 14);
+		contentPane.add(lblFire);
+		
+		lblLava = new JLabel("Lava:");
+		lblLava.setBounds(495, 159, 159, 14);
+		contentPane.add(lblLava);
+		
+		lblWind = new JLabel("Wind:");
+		lblWind.setBounds(495, 184, 159, 14);
+		contentPane.add(lblWind);
+		
+		lblLight = new JLabel("Light:");
+		lblLight.setBounds(495, 209, 159, 14);
+		contentPane.add(lblLight);
+		
+		lblDark = new JLabel("Dark:");
+		lblDark.setBounds(495, 234, 159, 14);
+		contentPane.add(lblDark);
 		
 		
 		refresh();

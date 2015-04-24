@@ -1,6 +1,8 @@
 package com.mangolion.epicmangorpg.characters;
 
 import com.mangolion.epicmangorpg.ais.AISimple;
+import com.mangolion.epicmangorpg.components.Element;
+import com.mangolion.epicmangorpg.components.Elements;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.SkillBasicHeal;
 import com.mangolion.epicmangorpg.skills.SkillBasicKick;
@@ -24,6 +26,7 @@ public class WildRabbit extends Character{
 
 	public WildRabbit() {
 		super("Wild Rabbit", "A wild and cute, harmless looking rabbit.",50, 30, 80, 30, 10, 60, 30, 10, 0, 0,new Weapon("Paws", 0, 100, Weapons.BareHand, 1, 1, 0.8f),   new SkillBlock(), new SkillSideJump(), new SkillJumpAtk(), new SkillBite());
+		addElements(new Element(Elements.Furry, 1));
 		ai = new AISimple(this);
 	}
 }

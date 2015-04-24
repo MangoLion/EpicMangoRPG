@@ -231,7 +231,7 @@ public class FrameGame extends JFrame {
 		tabLower.addTab("Info", null, panel, null);
 		
 		lblPName = new JLabel("PName");
-		lblPName.setBounds(10, 11, 71, 14);
+		lblPName.setBounds(10, 11, 267, 14);
 		panel.add(lblPName);
 		
 		pbHP = new JProgressBar();
@@ -272,11 +272,11 @@ public class FrameGame extends JFrame {
 		panel.add(lblStatuses);
 		
 		lblBuffs = new JLabel("Buffs:");
-		lblBuffs.setBounds(10, 140, 267, 14);
+		lblBuffs.setBounds(10, 140, 120, 14);
 		panel.add(lblBuffs);
 		
 		lblPName2 = new JLabel("PName");
-		lblPName2.setBounds(10, 173, 71, 14);
+		lblPName2.setBounds(10, 173, 250, 14);
 		panel.add(lblPName2);
 		
 		pbHP2 = new JProgressBar();
@@ -317,7 +317,7 @@ public class FrameGame extends JFrame {
 		panel.add(lblStatuses2);
 		
 		lblBuffs2 = new JLabel("Buffs:");
-		lblBuffs2.setBounds(10, 389, 267, 14);
+		lblBuffs2.setBounds(10, 389, 120, 14);
 		panel.add(lblBuffs2);
 		
 		 tfDesc = new JTextPane();

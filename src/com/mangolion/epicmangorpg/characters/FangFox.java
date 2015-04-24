@@ -1,6 +1,8 @@
 package com.mangolion.epicmangorpg.characters;
 
 import com.mangolion.epicmangorpg.ais.AISimple;
+import com.mangolion.epicmangorpg.components.Element;
+import com.mangolion.epicmangorpg.components.Elements;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.SkillBasicHeal;
 import com.mangolion.epicmangorpg.skills.SkillBasicKick;
@@ -25,6 +27,7 @@ public class FangFox extends Character{
 
 	public FangFox() {
 		super("Fanged Fox", "A slightly more dangerous looking fox with much sharper teeth that are poisoned.",65, 30, 70, 30, 10, 80, 30, 10, 0, 0,new Weapon("Claws", 0, 100, Weapons.Fang, 1, 1, 0.8f),  new SkillSideJump(), new SkillBasicSlash());
+		addElements(new Element(Elements.Furry, 1));
 		ai = new AISimple(this);
 		SkillBite bite = new SkillBite();
 		bite.steps.getFirst().setStatus(new StatusPoison(null, 1), 1f);

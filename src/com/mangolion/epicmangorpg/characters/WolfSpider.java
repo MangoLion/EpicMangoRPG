@@ -1,6 +1,8 @@
 package com.mangolion.epicmangorpg.characters;
 
 import com.mangolion.epicmangorpg.ais.AISimple;
+import com.mangolion.epicmangorpg.components.Element;
+import com.mangolion.epicmangorpg.components.Elements;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.SkillBasicHeal;
 import com.mangolion.epicmangorpg.skills.SkillBasicKick;
@@ -25,6 +27,7 @@ public class WolfSpider extends Character{
 
 	public WolfSpider() {
 		super("Wolf Spider", "A dog sized spider, kill it with fire!!!",60, 0, 100, 80, 10, 60, 10, 10, 0, 0,new WeaponSpiderFang(),   new SkillBlock(), new SkillDodge(), new SkillJumpAtk(), new SkillWebFiring(), new SkillBite());
+		addElements(new Element(Elements.Furry, 1));
 		ai = new AISimple(this);
 	}
 

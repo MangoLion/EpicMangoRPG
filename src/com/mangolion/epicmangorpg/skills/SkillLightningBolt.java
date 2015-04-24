@@ -4,6 +4,8 @@ import java.util.LinkedList;
 
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.components.ActionType;
+import com.mangolion.epicmangorpg.components.Element;
+import com.mangolion.epicmangorpg.components.Elements;
 import com.mangolion.epicmangorpg.events.Event;
 import com.mangolion.epicmangorpg.events.EventArrow;
 import com.mangolion.epicmangorpg.events.EventRange;
@@ -23,6 +25,7 @@ public class SkillLightningBolt extends Skill {
 			strBased = false;
 			intBased = true;
 			dmgBase = 10;
+			setElement(new Element(Elements.Lightning, 1));
 				super.init();
 			}
 			@Override
