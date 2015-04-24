@@ -32,8 +32,8 @@ public class SkillBasicHeal extends Skill {
 			@Override
 			public void addProf(Proficiency p) {
 				float add = 0;
-				if (p.target.hp < p.target.getMaxHP())
-					if (p.target.hp < p.target.getMaxHP() * 20)
+				if (p.target.getHp() < p.target.getMaxHP())
+					if (p.target.getHp() < p.target.getMaxHP() * 20)
 						add += 0.02;
 					else
 						add += 0.01;

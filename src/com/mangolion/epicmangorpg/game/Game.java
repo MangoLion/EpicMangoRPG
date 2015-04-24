@@ -128,6 +128,8 @@ public class Game {
 				for (Character character : allChars) {
 					addTick(character, rand.nextFloat(), Tick.ACTION);
 				}
+				
+					frame.	updateInfoTab();
 				/*for (Character character : charsEnemies) {
 					addTick(character, rand.nextFloat()*2, Tick.ACTION);
 				}
@@ -321,16 +323,16 @@ public class Game {
 		if (!character.isAllied){
 			if (charsEnemies.size() > 1){
 				for (Character c: charsEnemies)
-					if (c.target == character && c.hp < c.maxHP)
+					if (c.target == character && c.getHp() < c.maxHP)
 						return c;
 				return charsEnemies.get(rand.nextInt(charsEnemies.size()));
 			}else
-				charsEnemies.getFirst();
+				return charsEnemies.getFirst();
 		}
 		if (character.isAllied){
 			if (charsAllies.size() > 1){
 				for (Character c: charsAllies)
-					if (c.getTarget() == character && c.hp < c.maxHP)
+					if (c.getTarget() == character && c.getHp() < c.maxHP)
 						return c;
 				return charsAllies.get(rand.nextInt(charsAllies.size()));
 			}else

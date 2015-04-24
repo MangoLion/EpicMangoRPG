@@ -20,7 +20,7 @@ public class SkillSpitPoison extends Skill {
 		addSteps(new Step(this, "Spit Poison", "",ActionType.RangeNormal, 0.3f, 0.2f, 0.2f, 0, 20, 0, 5, 1){
 			@Override
 			public void execute(Character target) {
-				Event.addEvent(new EventSpitPoison(1, getCharacter(), target, 20, this));
+				Event.addEvent(new EventSpitPoison(0.5f, getCharacter(), target, 20, this));
 				super.execute(character);
 			}			
 		});

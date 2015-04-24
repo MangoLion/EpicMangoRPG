@@ -26,14 +26,5 @@ public class HealSlime extends Character{
 		isSupporter = true;
 		cpBase = 50;
 	}
-	
-	@Override
-	public void nextAction() {
-		if (target != null)
-			System.out.println(target.name);
-		else
-			System.out.println("null");
-		super.nextAction();
-	}
 
 }

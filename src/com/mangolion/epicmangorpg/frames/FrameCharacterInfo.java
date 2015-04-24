@@ -42,14 +42,14 @@ public class FrameCharacterInfo extends JFrame {
 	public void refresh(){
 
 		
-		pbHP.setValue((int) ((int) character.hp/character.getMaxHP()*100));
-		pbHP.setString( character.hp + "/" +character.getMaxHP());
-		pbMP.setValue((int) ((int) character.mp/character.getMaxMP()*100));
-		pbMP.setString( character.mp + "/" +character.getMaxMP());
-		pbSP.setValue((int) ((int) character.sp/character.getMaxSP()*100));
-		pbSP.setString( character.sp + "/" +character.getMaxSP());
-		pbBal.setValue((int) ((int) character.bal/character.getMaxBal()*100));
-		pbBal.setString( character.bal + "/" +character.getMaxBal());
+		pbHP.setValue((int) ((int) character.getHp()/character.getMaxHP()*100));
+		pbHP.setString( character.getHp() + "/" +character.getMaxHP());
+		pbMP.setValue((int) ((int) character.getMp()/character.getMaxMP()*100));
+		pbMP.setString( character.getMp() + "/" +character.getMaxMP());
+		pbSP.setValue((int) ((int) character.getSp()/character.getMaxSP()*100));
+		pbSP.setString( character.getSp() + "/" +character.getMaxSP());
+		pbBal.setValue((int) ((int) character.getBal()/character.getMaxBal()*100));
+		pbBal.setString( character.getBal() + "/" +character.getMaxBal());
 		lblStr.setText("Str: " + String.valueOf(character.getStr()));
 		lblInt.setText("Int: " + String.valueOf(character.getInt()));
 		lblDex.setText("Dex: " + String.valueOf(character.getDex()));

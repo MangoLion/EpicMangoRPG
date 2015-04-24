@@ -15,8 +15,10 @@ import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.game.StylePainter;
 import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.items.Inventory;
+import com.mangolion.epicmangorpg.items.Item;
 import com.mangolion.epicmangorpg.messages.Msg;
 import com.mangolion.epicmangorpg.skills.Skill;
+import com.mangolion.epicmangorpg.skills.Skills;
 import com.mangolion.epicmangorpg.statuses.Buff;
 import com.mangolion.epicmangorpg.statuses.Status;
 import com.mangolion.epicmangorpg.statuses.StatusStun;
@@ -41,7 +43,10 @@ public class Character implements Cloneable {
 	public AI ai;
 	public Inventory inventory = new Inventory();
 
-	public float hp, mp, sp, str, agi, bal, inte, dex, maxHP, maxMP, maxSP, maxBal, prot, def, meleeSpeedMod = 1, magicSpeedMod = 1, hpRegen = 0, mpRegen =0.01f, spRegen = 0.02f, balRegen = 0.05f, cpBase = 0 , learnRate = 0;;
+	public float str, agi,  inte, dex, maxHP, maxMP, maxSP, maxBal, prot, def, meleeSpeedMod = 1, magicSpeedMod = 1, hpRegen = 0, mpRegen =0.01f, spRegen = 0.02f, balRegen = 0.05f, cpBase = 0 , learnRate = 0;;
+	float hp, mp, sp, bal;
+	
+
 
 	public Character(String name, String desc, float hp, float mp, float stam, float str,
 			float agi, float bal, float inte, float dex, float def, float prot, Weapon weapons, Skill... skills) {
@@ -64,6 +69,7 @@ public class Character implements Cloneable {
 		this.weapon = weapons;
 		this.desc = desc;
 		addSkills(skills);
+		equip(weapon);
 	}
 
 	public void addSkills(Skill... skills) {
@@ -72,6 +78,22 @@ public class Character implements Cloneable {
 			for (Skill skill : skills)
 				skill.character = this;
 		}
+	}
+	
+	
+	public void equip (Weapon weapon){
+		this.weapon = weapon;
+
+		for (Skill skill: getSkill(ActionType.WeaponMastery))
+			if (skill.checkWeapon(weapon))
+				return;
+		for (Skill skill : Skills.masteries)
+			if (skill.checkWeapon(weapon)){
+				addSkills(Utility.getInstance(skill.getClass()));
+				if (this instanceof CharacterPlayer)
+					StylePainter.append(new Msg("$name has learned " + skill.name).getMessage(this, null, 0));
+			}
+		
 	}
 	
 	public void addStatus(Status stat){
@@ -135,8 +157,16 @@ public class Character implements Cloneable {
 	public LinkedList<Skill> getPassiveSkills(){
 		LinkedList<Skill> result = new LinkedList<Skill>();
 		for (Skill skill :skills)
-			if (skill.type == ActionType.Passive)
-				result.add(skill);
+			if (skill.type.getGeneralType() == GeneralType.Passive)
+				result.add(skill);		
+		return result;
+	}
+	
+	public LinkedList<Skill> getSkill (ActionType type){
+		LinkedList<Skill> result = new LinkedList<Skill>();
+		for (Skill skill :skills)
+			if (skill.type == type)
+				result.add(skill);		
 		return result;
 	}
 
@@ -283,7 +313,7 @@ public class Character implements Cloneable {
 			result += buff.value;
 		for (Skill skill: skills)
 			result += skill.getHPBuff();
-		return result;
+		return Utility.format(result);
 	}
 	
 	public float getMaxMP(){
@@ -292,7 +322,7 @@ public class Character implements Cloneable {
 			result += buff.value;
 		for (Skill skill: skills)
 			result += skill.getMPBuff();
-		return result;
+		return Utility.format(result);
 	}
 	
 	public float getMaxSP(){
@@ -301,7 +331,7 @@ public class Character implements Cloneable {
 			result += buff.value;
 		for (Skill skill: skills)
 			result += skill.getSPBuff();
-		return result;
+		return Utility.format(result);
 	}
 	
 	public float getMaxBal(){
@@ -310,7 +340,7 @@ public class Character implements Cloneable {
 			result += buff.value;
 		for (Skill skill: skills)
 			result += skill.getBalBuff();
-		return result;
+		return Utility.format(result);
 	}
 	
 	public float getInt(){
@@ -319,7 +349,7 @@ public class Character implements Cloneable {
 			result += buff.value;
 		for (Skill skill: skills)
 			result += skill.getIntBuff();
-		return result;
+		return Utility.format(result);
 	}
 	
 	public float getDex(){
@@ -328,7 +358,7 @@ public class Character implements Cloneable {
 			result += buff.value;
 		for (Skill skill: skills)
 			result += skill.getDexBuff();
-		return result;
+		return Utility.format(result);
 	}
 	
 	public float getStr(){
@@ -337,7 +367,7 @@ public class Character implements Cloneable {
 			result += buff.value;
 		for (Skill skill: skills)
 			result += skill.getStrBuff();
-		return result;
+		return Utility.format(result);
 	}
 	
 	public float getAgi(){
@@ -346,7 +376,7 @@ public class Character implements Cloneable {
 			result += buff.value;
 		for (Skill skill: skills)
 			result += skill.getAgiBuff();
-		return result;
+		return Utility.format(result);
 	}
 	
 	public float getDef(){
@@ -355,7 +385,7 @@ public class Character implements Cloneable {
 			result += buff.value;
 		for (Skill skill: skills)
 			result += skill.getDefBuff();
-		return result;
+		return Utility.format(result);
 	}
 	
 	public float getProt(){
@@ -364,7 +394,7 @@ public class Character implements Cloneable {
 			result += buff.value;
 		for (Skill skill: skills)
 			result += skill.getProtBuff();
-		return result;
+		return Utility.format(result);
 	}
 	
 	public float getCP(){
@@ -372,7 +402,40 @@ public class Character implements Cloneable {
 		for (Skill skill : skills)
 			result += skill.getCP();
 		result += getMaxHP() + getMaxMP() + getMaxBal()/2 + getMaxSP()/2 + getAgi() + getDex()/2 + getInt() + getStr();
-		return result;
+		return Utility.format(result);
+	}
+	
+	
+	public float getHp() {
+		return Utility.format( hp);
+	}
+
+	public void addHp(float hp) {
+		this.hp = hp;
+	}
+
+	public float getMp() {
+		return Utility.format( mp);
+	}
+
+	public void addMp(float mp) {
+		this.mp = mp;
+	}
+
+	public float getSp() {
+		return Utility.format( sp);
+	}
+
+	public void addSp(float sp) {
+		this.sp = sp;
+	}
+
+	public float getBal() {
+		return Utility.format( bal);
+	}
+
+	public void addBal(float bal) {
+		this.bal = bal;
 	}
 
 	@Override

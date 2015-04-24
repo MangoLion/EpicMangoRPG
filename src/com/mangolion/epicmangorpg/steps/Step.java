@@ -20,6 +20,7 @@ import com.mangolion.epicmangorpg.messages.Msg;
 import com.mangolion.epicmangorpg.messages.MsgParrySuccess;
 import com.mangolion.epicmangorpg.messages.MsgSlashMiss;
 import com.mangolion.epicmangorpg.skills.Skill;
+import com.mangolion.epicmangorpg.skills.SkillDodge;
 import com.mangolion.epicmangorpg.statuses.Status;
 
 public abstract class Step implements Cloneable, StatBuff {
@@ -47,10 +48,14 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 	
 	public float getDamage(){
+		float skilDmg = 0;
+		for (Skill skill: getCharacter().skills)
+			if (skill.type == ActionType.WeaponMastery && skill.checkWeapon(getCharacter().weapon))
+				skilDmg = skill.getTotalDamagePercent()+1;
 		if (strBased)
-			return ((getCharacter().weapon.baseDamage + dmgBase + getCharacter().getStrDamage())*getDmgPercent()*getCharacter().weapon.meleeDamageModifier);
+			return ((getCharacter().weapon.baseDamage + dmgBase + getCharacter().getStrDamage())*getDmgPercent()*getCharacter().weapon.meleeDamageModifier)*skilDmg;
 		else
-			return ((getCharacter().weapon.baseMagicDmg + dmgBase + getCharacter().getIntDamage())*getDmgPercent()*getCharacter().weapon.baseMagicDmgMod);
+			return ((getCharacter().weapon.baseMagicDmg + dmgBase + getCharacter().getIntDamage())*getDmgPercent()*getCharacter().weapon.baseMagicDmgMod)*skilDmg;
 	}
 	
 	public void addProf(Proficiency p){
@@ -66,6 +71,11 @@ public abstract class Step implements Cloneable, StatBuff {
 		if (getCharacter() == CharacterPlayer.instance)
 			LogMsg.appendLog(", \n" + name +" gained " +gained*100 + "% proficiency");
 		prof += gained;
+		for (Skill skill: getCharacter().skills)
+			if (skill.type == ActionType.WeaponMastery && skill.checkWeapon(getCharacter().weapon)){
+				skill.prof += gained/2;
+				LogMsg.appendLog(", \n" + skill.name +" gained " + gained/2*100*(4f - prof)/4 + "% proficiency");
+			}
 	}
 	
 	public void damage(Character target, float subtract){

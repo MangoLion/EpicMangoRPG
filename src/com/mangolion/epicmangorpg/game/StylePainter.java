@@ -113,7 +113,7 @@ public class StylePainter {
 			}
 		});
 		//System.out.println("" + lineNum);
-		if (lineNum > 1){
+		if (lineNum > 1 || paneTime.getText().equals("")){
 			paneTime.append("\n");
 		//	System.out.println("appended");
 		}

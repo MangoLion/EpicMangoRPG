@@ -13,7 +13,7 @@ public enum ActionType {
 	Dodge(GeneralType.Defend), 
 	RangeNormal(GeneralType.Attack),
 	Summon(GeneralType.Recover),
-	Passive (GeneralType.Passive),
+	WeaponMastery (GeneralType.Passive),
 	None(GeneralType.None);
 	
 	GeneralType type;

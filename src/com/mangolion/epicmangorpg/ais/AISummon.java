@@ -20,7 +20,7 @@ public class AISummon extends AISimple{
 	}
 	
 	public boolean checkSummon(){
-		if (rand.nextFloat() <1 - character.hp/character.getMaxHP()){
+		if (rand.nextFloat() <1 - character.getHp()/character.getMaxHP()){
 			Skill skill = getRandomSkill(ActionType.Summon);
 			if (skill != null){
 				skill.execute();

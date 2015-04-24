@@ -8,6 +8,7 @@ public class Item {
 		Damage,
 		Heal,
 		Craft,
+		Equip,
 		Custom
 	}
 	

@@ -52,11 +52,15 @@ import com.mangolion.epicmangorpg.game.StylePainter;
 import com.mangolion.epicmangorpg.game.Terrain;
 import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.game.Weather;
+import com.mangolion.epicmangorpg.skills.Skill;
+import com.mangolion.epicmangorpg.statuses.Buff;
+import com.mangolion.epicmangorpg.statuses.Status;
 
 import javax.swing.JProgressBar;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.JSeparator;
 
 public class FrameGame extends JFrame {
  
@@ -128,8 +132,10 @@ public class FrameGame extends JFrame {
 		for (Character character : game.charsEnemies)
 			modelEnemies.addElement(character.name);
 		
-		for (FrameCharacterInfo info : charInfos)
+		for (FrameCharacterInfo info : charInfos )
 			info.refresh();
+		if (CharacterPlayer.instance != null)
+			updateInfoTab();
 	}
 	
 	public void updateWeather(Weather weather){
@@ -152,9 +158,10 @@ public class FrameGame extends JFrame {
 	JList<Event> listEvents;
 	JList<Character>listMonsters;
 	public JLabel lblTimePassed;
-	public JProgressBar pbTemp, pbHumid, pbVis, pbWind, pbRugged, pbFloor;
-	public JLabel lblWeather, lblTerrain;
+	public JProgressBar pbTemp, pbHumid, pbVis, pbWind, pbRugged, pbFloor, pbHP, pbHP2, pbMP, pbMP2, pbSP, pbSP2, pbBal, pbBal2;
+	public JLabel lblWeather, lblTerrain, lblPName, lblPName2, lblStatuses, lblStatuses2, lblBuffs, lblBuffs2;
 	public TextPaneMango tfCommand, tfTime;
+	JTextPane tfDesc, tfSkill, tfSkill2;
 	
 	public JScrollPane scrollMango, scrollLog;
 
@@ -177,7 +184,7 @@ public class FrameGame extends JFrame {
 		getContentPane().add(splitPane, BorderLayout.CENTER);
 		
 		JSplitPane splitPane_1 = new JSplitPane();
-		splitPane_1.setResizeWeight(0.3);
+		splitPane_1.setResizeWeight(0.2);
 		splitPane_1.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setLeftComponent(splitPane_1);
 		
@@ -218,12 +225,148 @@ public class FrameGame extends JFrame {
 				super.mouseClicked(e);
 			}
 		});
+		JTabbedPane tabLower = new JTabbedPane();
 		
+		JPanel panel = new JPanel(null);
+		tabLower.addTab("Info", null, panel, null);
+		
+		lblPName = new JLabel("PName");
+		lblPName.setBounds(10, 11, 71, 14);
+		panel.add(lblPName);
+		
+		pbHP = new JProgressBar();
+		pbHP.setValue(0);
+		pbHP.setStringPainted(true);
+		pbHP.setString("0.0/0.0");
+		pbHP.setBounds(171, 88, 89, 16);
+		panel.add(pbHP);
+		
+		JLabel label = new JLabel("MP:");
+		label.setBounds(140, 115, 44, 14);
+		panel.add(label);
+		
+		pbMP = new JProgressBar();
+		pbMP.setValue(0);
+		pbMP.setStringPainted(true);
+		pbMP.setString("0.0/0.0");
+		pbMP.setBounds(171, 113, 89, 16);
+		panel.add(pbMP);
+		
+		pbSP = new JProgressBar();
+		pbSP.setValue(0);
+		pbSP.setStringPainted(true);
+		pbSP.setString("0.0/0.0");
+		pbSP.setBounds(41, 88, 89, 16);
+		panel.add(pbSP);
+		
+		JLabel label_1 = new JLabel("SP:");
+		label_1.setBounds(10, 88, 100, 14);
+		panel.add(label_1);
+		
+		JLabel label_2 = new JLabel("HP:");
+		label_2.setBounds(140, 90, 44, 14);
+		panel.add(label_2);
+		
+		lblStatuses = new JLabel("Statuses:");
+		lblStatuses.setBounds(139, 140, 138, 14);
+		panel.add(lblStatuses);
+		
+		lblBuffs = new JLabel("Buffs:");
+		lblBuffs.setBounds(10, 140, 267, 14);
+		panel.add(lblBuffs);
+		
+		lblPName2 = new JLabel("PName");
+		lblPName2.setBounds(10, 173, 71, 14);
+		panel.add(lblPName2);
+		
+		pbHP2 = new JProgressBar();
+		pbHP2.setValue(0);
+		pbHP2.setStringPainted(true);
+		pbHP2.setString("0.0/0.0");
+		pbHP2.setBounds(177, 337, 83, 16);
+		panel.add(pbHP2);
+		
+		JLabel label_4 = new JLabel("MP:");
+		label_4.setBounds(146, 364, 100, 14);
+		panel.add(label_4);
+		
+		pbMP2 = new JProgressBar();
+		pbMP2.setValue(0);
+		pbMP2.setStringPainted(true);
+		pbMP2.setString("0.0/0.0");
+		pbMP2.setBounds(177, 362, 83, 16);
+		panel.add(pbMP2);
+		
+		pbSP2 = new JProgressBar();
+		pbSP2.setValue(0);
+		pbSP2.setStringPainted(true);
+		pbSP2.setString("0.0/0.0");
+		pbSP2.setBounds(51, 337, 83, 16);
+		panel.add(pbSP2);
+		
+		JLabel label_5 = new JLabel("SP:");
+		label_5.setBounds(20, 337, 100, 14);
+		panel.add(label_5);
+		
+		JLabel label_6 = new JLabel("HP:");
+		label_6.setBounds(146, 339, 100, 14);
+		panel.add(label_6);
+		
+		lblStatuses2 = new JLabel("Statuses:");
+		lblStatuses2.setBounds(139, 389, 138, 14);
+		panel.add(lblStatuses2);
+		
+		lblBuffs2 = new JLabel("Buffs:");
+		lblBuffs2.setBounds(10, 389, 267, 14);
+		panel.add(lblBuffs2);
+		
+		 tfDesc = new JTextPane();
+		 tfDesc.setBounds(10, 198, 267, 65);
+		 panel.add(tfDesc);
+		 
+		 JSeparator separator = new JSeparator();
+		 separator.setBounds(0, 160, 287, 14);
+		 panel.add(separator);
+		 
+		 JLabel lblBal = new JLabel("Bal:");
+		 lblBal.setBounds(10, 115, 100, 14);
+		 panel.add(lblBal);
+		 
+		 pbBal = new JProgressBar();
+		 pbBal.setValue(0);
+		 pbBal.setStringPainted(true);
+		 pbBal.setString("0.0/0.0");
+		 pbBal.setBounds(41, 115, 89, 16);
+		 panel.add(pbBal);
+		 
+		 JLabel label_7 = new JLabel("Bal:");
+		 label_7.setBounds(20, 364, 100, 14);
+		 panel.add(label_7);
+		 
+		 pbBal2 = new JProgressBar();
+		 pbBal2.setValue(0);
+		 pbBal2.setStringPainted(true);
+		 pbBal2.setString("0.0/0.0");
+		 pbBal2.setBounds(51, 364, 83, 16);
+		 panel.add(pbBal2);
+		 
+		 tfSkill = new JTextPane();
+		 tfSkill.setBounds(10, 36, 267, 41);
+		 panel.add(tfSkill);
+		 
+		 tfSkill2 = new JTextPane();
+		 tfSkill2.setBounds(10, 274, 267, 41);
+		 panel.add(tfSkill2);
 
 
-		
 		JPanel panelTerrain = new JPanel();
-		splitPane_1.setRightComponent(panelTerrain);
+
+
+		tabLower.addTab("Environment", panelTerrain);
+		splitPane_1.setRightComponent(tabLower);
+		
+		
+		
 		panelTerrain.setLayout(null);
 		
 		lblWeather = new JLabel("Weather");
@@ -328,7 +471,7 @@ public class FrameGame extends JFrame {
 			}
 		});
 		JScrollPane scrollPane = new JScrollPane(listMonsters);
-		scrollPane.setBounds(10, 238, 272, 138);
+		scrollPane.setBounds(10, 263, 272, 148);
 		panelTerrain.add(scrollPane);
 		
 		JLabel lblMonsters = new JLabel("Monsters on this floor:");
@@ -356,6 +499,12 @@ public class FrameGame extends JFrame {
 		pbFloor.setBounds(10, 183, 272, 16);
 		pbFloor.setStringPainted(true);
 		panelTerrain.add(pbFloor);
+		
+		JLabel lblTime = new JLabel("Time:");
+		lblTime.setBounds(10, 238, 272, 14);
+		panelTerrain.add(lblTime);
+		
+
 		
 		btnLastFloor.addActionListener(new ActionListener() {
 			
@@ -560,5 +709,92 @@ public class FrameGame extends JFrame {
 			modelEvent.addElement(event);
 		if (game.events.size()==0)
 			FrameGame.instance.tabInfo.setSelectedIndex(0);
+	}
+	
+	public void updateInfoTab(){
+		Character character = CharacterPlayer.instance;
+		lblPName.setText(character.name);
+		pbHP.setValue((int) ((int) character.getHp()/character.getMaxHP()*100));
+		pbHP.setString( character.getHp() + "/" +character.getMaxHP());
+		pbMP.setValue((int) ((int) character.getMp()/character.getMaxMP()*100));
+		pbMP.setString( character.getMp() + "/" +character.getMaxMP());
+		pbSP.setValue((int) ((int) character.getSp()/character.getMaxSP()*100));
+		pbSP.setString( character.getSp() + "/" +character.getMaxSP());
+		pbBal.setValue((int) ((int) character.getBal()/character.getMaxBal()*100));
+		pbBal.setString( character.getBal() + "/" +character.getMaxBal());
+		String str = "Statuses: ";
+		for (Status status: character.statuses)
+			str += status.toString();
+		lblStatuses.setText(str);
+		
+		str = "Buffs: ";
+		for (Buff buff: character.buffs)
+			str += buff.toString();
+		lblBuffs.setText(str);
+		
+		tfSkill.setText("");
+		if (character.skillCurrent != null){
+			Skill skill = character.skillCurrent;
+			 str = skill.name;
+			if (skill.steps.size() > 1)
+				 str += ": " +character.getCurrentStep().name + "(step "+ skill.stepCurrent + ")\n";
+			else
+				str += "\n";
+			if (skill.isLoading)
+				str += "Loading";
+			if (skill.isExecuting)
+				str += "Executing";
+			if (skill.isCooldown)
+				str += "Cooldown";
+			str += " for " + Game.getInstance().findTick(character).time + " seconds";
+			tfSkill.setText(str);		
+		}else
+			tfSkill.setText("Idling");
+		
+		
+		
+		
+		character = character.getTarget();
+		if (character == null)
+				character = game.charsEnemies.getFirst();
+		lblPName2.setText(character.name);
+		pbHP2.setValue((int) ((int) character.getHp()/character.getMaxHP()*100));
+		pbHP2.setString( character.getHp() + "/" +character.getMaxHP());
+		pbMP2.setValue((int) ((int) character.getMp()/character.getMaxMP()*100));
+		pbMP2.setString( character.getMp() + "/" +character.getMaxMP());
+		pbSP2.setValue((int) ((int) character.getSp()/character.getMaxSP()*100));
+		pbSP2.setString( character.getSp() + "/" +character.getMaxSP());
+		pbBal2.setValue((int) ((int) character.getBal()/character.getMaxBal()*100));
+		pbBal2.setString( character.getBal() + "/" +character.getMaxBal());
+		tfDesc.setText(character.desc);
+		
+		str = "Statuses: ";
+		for (Status status: character.statuses)
+			str += status.toString();
+		lblStatuses2.setText(str);
+		
+		str = "Buffs: ";
+		for (Buff buff: character.buffs)
+			str += buff.toString();
+		lblBuffs2.setText(str);
+		
+		tfSkill2.setText("");
+		if (character.skillCurrent != null && game.findTick(character) != null){
+			Skill skill = character.skillCurrent;
+			 str = skill.name;
+			if (skill.steps.size() > 1)
+				 str += ": " +character.getCurrentStep().name + "(step "+ skill.stepCurrent + ")\n";
+			else
+				str += "\n";
+			if (skill.isLoading)
+				str += "Loading";
+			if (skill.isExecuting)
+				str += "Executing";
+			if (skill.isCooldown)
+				str += "Cooldown";
+			str += " for " + Game.getInstance().findTick(character).time + " seconds";
+			tfSkill2.setText(str);		
+		}else
+			tfSkill2.setText("Idling");
 	}
 }

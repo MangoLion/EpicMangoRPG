@@ -7,6 +7,7 @@ import java.util.Random;
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.characters.CharacterPlayer;
 import com.mangolion.epicmangorpg.components.ActionType;
+import com.mangolion.epicmangorpg.components.GeneralType;
 import com.mangolion.epicmangorpg.components.LogMsg;
 import com.mangolion.epicmangorpg.components.StatBuff;
 import com.mangolion.epicmangorpg.components.Tick;
@@ -30,7 +31,7 @@ public class Skill implements StatBuff {
 	public int stepCurrent;
 	public LinkedList<Weapons> weapons = new LinkedList<Weapons>();
 	public ActionType type;
-	public float chanceObserve = 0;
+	public float chanceObserve = 0, prof = 0, dmgBoost = 1;
 	
 	public void setObservable(boolean ob, float chance){
 		isObservable = ob;
@@ -339,8 +340,19 @@ public class Skill implements StatBuff {
 
 	public float getProf() {
 		float prof = 0;
-		for (Step step: steps)
+		if (type.getGeneralType() != GeneralType.Passive)
+		for (Step step: steps){
 			prof += step.prof;
-		return prof/steps.size();
+			return prof/steps.size();
+		}
+		return this.prof;
+	}
+
+	public boolean checkWeapon(Weapon weapon) {
+		
+		for (Weapons w: weapons)
+			if (w == weapon.type || w == Weapons.ALL)
+				return true;
+		return false;
 	}
 }
