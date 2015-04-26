@@ -3,6 +3,7 @@ package com.mangolion.epicmangorpg.steps;
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.components.ActionType;
 import com.mangolion.epicmangorpg.components.Proficiency;
+import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.game.StylePainter;
 import com.mangolion.epicmangorpg.game.StyleSegment;
 import com.mangolion.epicmangorpg.game.Utility;
@@ -22,10 +23,9 @@ public abstract class StepMeleeSlash extends Step {
 
 
 	public StepMeleeSlash(Skill parent, String name,  String desc, float timeLoad,
-			float timeExecute, float timeCooldown, float hpCost, float mpCost,
-			float stamCost, float balCost, float dmgPercent) {
+			float timeExecute, float timeCooldown, float dmgPercent) {
 		super(parent, name, desc, ActionType.MeleeSwing, timeLoad, timeExecute,
-				timeCooldown, hpCost, mpCost, stamCost, balCost, dmgPercent);
+				timeCooldown, dmgPercent);
 		chanceBlock = 0.5f; // cancel both melee skills
 		chanceParry = 0.5f;// both skills goes pass
 							// each other and deal
@@ -36,7 +36,13 @@ public abstract class StepMeleeSlash extends Step {
 	
 	@Override
 	public void execute(Character target, float time) {
-		if (!calculateChance(target)){
+		if (!isAOE && !calculateChance(target)){
+			damage(target);
+			super.execute(target, time);
+		}else  if (isAOE)
+		{
+			for (Character character: Game.getInstance().getEnemies(getCharacter()))
+				calculateChance(character);
 			damage(target);
 			super.execute(target, time);
 		}
@@ -62,10 +68,11 @@ public abstract class StepMeleeSlash extends Step {
 			}
 		}
 
-		if (step.type == ActionType.Dodge && skill.isExecuting
+		if (!isAOE && step.type == ActionType.Dodge && skill.isExecuting
 				&& rand.nextFloat() <= (step.chanceDodge) /  getCharacter().weapon.sizeModifier) {
 			StylePainter.append(msgMiss.getMessage(getCharacter(), target, 0));
 			step.addProf(new Proficiency(target, getCharacter()));
+			aoeExceptions.add(target);
 			cancel();
 			return true;
 		}
@@ -75,10 +82,10 @@ public abstract class StepMeleeSlash extends Step {
 						/ getCharacter().weapon.sizeModifier) {
 			StylePainter.append(msgParry.getMessage(target, getCharacter(), 0));
 			step.addProf(new Proficiency(target, getCharacter()));
+			aoeExceptions.add(target);
 			cancel();
 			return true;
 		}
-
 		if (step.type == ActionType.MeleeBlock && skill.isExecuting && chanceBlock > 0) {
 			StylePainter.append(new StyleSegment(StylePainter.NAME,
 					parent.character.name), new StyleSegment(null, "'s "),
@@ -91,6 +98,8 @@ public abstract class StepMeleeSlash extends Step {
 			if (finalDamage <= 0)
 				finalDamage = 1;
 			target.setDamage(parent.character, finalDamage);
+			System.out.println("blocked");
+			aoeExceptions.add(target);
 			step.addProf(new Proficiency(target, getCharacter()));
 			return true;
 		}
@@ -122,6 +131,7 @@ public abstract class StepMeleeSlash extends Step {
 						new StyleSegment(null, "'s "), new StyleSegment(
 								StylePainter.SKILL, step.name, true));
 				step.addProf(new Proficiency(target, getCharacter()));
+				aoeExceptions.add(target);
 				step.cancel();
 				cancel();
 				return true;

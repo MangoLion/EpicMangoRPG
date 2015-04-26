@@ -11,7 +11,7 @@ public class SkillStab extends Skill {
 
 	public SkillStab() {
 		super("Stab", "Leaves lots of openings, but used to bypass the block skill, can be easily(higher chance) parried and dodged.",Weapons.Sword, ActionType.MeleeStab) ;
-		addSteps(new StepStab(this, "Stab", "", 0.6f, 0.3f, 0.4f, 5, 0, 15, 5,2f){
+		addSteps(new StepStab(this, "Stab", "", 0.6f, 0.3f, 0.4f, 2f){
 			public float getStrBuff() {
 				// TODO Auto-generated method stub
 				return prof * 15;
@@ -19,7 +19,7 @@ public class SkillStab extends Skill {
 			public float getAgiBuff() {
 				return prof*5;
 			};
-		});
+		}.setCost(25, 0, 10, 0));
 		weapons.add(Weapons.Dagger);
 	}
 	

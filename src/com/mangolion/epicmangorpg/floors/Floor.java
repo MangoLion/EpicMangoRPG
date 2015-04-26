@@ -1,25 +1,43 @@
 package com.mangolion.epicmangorpg.floors;
 
-import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 
 import com.mangolion.epicmangorpg.characters.Character;
+import com.mangolion.epicmangorpg.game.Terrain;
 import com.mangolion.epicmangorpg.game.Utility;
 
 public class Floor {
 	public LinkedList<Spawn> spawns = new LinkedList<Floor.Spawn>();
+	public LinkedList<Spawn> allies = new LinkedList<Floor.Spawn>();
+	public LinkedList<Terrain> terrains = new LinkedList<Terrain>();
 	Random rand = new Random();
-	public void addSpawn( Class<? extends Character> character, float chance){
-		spawns.add(new Spawn(character, chance));
+	public void addSpawn( Class<? extends Character> character, float scale){
+		spawns.add(new Spawn(character, scale));
+	}
+
+	public void addSpawn( Class<? extends Character> character, float chance, float scale){
+		spawns.add(new Spawn(character, chance, scale));
 	}
 	
+	public void addAlly( Class<? extends Character> character, float scale){
+		allies.add(new Spawn(character, scale));
+	}
+
+	
 	public Character getSpawn(){
-		for (Spawn spawn:spawns)
-			if (rand.nextFloat() <= spawn.chance)
-				return Utility.getInstance(spawn.character);
-		return Utility.getInstance( spawns.get(rand.nextInt(spawns.size())).character);
+		/*for (Spawn spawn:spawns)
+			if (rand.nextFloat() <= spawn.chance){
+				Character character =  Utility.getInstance(spawn.character);
+				if (spawn.scale != 1)
+					character.scale(spawn.scale);
+				return character;
+		}*/
+		return  Utility.getInstance( spawns.get(rand.nextInt(spawns.size())).character);
+	}
+	
+	public Character getAlly(){
+		return  Utility.getInstance( allies.get(rand.nextInt(allies.size())).character);
 	}
 	
 	public Character getSpawn(int i){
@@ -28,11 +46,23 @@ public class Floor {
 
 	public static class Spawn{
 		public Class<? extends Character> character;
-		public float chance;
+		public float chance, scale = 1;
 		
-		public Spawn( Class<? extends Character>character_, float chance_) {
+		public Spawn( Class<? extends Character>character_) {
+			chance = 1;
+			character = character_;
+		}
+		
+		public Spawn( Class<? extends Character>character_, float scale_) {
+			scale = scale_;
+			character = character_;
+			chance = 1;
+		}
+		
+		public Spawn( Class<? extends Character>character_, float chance_, float scale_) {
 			chance = chance_;
 			character = character_;
+			scale = scale_;
 		}
 		
 	}
@@ -42,6 +72,8 @@ public class Floor {
 		result.add(new Floor0());
 		result.add(new Floor1());
 		result.add(new Floor2());
+		result.add(new Floor3());
+		result.add(new Floor4());
 		return result;
 	}
 }

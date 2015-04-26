@@ -3,6 +3,7 @@ package com.mangolion.epicmangorpg.game;
 import java.util.Random;
 
 public class Terrain {
+
 	public static Terrain Beach = new Terrain("Beach", 20, 50, 30, 90, 50, 90, 85, 100),
 			Swamp = new Terrain("Swamp", 45, 90, 50, 85, 40, 85, 50, 75),
 			Plain = new Terrain("Plain", 0, 20, 40, 60, 0, 50, 85, 100),
@@ -11,7 +12,9 @@ public class Terrain {
 			RoofedForest = new Terrain("Roofed Forest", 40, 85, 30, 90, 50, 90, 20, 50),
 			Jungle = new Terrain("Jungle", 50, 90, 30, 90, 50, 90, 30, 70),
 			Taiga = new Terrain("Taiga", 10, 30, 20, 45, 0, 50, 85, 100),
-			Tundra =  new Terrain("Tundra", 10, 30, 20, 45, 0, 50, 85, 100);
+			Tundra =  new Terrain("Tundra", 10, 30, 20, 45, 0, 50, 85, 100),
+			Desert = new Terrain("Desert", 20, 60, 50, 85, 30, 70, 25, 85),
+			Arctic = new Terrain("Arctic", 20, 60, 0, 40, 20, 40, 30, 90);
 	
 	public static Terrain terrains[] = {Beach, Swamp, Plain, HighMountain, Forest, RoofedForest, Jungle, Taiga, Tundra};
 	

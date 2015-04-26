@@ -18,22 +18,27 @@ import com.mangolion.epicmangorpg.frames.FrameGame;
 import com.mangolion.epicmangorpg.messages.Msg;
 
 public class StylePainter {
-	static TextPaneMango paneMango = FrameGame.instance.tfNarration,
-			paneTime = FrameGame.instance.tfTime;
-	public static final Style NAME = paneMango.addStyle("Name", null),
-			STATUS = paneMango.addStyle("Status", null),
-			SKILL = paneMango.addStyle("Skill", null),
-			NUMBER = paneMango.addStyle("Number", null),
-			NORMAL = paneMango.addStyle("Normal", null),
-			BOLD = paneMango.addStyle("Bold", null),
-			NULL = null; 
+	static TextPaneMango paneMango,
+			paneTime;
+	public static Style NAME, STATUS, NUMBER, SKILL, NORMAL, BOLD, NULL;
 	public static Color colName,	colStatus , colSkill,colNumber, colNormal;
 	public static boolean lightTheme = true;
 	public static Style styles[] = {NAME, SKILL, NUMBER, NORMAL, STATUS};
 	static int lineNum = 0;
 	
 	public StylePainter() {
-		updateColors(true);
+		//updateColors(true);
+	}
+	
+	public static void init(){
+		paneMango = FrameGame.instance.tfNarration;
+		NAME = paneMango.addStyle("Name", null);
+				STATUS = paneMango.addStyle("Status", null);
+				SKILL = paneMango.addStyle("Skill", null);
+				NUMBER = paneMango.addStyle("Number", null);
+				NORMAL = paneMango.addStyle("Normal", null);
+				BOLD = paneMango.addStyle("Bold", null);
+				NULL = null; 
 	}
 	
 	public static void updateColors(boolean light){
@@ -51,6 +56,8 @@ public class StylePainter {
 				colNumber = Color.yellow;
 				colNormal = Color.white;
 		}
+		if (NAME == null)
+			return;
 		
 		StyleConstants.setForeground(NAME, colName);
 		StyleConstants.setForeground(STATUS, colStatus);
@@ -61,7 +68,9 @@ public class StylePainter {
 
 	}
 	
-	public static void append(StyleSegment ... segments){		StyledDocument document = paneMango.getStyledDocument();
+	public static void append(StyleSegment ... segments){
+		 paneMango = FrameGame.instance.tfNarration;
+		StyledDocument document = paneMango.getStyledDocument();
 		lineNum ++;
 		for (StyleSegment segment: segments){
 			try {
@@ -90,6 +99,7 @@ public class StylePainter {
 	}
 
 	public static void append(LinkedList<StyleSegment> message) {
+		 paneMango = FrameGame.instance.tfNarration;
 		lineNum ++;
 		StyledDocument document = paneMango.getStyledDocument();
 		for (StyleSegment segment: message){
@@ -120,6 +130,8 @@ public class StylePainter {
 	}
 	
 	public static void appendTime(float time) {
+		paneTime = FrameGame.instance.tfTime;
+		 paneMango = FrameGame.instance.tfNarration;
 		//System.out.println("-" + lineNum);
 		String str = "[ $num ]";
 		lineNum = 0;

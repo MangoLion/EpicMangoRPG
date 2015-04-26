@@ -8,8 +8,8 @@ public class ItemStat extends Item{
 
 	public float value;
 	
-	public ItemStat( String name, String desc, Type type, float value) {
-		super( name, desc, type);
+	public ItemStat( String name, String desc, Type type, float value, int maxStack) {
+		super( name, desc, type, maxStack);
 		this.value = value;
 	}
 	

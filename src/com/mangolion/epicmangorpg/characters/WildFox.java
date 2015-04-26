@@ -4,9 +4,9 @@ import com.mangolion.epicmangorpg.ais.AISimple;
 import com.mangolion.epicmangorpg.components.Element;
 import com.mangolion.epicmangorpg.components.Elements;
 import com.mangolion.epicmangorpg.skills.Skill;
-import com.mangolion.epicmangorpg.skills.SkillBasicHeal;
-import com.mangolion.epicmangorpg.skills.SkillBasicKick;
-import com.mangolion.epicmangorpg.skills.SkillBasicSlash;
+import com.mangolion.epicmangorpg.skills.SkillHealBasic;
+import com.mangolion.epicmangorpg.skills.SkillKickBasic;
+import com.mangolion.epicmangorpg.skills.SkillSlashBasic;
 import com.mangolion.epicmangorpg.skills.SkillBasicSwordCombo;
 import com.mangolion.epicmangorpg.skills.SkillBite;
 import com.mangolion.epicmangorpg.skills.SkillBlock;
@@ -25,8 +25,8 @@ import com.mangolion.epicmangorpg.weapons.Weapons;
 public class WildFox extends Character{
 
 	public WildFox() {
-		super("Wild Fox", "A small, wild fox, why are you bullying it?",50, 20, 80, 30, 10, 30, 20, 10, 0, 0,new Weapon("Fox Teeth", 0, 100, Weapons.Fang, 1, 1, 0.8f),  new SkillSideStep(), new SkillBite(), new SkillBasicSlash());
-		addElements(new Element(Elements.Furry, 1));
+		super("Wild Fox", "A small, wild fox, why are you bullying it?",50, 20, 80, 30, 10, 30, 20, 10, 0, 0,new Weapon("Fox Teeth", 0, 100, Weapons.Fang, 1, 1, 0.8f),  new SkillSideStep(), new SkillBite(), new SkillSlashBasic());
+		addElements(new Element("Furry", 1));
 		ai = new AISimple(this);
 	}
 }

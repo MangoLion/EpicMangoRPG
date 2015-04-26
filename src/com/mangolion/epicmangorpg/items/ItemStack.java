@@ -4,14 +4,23 @@ import com.mangolion.epicmangorpg.characters.Character;
 
 public class ItemStack {
 	public Item item;
+	public ItemCustom itemCustom;
 	public int stack = 0;
 	public Inventory inventory;
+	public boolean isCustom = false;
 	
 	public ItemStack(Inventory inv, Item item, int stack) {
 		this.item= item;
 		this.stack= stack;
 		inventory = inv;
 		
+	}
+	
+	public ItemStack(Inventory inv, ItemCustom item) {
+		this.itemCustom= item;
+		this.stack= 1;
+		inventory = inv;
+		isCustom = true;
 	}
 	
 	public void use(Character character){
@@ -45,7 +54,9 @@ public void use(Character character, Character target, float value){
 	
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return item.name + "(" + stack + ")";
+		if (isCustom)
+			return itemCustom.name + "(dur: " + itemCustom.durability + ")";
+		else
+			return item.name + "(" + stack + ")";
 	}
 }

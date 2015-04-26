@@ -7,7 +7,7 @@ public class BuffElemental extends Buff {
 
 	public BuffElemental(String name,float time, Element element) {
 		super(name, 0, time, Type.elemental, GenType.positive);
-		// TODO Auto-generated constructor stub
+		this.element = element;
 	}
 
 }

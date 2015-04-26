@@ -2,7 +2,7 @@ package com.mangolion.epicmangorpg.characters;
 
 import com.mangolion.epicmangorpg.ais.AISimple;
 import com.mangolion.epicmangorpg.skills.Skill;
-import com.mangolion.epicmangorpg.skills.SkillBasicKick;
+import com.mangolion.epicmangorpg.skills.SkillKickBasic;
 import com.mangolion.epicmangorpg.skills.SkillBasicSwordCombo;
 import com.mangolion.epicmangorpg.skills.SkillBlock;
 import com.mangolion.epicmangorpg.skills.SkillDodge;

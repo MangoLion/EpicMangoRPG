@@ -11,5 +11,6 @@ public enum Weapons {
 	Dagger,
 	GreatSword,
 	Fang,
+	Claws,
 	ALL
 }

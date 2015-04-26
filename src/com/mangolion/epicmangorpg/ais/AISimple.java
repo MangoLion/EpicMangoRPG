@@ -25,16 +25,9 @@ public class AISimple extends AI {
 	@Override
 	public void nextAction() {
 		if (!checkRecovery())
-		if (!checkDefense()){
-			Skill skill = getRandomSkill(GeneralType.Attack);
-			if (skill != null){
-				skill.execute();
-			}else{
-				 skill = getRandomSkill(GeneralType.Defend);
-				 if (skill != null)
-					 skill.execute();
-			}
-		}
+		if (!checkDefense())
+		if (!executeSkill(GeneralType.Attack))
+			executeSkill(GeneralType.Defend);
 			
 		super.nextAction();
 	}
@@ -44,25 +37,14 @@ public class AISimple extends AI {
 			return false;
 		
 		if (character.getHp()/character.maxHP < recoverLevel){
-			Skill skill = getRandomSkill(ActionType.RecoverHP);
-			if (skill != null){
-				skill.execute();
-				return true;
-			}
+			return executeSkill(ActionType.RecoverHP);
 		}
 		if (character.getSp()/character.maxSP < recoverLevel){
 			Skill skill = getRandomSkill(ActionType.RecoverSP);
-			if (skill != null){
-				skill.execute();
-				return true;
-			}
+			return executeSkill(ActionType.RecoverSP);
 		}
 		if (character.getMp()/character.maxMP < recoverLevel){
-			Skill skill = getRandomSkill(ActionType.RecoverMP);
-			if (skill != null){
-				skill.execute();
-				return true;
-			}
+			return executeSkill(ActionType.RecoverMP);
 		}
 		return false;
 	}
@@ -79,11 +61,27 @@ public class AISimple extends AI {
 		}
 		
 		if (skill.type.getGeneralType() == GeneralType.Attack && skill.isLoading && rand.nextFloat() <= chanceDefend){
-			 skill = getRandomSkill(GeneralType.Defend);
-			if (skill != null){
-				skill.execute();
+			 return executeSkill(GeneralType.Defend);
+		}
+		return false;
+	}
+	
+	public boolean executeSkill(ActionType type){
+		int retry = 5;
+		for (int i = 0; i < retry; i ++){
+			Skill  skill = getRandomSkill(type);
+			if (skill != null && skill.execute())
 				return true;
-			}
+		}
+		return false;
+	}
+	
+	public boolean executeSkill(GeneralType type){
+		int retry = 5;
+		for (int i = 0; i < retry; i ++){
+			Skill  skill = getRandomSkill(type);
+			if (skill != null && skill.execute())
+				return true;
 		}
 		return false;
 	}

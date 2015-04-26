@@ -14,13 +14,13 @@ public class SkillWebFiring extends Skill {
 
 	public SkillWebFiring() {
 		super("Web Shoot", "Shoot spider webs, can slow.",Weapons.ALL, ActionType.RangeNormal);
-		addSteps(new Step(this, "Web Shoot", "",ActionType.RangeNormal, 0.3f, 0.2f, 0.2f, 0, 20, 0, 5,0){
+		addSteps(new Step(this, "Web Shoot", "",ActionType.RangeNormal, 0.3f, 0.2f, 0.2f, 0){
 			@Override
 			public void execute(Character target) {
 				Event.addEvent(new EventWebFire(1, getCharacter(), target, 20, this));
 				super.execute(character);
 			}			
-		});
+		}.setCost(15, 10, 0, 0));
 	}
 
 }

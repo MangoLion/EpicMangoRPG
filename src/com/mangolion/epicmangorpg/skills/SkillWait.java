@@ -10,7 +10,7 @@ public class SkillWait extends Skill{
 
 	public SkillWait() {
 		super("Wait", "Take no action for x seconds",Weapons.ALL, ActionType.None);
-		addSteps(new Step(this, "wait","", ActionType.None, 0, -1, 0, 0, 0, 0, 0, 0){
+		addSteps(new Step(this, "wait","", ActionType.None, 0, -1, 0,  0){
 			@Override
 			public boolean isCustomTime() {
 				// TODO Auto-generated method stub

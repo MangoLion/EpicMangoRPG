@@ -1,31 +1,35 @@
 package com.mangolion.epicmangorpg.floors;
 
-import com.mangolion.epicmangorpg.characters.BlueSlime;
-import com.mangolion.epicmangorpg.characters.FangFox;
-import com.mangolion.epicmangorpg.characters.FangRabbit;
-import com.mangolion.epicmangorpg.characters.FangSpider;
-import com.mangolion.epicmangorpg.characters.GiantRabbit;
-import com.mangolion.epicmangorpg.characters.GiantRat;
-import com.mangolion.epicmangorpg.characters.HealSlime;
-import com.mangolion.epicmangorpg.characters.KingSlime;
-import com.mangolion.epicmangorpg.characters.KomodusLizard;
+import com.mangolion.epicmangorpg.characters.SlimeBlue;
+import com.mangolion.epicmangorpg.characters.FoxFang;
+import com.mangolion.epicmangorpg.characters.RabbitFang;
+import com.mangolion.epicmangorpg.characters.SpiderFang;
+import com.mangolion.epicmangorpg.characters.RabbitGiant;
+import com.mangolion.epicmangorpg.characters.RatGiant;
+import com.mangolion.epicmangorpg.characters.SlimeHeal;
+import com.mangolion.epicmangorpg.characters.SlimeKing;
+import com.mangolion.epicmangorpg.characters.LizardKomodus;
 import com.mangolion.epicmangorpg.characters.Minotaur;
-import com.mangolion.epicmangorpg.characters.PoisonSlime;
-import com.mangolion.epicmangorpg.characters.SoldierAnt;
+import com.mangolion.epicmangorpg.characters.SlimePoison;
+import com.mangolion.epicmangorpg.characters.AntSoldier;
 import com.mangolion.epicmangorpg.characters.WildFox;
-import com.mangolion.epicmangorpg.characters.WildRabbit;
-import com.mangolion.epicmangorpg.characters.WolfSpider;
+import com.mangolion.epicmangorpg.characters.RabbitWild;
+import com.mangolion.epicmangorpg.characters.SpiderWolf;
+import com.mangolion.epicmangorpg.game.Terrain;
 
 public class Floor1 extends Floor {
 
 	public Floor1() {
-		addSpawn( GiantRat.class, 0.1f);
-		addSpawn( FangRabbit.class, 0.15f);
-		addSpawn(HealSlime.class, 0.2f);
-		addSpawn( FangFox.class, 015f);	
-		addSpawn(KomodusLizard.class, 0.2f);
-		addSpawn( WolfSpider.class, 0.2f);
-		addSpawn( FangSpider.class, 0.15f);
-		addSpawn( KingSlime.class, 0.1f);
+		terrains.add(Terrain.Forest);
+		terrains.add(Terrain.Taiga);
+		terrains.add(Terrain.Plain);
+		
+		addSpawn( RatGiant.class, 0.1f);
+		addSpawn( RabbitFang.class, 0.15f);
+		addSpawn(SlimeHeal.class, 0.2f, 1.2f);
+		addSpawn( FoxFang.class, 015f);	
+		addSpawn( SpiderWolf.class, 0.2f);
+		addSpawn( SpiderFang.class, 0.15f);
+		addSpawn( SlimeKing.class, 0.1f);
 	}
 }

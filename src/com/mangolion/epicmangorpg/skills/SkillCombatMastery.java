@@ -18,6 +18,12 @@ public class SkillCombatMastery  extends Skill{
 	}
 	
 	@Override
+	public float getSPBuff() {
+		
+		return Utility.format4(prof*50f);
+	}
+	
+	@Override
 	public float getStrBuff() {
 		// TODO Auto-generated method stub
 		return Utility.format4(prof*10f);

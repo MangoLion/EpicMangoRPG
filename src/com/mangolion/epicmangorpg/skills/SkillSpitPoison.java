@@ -17,13 +17,13 @@ public class SkillSpitPoison extends Skill {
 
 	public SkillSpitPoison() {
 		super("Spit Poison", "Cannot be parried",Weapons.ALL, ActionType.RangeNormal);
-		addSteps(new Step(this, "Spit Poison", "",ActionType.RangeNormal, 0.3f, 0.2f, 0.2f, 0, 20, 0, 5, 1){
+		addSteps(new Step(this, "Spit Poison", "",ActionType.RangeNormal, 0.3f, 0.2f, 0.2f, 1){
 			@Override
 			public void execute(Character target) {
 				Event.addEvent(new EventSpitPoison(0.5f, getCharacter(), target, 20, this));
 				super.execute(character);
 			}			
-		});
+		}.setCost(15, 15, 5, 0));
 	}
 	public class EventSpitPoison extends EventRange{
 

@@ -3,6 +3,7 @@ package com.mangolion.epicmangorpg.skills;
 import java.util.LinkedList;
 
 import com.mangolion.epicmangorpg.components.ActionType;
+import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.messages.MsgBasicCD;
 import com.mangolion.epicmangorpg.messages.MsgDodgeExecute;
 import com.mangolion.epicmangorpg.messages.MsgDodgeLoad;
@@ -14,16 +15,14 @@ public class SkillParry extends Skill{
 
 	public SkillParry() {
 		super("Parry", "Very high chance of success compared to dodge, used to deflect most melee attacks and even some ranged attack, if succeed, the user will receive no damage and also can take advantage of the target's opening.",Weapons.ALL, ActionType.MeleeParry);
-		addSteps(new StepParry(this, 0.3f, 0.5f, 0.2f, 0, 0, 5, 15));
+		addSteps(new StepParry(this, 0.3f, 0.4f, 0.2f).setCost(10, 0, 0, 0));
 	}
 
 	public static class StepParry extends Step{
 		public float chanceParry = 0.8f;
 		public StepParry(Skill parent,
-				float timeLoad, float timeExecute, float timeCooldown,
-				float hpCost, float mpCost, float balCost, float stamCost) {
-			super(parent, "Parry", "",ActionType.MeleeParry, timeLoad, timeExecute, timeCooldown, hpCost, mpCost,
-					balCost, stamCost, 0);
+				float timeLoad, float timeExecute, float timeCooldown) {
+			super(parent, "Parry", "",ActionType.MeleeParry, timeLoad, timeExecute, timeCooldown, 0);
 			setMessages(new MsgParryLoad(), null, new MsgBasicCD());
 			chanceParry= 1;
 		}
@@ -41,7 +40,11 @@ public class SkillParry extends Skill{
 			// TODO Auto-generated method stub
 			return prof*10;
 		}
-		
+		@Override
+		public float getSPBuff() {
+			
+			return Utility.format4(prof*10f);
+		}
 		@Override
 		public boolean isCustomTime() {
 			// TODO Auto-generated method stub

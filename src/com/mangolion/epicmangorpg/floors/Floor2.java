@@ -1,32 +1,45 @@
 package com.mangolion.epicmangorpg.floors;
 
-import com.mangolion.epicmangorpg.characters.BlueSlime;
-import com.mangolion.epicmangorpg.characters.FangFox;
-import com.mangolion.epicmangorpg.characters.FangRabbit;
-import com.mangolion.epicmangorpg.characters.FangSpider;
-import com.mangolion.epicmangorpg.characters.FireSprite;
-import com.mangolion.epicmangorpg.characters.GiantRabbit;
-import com.mangolion.epicmangorpg.characters.GiantRat;
-import com.mangolion.epicmangorpg.characters.HealSlime;
-import com.mangolion.epicmangorpg.characters.IceSprite;
-import com.mangolion.epicmangorpg.characters.KingSlime;
-import com.mangolion.epicmangorpg.characters.KomodusLizard;
-import com.mangolion.epicmangorpg.characters.LightningSprite;
+import com.mangolion.epicmangorpg.characters.BoarWild;
+import com.mangolion.epicmangorpg.characters.SlimeBlue;
+import com.mangolion.epicmangorpg.characters.FoxFang;
+import com.mangolion.epicmangorpg.characters.RabbitFang;
+import com.mangolion.epicmangorpg.characters.SpiderFang;
+import com.mangolion.epicmangorpg.characters.SpriteEarth;
+import com.mangolion.epicmangorpg.characters.SpriteFire;
+import com.mangolion.epicmangorpg.characters.RabbitGiant;
+import com.mangolion.epicmangorpg.characters.RatGiant;
+import com.mangolion.epicmangorpg.characters.SlimeHeal;
+import com.mangolion.epicmangorpg.characters.SpriteIce;
+import com.mangolion.epicmangorpg.characters.SlimeKing;
+import com.mangolion.epicmangorpg.characters.LizardKomodus;
+import com.mangolion.epicmangorpg.characters.SpriteLightning;
 import com.mangolion.epicmangorpg.characters.Minotaur;
-import com.mangolion.epicmangorpg.characters.PoisonSlime;
-import com.mangolion.epicmangorpg.characters.SoldierAnt;
+import com.mangolion.epicmangorpg.characters.SlimePoison;
+import com.mangolion.epicmangorpg.characters.AntSoldier;
 import com.mangolion.epicmangorpg.characters.WildFox;
-import com.mangolion.epicmangorpg.characters.WildRabbit;
-import com.mangolion.epicmangorpg.characters.WolfSpider;
+import com.mangolion.epicmangorpg.characters.RabbitWild;
+import com.mangolion.epicmangorpg.characters.SpiderWolf;
+import com.mangolion.epicmangorpg.characters.WolfGray;
+import com.mangolion.epicmangorpg.characters.WolfWhite;
+import com.mangolion.epicmangorpg.game.Terrain;
 
 public class Floor2 extends Floor {
 
 	public Floor2() {
-		addSpawn( SoldierAnt.class, 0.1f);
-		addSpawn(HealSlime.class, 0.2f);
-		addSpawn(KomodusLizard.class, 0.2f);
-		addSpawn(IceSprite.class, 0.2f);
-		addSpawn(FireSprite.class, 0.2f);
-		addSpawn(LightningSprite.class, 0.2f);
+		terrains.add(Terrain.Forest);
+		terrains.add(Terrain.RoofedForest);
+		terrains.add(Terrain.Jungle);
+		terrains.add(Terrain.Swamp);
+		
+		addSpawn(LizardKomodus.class, 0.2f);
+		addSpawn( AntSoldier.class, 0.1f);
+		addSpawn(SlimeHeal.class, 0.2f, 1.4f);
+		addSpawn(LizardKomodus.class, 0.2f);
+		addSpawn(SpriteEarth.class, 0.2f);
+		addSpawn(WolfGray.class, 0.2f);
+		addSpawn(WolfWhite.class, 0.2f);
+		addSpawn(BoarWild.class, 0.2f);
+
 	}
 }

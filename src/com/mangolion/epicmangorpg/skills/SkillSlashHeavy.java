@@ -19,17 +19,15 @@ public class SkillSlashHeavy extends Skill {
 	public SkillSlashHeavy() {
 		super("Heavy Slash", "A deadly and crushing slash, will stun, but leaves alot of openings.",Weapons.GreatSword, ActionType.MeleeSwing);
 		addSteps(new StepSlashHeavy(this, "Heavy Slash","",1f,
-				0.8f, 0.7f, 0, 0, 30, 10, 3) {});
+				0.8f, 0.7f, 3) {}.setCost(25, 0, 12, 0));
 		setObservable(true, 0.8f);
 	}
 	
 	public static class StepSlashHeavy extends StepMeleeSlash{
 
 		public StepSlashHeavy(Skill parent, String name, String desc, float timeLoad,
-				float timeExecute, float timeCooldown, float hpCost,
-				float mpCost, float stamCost, float balcost,float baseDamage_) {
-			super(parent, name, desc, timeLoad, timeExecute, timeCooldown, hpCost, mpCost,
-					stamCost, balcost,baseDamage_);
+				float timeExecute, float timeCooldown,float baseDamage_) {
+			super(parent, name, desc, timeLoad, timeExecute, timeCooldown, baseDamage_);
 			cancelfromStun = false;
 			setStatus(new StatusStun(null, 0.9f), 1);
 			

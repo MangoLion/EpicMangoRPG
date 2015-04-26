@@ -3,30 +3,81 @@ package com.mangolion.epicmangorpg.components;
 import java.util.LinkedList;
 
 public enum Elements {
-	Ice("Ice", new Element(Elements.getFire(), 1.5f),new Element(Elements.getLava(), 2), new Element(Elements.getWind(), 0.5f)),
-	Water("Water", new Element(Elements.getFire(), 0.8f),new Element(Elements.getLava(), 2.5f)),
-	Earth("Earth", new Element(Elements.Water, 2), new Element(Elements.getLightning(), 0.5f), new Element(Elements.getFire(), 0.5f),new Element(Elements.getLava(), 1.5f), new Element(Elements.getWind(), 0.5f)),
-	Lightning("Lightning", new Element(Elements.Water, 2), new Element(Elements.Earth, 0.5f)),
-	Fire("Fire", new Element(Elements.getLava(), 0f),new Element(Elements.getWater(), 2), new Element(Elements.getWind(), 2f), new Element(Elements.getEarth(), 1.5f)),
-	Lava("Lava", new Element(Elements.getFire(), 0f),new Element(Elements.getWater(), 2), new Element(Elements.getWind(), 1.5f), new Element(Elements.getEarth(), 1.5f), new Element(Elements.getIce(), 2)),
-	Wind("Wind", new Element(Elements.getLava(), 1.5f),new Element(Elements.getFire(), 1.5f),  new Element(Elements.getEarth(), 0.5f)),
-	Plant("Plant", new Element(Elements.getFire(), 2f),new Element(Elements.getLava(), 2f) ,new Element(Elements.getWater(), 0.5f),new Element(Elements.getLightning(), 2f),new Element(Elements.getLight(), -1f)),
-	Furry("Furry", new Element(Elements.getFire(), 2f),new Element(Elements.getLava(), 2f) ,new Element(Elements.getLightning(), 2f)),
-	Light("Light", new Element(Elements.getDark(), 2f)),
-	Dark("Dark", new Element(Elements.getLight(), 2f));
+	Ice("Ice", new Element("Fire", 1.5f),new Element("Lava", 2), new Element("Wind", 0.5f)),
+	Water("Water", new Element("Fire", 0.8f),new Element("Lava", 2.5f)),
+	Earth("Earth", new Element("Water", 2), new Element("Lightning", 0.5f), new Element("Fire", 0.5f),new Element("Lava", 1.5f), new Element("Wind", 0.5f)),
+	Lightning("Lightning", new Element("Water", 2), new Element("Earth", 0.5f)),
+	Fire("Fire", new Element("Lava", 0f),new Element("Water", 2), new Element("Wind", 2f), new Element("Earth", 1.5f)),
+	Lava("Lava", new Element("Fire", 0f),new Element("Water", 2), new Element("Wind", 1.5f), new Element("Earth", 1.5f), new Element("Ice", 2)),
+	Wind("Wind", new Element("Lava", 1.5f),new Element("Fire", 1.5f),  new Element("Earth", 0.5f)),
+	Plant(false, "Plant", new Element("Fire", 2f),new Element("Lava", 2f) ,new Element("Water", 0.5f),new Element("Lightning", 2f),new Element("Light", -1f)),
+	Furry(false, "Furry", new Element("Fire", 2f),new Element("Lava", 2f) ,new Element("Lightning", 2f)),
+	ToughHide(false, "Tough Hide",new Element("Lightning", 2f),new Element("Fire", 0.5f),  new Element("Wind", 0.5f), new Element("Ice", 0.5f)),
+	ToughScales(false, "Tough Scales",new Element("Lightning", 2f) ,new Element("Fire", 0.5f),  new Element("Wind", 0.5f), new Element("Ice", 2f)),
+	Light("Light", new Element("Dark", 2f)),
+	Dark("Dark", new Element("Light", 2f));
 	
 	public String name;
+	boolean againstSelf = true;
 	public Element[] elements;
 	private Elements(String name, Element ... elements) {
 		this.name = name;
 		this.elements = elements;
 	}
 	
+	private Elements(boolean as, String name, Element ... elements) {
+		againstSelf = as;
+		this.name = name;
+		this.elements = elements;
+	}
+	
 	public float calculate(Elements element){
 		for (Element e: elements)
-			if (e.type == element)
+			if (e.type.toLowerCase().equals( element.name.toLowerCase()))
 				return e.value;
+			if (element == this && againstSelf)
+				return 0;
 		return 1;
+	}
+	
+	public float calculate(String element){
+		for (Element e: elements)
+			if (e.type.toLowerCase().equals(element.toLowerCase()))
+				return e.value;
+			if (element.equals(this.name) && againstSelf)
+				return 0;
+		return 1;
+	}
+	
+	public static  Elements getElement(String ele){
+		ele = ele.toLowerCase();
+		if (ele.equals("ice"))
+			return Ice;
+		else if (ele.equals("water"))
+		return Water;
+		else if (ele.equals("lightning"))
+		return Lightning;
+		else if (ele.equals("fire"))
+		return Fire;
+		else if (ele.equals("earth"))
+			return Earth;
+		else if (ele.equals("wind"))
+			return Wind;
+		else if (ele.equals("lava"))
+			return Lava;
+		else if (ele.equals("plant"))
+			return Plant;
+		else if (ele.equals("furry"))
+			return Furry;
+		else if (ele.equals("light"))
+			return Light;
+		else if (ele.equals("dark"))
+			return Dark;
+		else if (ele.equals("tough hide"))
+			return ToughHide;
+		else if (ele.equals("tough scales"))
+			return ToughScales;
+		return null;
 	}
 	
 	public static Elements getIce(){

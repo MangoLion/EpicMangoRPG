@@ -6,21 +6,19 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
-import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.characters.CharacterPlayer;
 import com.mangolion.epicmangorpg.components.ConcurrentDoublyLinkedList;
+import com.mangolion.epicmangorpg.components.Themes;
 import com.mangolion.epicmangorpg.components.Tick;
 import com.mangolion.epicmangorpg.events.Event;
 import com.mangolion.epicmangorpg.floors.Floor;
-import com.mangolion.epicmangorpg.floors.Floor.Spawn;
 import com.mangolion.epicmangorpg.frames.FrameCharacterInfo;
 import com.mangolion.epicmangorpg.frames.FrameGame;
 import com.mangolion.epicmangorpg.messages.Msg;
 import com.mangolion.epicmangorpg.skills.Skill;
-import com.mangolion.epicmangorpg.statuses.Status;
 import com.mangolion.epicmangorpg.steps.Step;
 
 public class Game {
@@ -36,7 +34,7 @@ public class Game {
 	public Weather weather;
 	public Terrain terrain;
 	public float timePassed = 0, lastWeatherTick = 0, timeSinceTick = 0, floorPercent = 0;
-	public boolean nextFloor = true, lastFloor = false; 
+	public boolean nextFloor = true, lastFloor = false, firstBattle = true; 
 	public Timer timer = new Timer(100, new ActionListener() {
 
 		@Override
@@ -58,24 +56,50 @@ public class Game {
 		return result;
 	}
 	FrameGame frame = FrameGame.instance;
+	
+	public void saveGame(){
+		Profile profile = new Profile(CharacterPlayer.instance, currentFloor, floorPercent, nextFloor, lastFloor, Themes.getCurrentTheme());
+		WiniWriter.saveProfile(profile);
+	}
+	
+	public void loadGame(Profile profile){
+		currentFloor = profile.currentFloor;
+		nextFloor = profile.nextFloor;
+		lastFloor = profile.lastFloor;
+		floorPercent = profile.floorPercent;
+		CharacterPlayer.instance = profile.player;
+		if (profile.theme == null)
+			profile.theme = "Dust Coffee";
+		Themes.setTheme(profile.theme);
+	}
+	
 	public void begin() {
 		if (lastFloor == true){
 			if (currentFloor > 0 && floorPercent <= 0){
 				currentFloor --;
 				floorPercent = 100;
+				Utility.narrate("You have ascended to the last floor");
 				//lastFloor = false;
 			}
 		//	floorPercent -= 20;
 		}
+		
+		
 		
 		if (nextFloor == true){
 				if (floorPercent >= 100){
 					currentFloor ++;
 					//nextFloor = false;
 					floorPercent = 0;
+					Utility.narrate("You have descended to the next floor");
 				}
 				//floorPercent += 20;
 		}
+		if (!firstBattle){
+		saveGame();
+		}
+		else
+			firstBattle = false;
 		
 		if (timer != null)
 			timer.stop();
@@ -84,10 +108,13 @@ public class Game {
 		ticks.clear();
 		charsAllies.clear();
 		charsEnemies.clear();
+		events.clear();
 		
 		floors.addAll(Floor.getFloors());
 		weather = Weather.getRandomWeather();
-		terrain = Terrain.getRandomTerrain();
+		if (currentFloor >= floors.size())
+			currentFloor = 0;
+		terrain = floors.get(currentFloor).terrains.get(rand.nextInt(floors.get(currentFloor).terrains.size()));//Terrain.getRandomTerrain();
 		weather.generateValues();
 		weather.syncTerrain(terrain);
 		
@@ -95,12 +122,13 @@ public class Game {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (playerName.equals(""))
-					playerName = JOptionPane.showInputDialog("Enter your name:", "Mango");
+				//if (playerName.equals(""))
+					//playerName = JOptionPane.showInputDialog("Enter your name:", "Mango");
 				
 				
 				for (FrameCharacterInfo info : FrameGame.instance.charInfos)
 					info.dispose();
+				 frame = FrameGame.instance;
 				frame.tfNarration.setText("");
 				frame.tfTime.setText("");
 				frame.pbFloor.setValue((int) floorPercent);
@@ -111,19 +139,39 @@ public class Game {
 				for (int i = 0; i < floors.get(currentFloor).spawns.size(); i ++)
 					frame.modelMonster.addElement(floors.get(currentFloor).getSpawn(i));
 				
+				float allyCP = 0, enemyCP = 0, limitCP;
 				if (CharacterPlayer.instance == null)
 					new CharacterPlayer(playerName);
 				CharacterPlayer.instance.reset();
 				
-				maxEnemies = charsAllies.size();
 				charsAllies.add(CharacterPlayer.instance);
-				charsEnemies.add(floors.get(currentFloor).getSpawn());
-				for (int i = 0; i < maxEnemies - 1; i ++)
-				//	if (rand.nextInt(4) == 0)
-						charsEnemies.add(floors.get(currentFloor).getSpawn());
 				
-					//for (int i = 0 ; i <100; i ++)
-					//	System.out.println(floors.get(currentFloor).getSpawn().name);
+			//	if (rand.nextInt(2) == 0)
+				if (getCurrentFloor().allies.size()>0)
+					for (int i = 0; i < 4; i ++)
+						if (rand.nextInt(3) == 0)
+							charsAllies.add(floors.get(currentFloor).getAlly());
+				
+				for (Character character: charsAllies)
+					allyCP += character.getCP();
+				//maxEnemies = charsAllies.size();
+
+				if (currentFloor < 2)
+					limitCP = allyCP * 0.5f;
+				else if (currentFloor < 4)
+					limitCP = allyCP * 0.7f;
+				else
+					limitCP = allyCP;
+				
+				while (enemyCP < limitCP ){
+					Character enemy = floors.get(currentFloor).getSpawn();
+					enemyCP += enemy.getCP();
+					if (enemyCP < allyCP * 1.2)
+					charsEnemies.add(enemy);
+				}
+				
+				frame.updateInfoTab();
+				
 			LinkedList<Character> allChars = getAllChars();
 				for (Character character : allChars) {
 					addTick(character, rand.nextFloat(), Tick.ACTION);
@@ -308,7 +356,7 @@ public class Game {
 		if (!character.isAllied){
 			if (charsAllies.size() > 1){
 				for (Character c: charsAllies)
-					if (c.getTarget() == character)
+					if (c.target == character)
 						return c;
 				return charsAllies.get(rand.nextInt(charsAllies.size()));
 			}else
@@ -323,7 +371,7 @@ public class Game {
 		if (!character.isAllied){
 			if (charsEnemies.size() > 1){
 				for (Character c: charsEnemies)
-					if (c.target == character && c.getHp() < c.maxHP)
+					if (c.target == character && c.getHp() < c.getMaxHP())
 						return c;
 				return charsEnemies.get(rand.nextInt(charsEnemies.size()));
 			}else
@@ -332,7 +380,7 @@ public class Game {
 		if (character.isAllied){
 			if (charsAllies.size() > 1){
 				for (Character c: charsAllies)
-					if (c.getTarget() == character && c.getHp() < c.maxHP)
+					if (c.getTarget() == character && c.getHp() < c.getMaxHP())
 						return c;
 				return charsAllies.get(rand.nextInt(charsAllies.size()));
 			}else
@@ -342,6 +390,8 @@ public class Game {
 	}
 
 	public static Game getInstance() {
+		if (game == null)
+			new Game();
 		return game;
 	}
 
@@ -383,5 +433,16 @@ public class Game {
 					StylePainter.append( new Msg("$name has learned " + learn.name + " from $targetname after watching $tp2 in action.").getMessage(c, character, 0));
 				}
 			}
+	}
+	
+	public LinkedList<Character> getEnemies(Character character){
+		if (character.isAllied)
+			return charsEnemies;
+		else
+			return charsAllies;
+	}
+	
+	public Floor getCurrentFloor(){
+		return floors.get(currentFloor);
 	}
 }

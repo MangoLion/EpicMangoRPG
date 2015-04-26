@@ -18,7 +18,7 @@ public class SkillJumpAtk extends Skill {
 	public SkillJumpAtk() {
 		super("Jump Attack", "Like a kick, it can stun and knock off balance, however, the user's balance is lost as well. Cannot be parried.",Weapons.ALL, ActionType.MeleeSpecial);
 		addSteps(new StepMeleeKick(this, "Jump Attack", "",0.7f,
-				0.3f, 1f, 0, 0, 60, 50, 60, 3.5f) {
+				0.3f, 1f, 60, 3.5f) {
 			@Override
 			public void init() {
 				super.init();
@@ -27,7 +27,20 @@ public class SkillJumpAtk extends Skill {
 				setMessages(null, null, null);
 				setObservable(true, 1f);
 			}
-		}.setChances(1, 0, 0.2f));
+			
+			@Override
+			public float getStrBuff() {
+				
+				return Utility.format4(prof*10f);
+			}
+			
+			@Override
+			public float getBalBuff() {
+				
+				return Utility.format4(prof*20f);
+			}
+		}.setChances(1, 0, 0.2f)
+		.setCost(25, 0, 70, 0));
 	}
 	
 }

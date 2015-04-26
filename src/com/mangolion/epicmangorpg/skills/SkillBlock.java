@@ -15,10 +15,10 @@ public class SkillBlock extends Skill {
 	
 	public SkillBlock() {
 		super("Block", "Can block and reduce damage from most attacks. Formula is def =  50 + character.maxHP*0.1",Weapons.ALL, ActionType.MeleeBlock);
-		addSteps(new Step(this, "Block", "",ActionType.MeleeBlock, 0.4f, -1, 0.4f, 0, 0,.2f, 10,0) {
+		addSteps(new Step(this, "Block", "",ActionType.MeleeBlock, 0.4f, -1, 0.4f,0) {
 public void execute(Character target, float time) {
 	super.execute(target, time);
-	value = (float) (50 + character.maxHP*0.1)*(1 + prof);
+	value = (float) (50 + character.getMaxHP()*0.1)*(1 + prof);
 };
 	public float getHPBuff() {
 		return prof * 50;
@@ -43,6 +43,7 @@ public void execute(Character target, float time) {
 			public boolean isCustomTime() {
 				return true;
 			};
-	}.setMessages(new MsgMeleeBlockLoad(), new MsgMeleeBlockExecute(), new MsgBasicCD()));
+	}.setMessages(new MsgMeleeBlockLoad(), new MsgMeleeBlockExecute(), new MsgBasicCD())
+	.setCost(15, 0, 0, 0));
 	}
 }

@@ -36,6 +36,7 @@ import com.mangolion.epicmangorpg.game.StylePainter;
 
 
 public class Themes {
+	public static String current;
 	public static SubstanceSkin lightthemes[] = { new BusinessSkin(),
 			new BusinessBlueSteelSkin(), new BusinessBlackSteelSkin(),
 			new CremeSkin(), new CremeCoffeeSkin(), new SaharaSkin(),
@@ -75,6 +76,11 @@ public class Themes {
 				SubstanceLookAndFeel.setSkin(skin);
 				StylePainter.updateColors(false);
 			}
-		//	IniWriter.setTheme(name);
+		current = name;
+	}
+
+	public static String getCurrentTheme() {
+		// TODO Auto-generated method stub
+		return current;
 	}
 }

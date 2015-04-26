@@ -17,10 +17,12 @@ public class SkillBite extends Skill {
 	public SkillBite() {
 		super("Bite", "Used by monsters with sharp teeth, beware of those with poison.",Weapons.Fang, ActionType.MeleeStab);
 		addSteps(new StepMeleeSlash(this, "Bite","", 0.5f,
-				0.3f, 0.3f, 0, 0, 10, 5,1.3f) {
+				0.3f, 0.3f,1.3f) {
 			
 			
-		}.setChances(0.9f, 0, 0.1f).setMessages(new Msg("$name lunges at $targetname, showing $p3 sharp teeth."), new Msg("Blood is seen everywhere as $name's teeth sunk into $targetname's body."), null));
+		}.setChances(0.9f, 0, 0.1f)
+		.setCost(20, 0, 10, 0)
+		.setMessages(new Msg("$name lunges at $targetname, showing $p3 sharp teeth."), new Msg("Blood is seen everywhere as $name's teeth sunk into $targetname's body."), null));
 	}
 	
 }

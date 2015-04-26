@@ -80,16 +80,16 @@ public class Skill implements StatBuff {
 		reset();
 	}
 	Msg msgCooldown = new MsgFinishCD();
-	public void execute() {
-		execute(character.getTarget());
+	public boolean  execute() {
+		return execute(character.getTarget());
 	}
 	
-	public void execute(Character target){
-		execute(target, -1);
+	public boolean execute(Character target){
+		return execute(target, -1);
 	}
 	
-	public void execute(Character target, float custime){
-
+	public boolean execute(Character target, float custime){
+		
 		character.skillCurrent = this;
 		character.setTarget(target);
 		Step step = null;
@@ -103,7 +103,7 @@ public class Skill implements StatBuff {
 				LogMsg.addLog(new LogMsg(character.name	+ "'s cooldown time is over, and  is  now ready to prepare another skill", Game.getInstance().timePassed));
 				StylePainter.append(msgCooldown.getMessage(character, null, 0));
 				complete();
-				return;
+				return true;
 			} else {
 				stepCurrent++;
 				resetStep();
@@ -139,13 +139,20 @@ public class Skill implements StatBuff {
 				step.execute(target);
 			}
 		} else {
+			if (!step.checkConndition()){
+				if (character == CharacterPlayer.instance)
+					Utility.narrate("You do not have enough sp/mp to use this skill");
+				return false;
+			}
+			
 			isLoading = true;
 			time = step.getLoadTime();
 			Game.getInstance().addTick(character, time, Tick.SKILL);
-			step.load();
 			if (custime != -1 && step.isCustomTime())
 				step.customExecutionTime = custime;
+			step.load();
 		}
+		return true;
 	}
 
 	public void reset() {
@@ -192,6 +199,11 @@ public class Skill implements StatBuff {
 		for (Step step: steps)
 			result += step.getCooldownTime();
 		return Utility.format(result);
+	}
+	
+	public boolean checkCondition(){
+		Step step = steps.get(stepCurrent);
+		return step.checkConndition();
 	}
 	
 	public float getTotalTime(){

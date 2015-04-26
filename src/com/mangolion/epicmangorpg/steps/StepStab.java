@@ -20,10 +20,9 @@ public abstract class StepStab extends StepMeleeSlash {
 
 
 	public StepStab(Skill parent, String name,  String desc, float timeLoad,
-			float timeExecute, float timeCooldown, float hpCost, float mpCost,
-			float stamCost, float balCost, float dmgPercent) {
+			float timeExecute, float timeCooldown, float dmgPercent) {
 		super(parent, name,desc,  timeLoad, timeExecute,
-				timeCooldown, hpCost, mpCost, stamCost, balCost, dmgPercent);
+				timeCooldown,dmgPercent);
 		setMessages(null, null, null);
 		chanceBlock = 0f;
 		chanceParry = 0.7f;

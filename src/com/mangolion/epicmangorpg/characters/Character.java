@@ -1,6 +1,7 @@
 package com.mangolion.epicmangorpg.characters;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -30,7 +31,7 @@ import com.mangolion.epicmangorpg.weapons.Weapons;
 public class Character implements Cloneable {
 	public Character target;
 	Random rand = new Random();
-	public String name, desc, pronoun = "he", pronoun2 = "him", pronoun3 =  "his", pronoun4 = "himself";
+	public String name, desc, pronoun = "he", pronoun2 = "him", pronoun3 =  "his", pronoun4 = "himself", gender = " male";
 	public Skill skillCurrent;
 	public LinkedList<Skill> skills = new LinkedList<Skill>();
 	public LinkedList<Status> statuses = new LinkedList<Status>();
@@ -44,10 +45,17 @@ public class Character implements Cloneable {
 	public AI ai;
 	public Inventory inventory = new Inventory();
 
-	public float str, agi,  inte, dex, maxHP, maxMP, maxSP, maxBal, prot, def, meleeSpeedMod = 1, magicSpeedMod = 1, hpRegen = 0, mpRegen =0.01f, spRegen = 0.02f, balRegen = 0.05f, cpBase = 0 , learnRate = 0;;
+	public float str, agi,  inte, dex, maxHP, maxMP, maxSP, maxBal, prot, def, meleeSpeedMod = 1, magicSpeedMod = 1, hpRegen = 0, mpRegen =0.05f, spRegen = 0.1f, balRegen = 0.1f, cpBase = 0 , learnRate = 0;;
 	float hp, mp, sp, bal;
-	public LinkedList<Element> elements = new LinkedList<Element>();
+	LinkedList<Element> elements = new LinkedList<Element>();
 	
+	public LinkedList<Element> getElements(){
+		LinkedList<Element> results = new LinkedList<Element>();
+		results.addAll(elements);
+		for (Buff buff : getBuff(Buff.Type.elemental))
+			results.add(buff.element);
+		return results;
+	}
 
 
 	public Character(String name, String desc, float hp, float mp, float stam, float str,
@@ -97,7 +105,7 @@ public class Character implements Cloneable {
 		for (Skill skill : Skills.masteries)
 			if (skill.checkWeapon(weapon)){
 				addSkills(Utility.getInstance(skill.getClass()));
-				if (this instanceof CharacterPlayer)
+				if (this instanceof CharacterPlayer && FrameGame.instance != null)
 					StylePainter.append(new Msg("$name has learned " + skill.name).getMessage(this, null, 0));
 			}
 		
@@ -128,6 +136,15 @@ public class Character implements Cloneable {
 		for (Status status : statuses){
 			status.tick(deltaTime);
 		}
+		Iterator<Buff> it = buffs.iterator();
+		while (it.hasNext()){
+			Buff buff = it.next();
+			buff.time -=  deltaTime;
+			if (buff.time <= 0){
+				StylePainter.append(new Msg("$name is no longer " + name).getMessage(this, null, 0));
+				it.remove();
+			}
+		}
 		if (skillCurrent == null && Game.getInstance().findTick(this) == null && !isStunned())
 			nextAction();
 		else if(skillCurrent != null && Game.game.findTick(this) == null)
@@ -137,18 +154,18 @@ public class Character implements Cloneable {
 	
 	public void regen(float deltaTime){
 		if (bal < getMaxBal())
-			bal += Math.round(deltaTime*getMaxBal()*balRegen*100f)/100f;
-		if (sp < getMaxSP())
-			sp += Math.round(deltaTime*getMaxSP()*spRegen*100f)/100f;
+			bal += Math.round(deltaTime*getMaxBal()*getBalRegen()*100f)/100f;
+		if (sp < getMaxSP() && (skillCurrent == null || (skillCurrent != null && !skillCurrent.isLoading)))
+			sp += Math.round(deltaTime*getMaxSP()*getSpRegen()*100f)/100f;
 		if (hp < getMaxHP())
-			hp += Math.round(deltaTime*getMaxHP()*hpRegen*100f)/100f;
+			hp += Math.round(deltaTime*getMaxHP()*getHpRegen()*100f)/100f;
 		if (mp < getMaxMP())
-			mp += Math.round(deltaTime*getMaxMP()*mpRegen*100f)/100f;
+			mp += Math.round(deltaTime*getMaxMP()*getMpRegen()*100f)/100f;
 	}
 	
 	public void applyBuff(Buff buff){
 		for (Buff b: buffs)
-			if (b.name.equals(buff.name) && b.value == buff.value){
+			if (b.name.equals(buff.name) && b.type == buff.type){
 				b.time += buff.time;
 				return;
 			}
@@ -213,10 +230,10 @@ public class Character implements Cloneable {
 		}
 
 	public void setHeal(Character source, float heal) {
-		if (hp + heal < maxHP)
+		if (hp + heal < getMaxHP())
 			hp += heal;
 		else
-			hp = maxHP;
+			hp = getMaxHP();
 		Utility.narrate(source.name + " healed " + String.valueOf(heal) + " to " + name);
 		if (source != this)
 			LogMsg.addLog(source.name + " healed " + String.valueOf(heal) + " hp to " + name);
@@ -271,7 +288,6 @@ public class Character implements Cloneable {
 			e.printStackTrace();
 		}
 		for (Status stat: statuses){
-			System.out.println(stat.name + " | " +string);
 			if (stat.name.equals(string))
 				return stat;
 		}
@@ -304,6 +320,24 @@ public class Character implements Cloneable {
 		if (bal < f)
 			bal = 0;
 		else bal -= f;
+	}
+	
+	public void scale(float scale){
+		maxHP *= scale;
+		maxMP*= scale;
+		maxSP  *= scale;
+		maxBal  *= scale;
+		hp = maxHP;
+		mp = maxMP;
+		sp = maxSP;
+		bal = maxBal;
+		str  *= scale;
+		inte  *= scale;
+		dex  *= scale;
+		def  *= scale;
+		prot  *= scale;
+		agi  *= scale;
+		
 	}
 	
 	public LinkedList<Buff> getBuff(Buff.Type type){
@@ -370,8 +404,10 @@ public class Character implements Cloneable {
 	
 	public float getStr(){
 		float result = str;
-		for (Buff buff: getBuff(Buff.Type.str))
+		for (Buff buff: getBuff(Buff.Type.str)){
 			result += buff.value;
+		//	System.out.println(buff.name + " " + buff.value);
+		}
 		for (Skill skill: skills)
 			result += skill.getStrBuff();
 		return Utility.format(result);
@@ -405,11 +441,49 @@ public class Character implements Cloneable {
 	}
 	
 	public float getCP(){
+		if (mp == 0)
+			mp = hp * 0.7f;
 		float result = cpBase;
 		for (Skill skill : skills)
 			result += skill.getCP();
 		result += getMaxHP() + getMaxMP() + getMaxBal()/2 + getMaxSP()/2 + getAgi() + getDex()/2 + getInt() + getStr();
 		return Utility.format(result);
+	}
+	
+	public float getHpRegen() {
+		float result = hpRegen;
+		for (Buff buff: getBuff(Buff.Type.hpRegen))
+			result += buff.value;
+		for (Skill skill: skills)
+			result += skill.getHPRegenBuff();
+		return Utility.format4( result);
+	}
+	
+	public float getSpRegen() {
+		float result = spRegen;
+		for (Buff buff: getBuff(Buff.Type.spRegen))
+			result += buff.value;
+		for (Skill skill: skills)
+			result += skill.getSPRegenBuff();
+		return Utility.format4( result);
+	}
+	
+	public float getBalRegen() {
+		float result = balRegen;
+		for (Buff buff: getBuff(Buff.Type.balRegen))
+			result += buff.value;
+		for (Skill skill: skills)
+			result += skill.getBalRegenBuff();
+		return Utility.format4( result);
+	}
+	
+	public float getMpRegen() {
+		float result =mpRegen;
+		for (Buff buff: getBuff(Buff.Type.mpRegen))
+			result += buff.value;
+		for (Skill skill: skills)
+			result += skill.getMPRegenBuff();
+		return Utility.format4( result);
 	}
 	
 	

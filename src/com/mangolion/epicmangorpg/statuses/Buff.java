@@ -2,6 +2,9 @@ package com.mangolion.epicmangorpg.statuses;
 
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.components.Element;
+import com.mangolion.epicmangorpg.game.StylePainter;
+import com.mangolion.epicmangorpg.game.Utility;
+import com.mangolion.epicmangorpg.messages.Msg;
 
 public class Buff {
 	public String name;
@@ -12,11 +15,11 @@ public class Buff {
 	
 	public Buff(String name, float value, float time, Type type, GenType genType) {
 		this.name = name;
+		this.value = value;
 		this.type = type;
 		this.time = time;
 		this.genType = genType;
 	}
-	
 	
 	public static enum Type{
 		hp,
@@ -43,5 +46,11 @@ public class Buff {
 		positive,
 		negative,
 		neutral
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return name + "(" + time + ")";
 	}
 }

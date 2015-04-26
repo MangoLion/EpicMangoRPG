@@ -10,6 +10,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.LinkedList;
 
@@ -30,16 +32,16 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-import com.mangolion.epicmangorpg.characters.BlueSlime;
+import com.mangolion.epicmangorpg.characters.SlimeBlue;
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.characters.CharacterBob;
 import com.mangolion.epicmangorpg.characters.CharacterPlayer;
 import com.mangolion.epicmangorpg.characters.Dummy;
-import com.mangolion.epicmangorpg.characters.FangFox;
-import com.mangolion.epicmangorpg.characters.HealSlime;
-import com.mangolion.epicmangorpg.characters.KingSlime;
+import com.mangolion.epicmangorpg.characters.FoxFang;
+import com.mangolion.epicmangorpg.characters.SlimeHeal;
+import com.mangolion.epicmangorpg.characters.SlimeKing;
 import com.mangolion.epicmangorpg.characters.Minotaur;
-import com.mangolion.epicmangorpg.characters.WolfSpider;
+import com.mangolion.epicmangorpg.characters.SpiderWolf;
 import com.mangolion.epicmangorpg.components.Command;
 import com.mangolion.epicmangorpg.components.LogMsg;
 import com.mangolion.epicmangorpg.components.MenuHelp;
@@ -61,6 +63,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JSeparator;
+import java.awt.Font;
 
 public class FrameGame extends JFrame {
  
@@ -69,19 +72,26 @@ public class FrameGame extends JFrame {
 	public static FrameGame instance;
 	static Timer start;
 	public static File infoFile = new File(
-			System.getProperty("user.dir") + "\\\\" + "gameinfo.txt");
+			System.getProperty("user.dir") + "\\\\" + "gameinfo.txt"),
+			profileFile = new File(
+					System.getProperty("user.dir") + "\\\\" + "profiles");;
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 
+		start();
+	}
+	
+	public static void start(){
+
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 
 				try {
 
-					instance = new FrameGame();
-					
+					FrameGame.getInstance();
 					start = null;
 					start = new Timer(50, new ActionListener() {
 						
@@ -104,9 +114,15 @@ public class FrameGame extends JFrame {
 			}
 		});
 	}
+	public static FrameGame getInstance() {
+		if (instance == null)
+			instance = new FrameGame();
+		return instance;
+	}
 	static Game game;
 	public static void init(){
-		new Game();
+		//new Game();
+		StylePainter.init();
 		game = Game.getInstance();
 	/*	game.charsEnemies.add(new FangFox());
 		game.charsAllies.add(new CharacterPlayer());*/
@@ -115,7 +131,7 @@ public class FrameGame extends JFrame {
 		
 		instance.updateWeather(game.weather);
 		instance.updateTerrain(game.terrain);
-		new StylePainter();
+
 	}
 	
 	DefaultListModel<String> modelAllies = new DefaultListModel<String>();
@@ -171,12 +187,13 @@ public class FrameGame extends JFrame {
 	 * Create the frame.
 	 */
 	public FrameGame() {
+		instance =this;
 		setTitle("Epic Mango Adventure");
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.add(new MenuSetting());
 		menuBar.add(new MenuHelp());
 		setJMenuBar(menuBar);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		//setBounds(100, 100, 763, 434);
 		setSize(1360, 780);
 		JSplitPane splitPane = new JSplitPane();
@@ -196,6 +213,7 @@ public class FrameGame extends JFrame {
 
 		
 		 listLog = new JList(modelLog);
+		 listLog.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		scrollLog.setViewportView(listLog);
 	//	listLog.setCellRenderer(new MyCellRenderer());
 		listLog.addMouseListener(new MouseAdapter() {
@@ -213,6 +231,7 @@ public class FrameGame extends JFrame {
 		tabInfo.addTab("Event", scrollEvent);
 		splitPane_1.setLeftComponent(tabInfo);
 		 listEvents = new JList(modelEvent);
+		 listEvents.setFont(new Font("Comic Sans MS", Font.PLAIN, 11));
 		scrollEvent.setViewportView(listEvents);
 	//	listLog.setCellRenderer(new MyCellRenderer());
 		listEvents.addMouseListener(new MouseAdapter() {
@@ -231,10 +250,12 @@ public class FrameGame extends JFrame {
 		tabLower.addTab("Info", null, panel, null);
 		
 		lblPName = new JLabel("PName");
+		lblPName.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		lblPName.setBounds(10, 11, 267, 14);
 		panel.add(lblPName);
 		
 		pbHP = new JProgressBar();
+		pbHP.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		pbHP.setValue(0);
 		pbHP.setStringPainted(true);
 		pbHP.setString("0.0/0.0");
@@ -242,10 +263,12 @@ public class FrameGame extends JFrame {
 		panel.add(pbHP);
 		
 		JLabel label = new JLabel("MP:");
+		label.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		label.setBounds(140, 115, 44, 14);
 		panel.add(label);
 		
 		pbMP = new JProgressBar();
+		pbMP.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		pbMP.setValue(0);
 		pbMP.setStringPainted(true);
 		pbMP.setString("0.0/0.0");
@@ -253,6 +276,7 @@ public class FrameGame extends JFrame {
 		panel.add(pbMP);
 		
 		pbSP = new JProgressBar();
+		pbSP.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		pbSP.setValue(0);
 		pbSP.setStringPainted(true);
 		pbSP.setString("0.0/0.0");
@@ -260,26 +284,32 @@ public class FrameGame extends JFrame {
 		panel.add(pbSP);
 		
 		JLabel label_1 = new JLabel("SP:");
+		label_1.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		label_1.setBounds(10, 88, 100, 14);
 		panel.add(label_1);
 		
 		JLabel label_2 = new JLabel("HP:");
+		label_2.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		label_2.setBounds(140, 90, 44, 14);
 		panel.add(label_2);
 		
 		lblStatuses = new JLabel("Statuses:");
+		lblStatuses.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		lblStatuses.setBounds(139, 140, 138, 14);
 		panel.add(lblStatuses);
 		
 		lblBuffs = new JLabel("Buffs:");
+		lblBuffs.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		lblBuffs.setBounds(10, 140, 120, 14);
 		panel.add(lblBuffs);
 		
 		lblPName2 = new JLabel("PName");
+		lblPName2.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		lblPName2.setBounds(10, 173, 250, 14);
 		panel.add(lblPName2);
 		
 		pbHP2 = new JProgressBar();
+		pbHP2.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		pbHP2.setValue(0);
 		pbHP2.setStringPainted(true);
 		pbHP2.setString("0.0/0.0");
@@ -287,10 +317,12 @@ public class FrameGame extends JFrame {
 		panel.add(pbHP2);
 		
 		JLabel label_4 = new JLabel("MP:");
+		label_4.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		label_4.setBounds(146, 364, 100, 14);
 		panel.add(label_4);
 		
 		pbMP2 = new JProgressBar();
+		pbMP2.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		pbMP2.setValue(0);
 		pbMP2.setStringPainted(true);
 		pbMP2.setString("0.0/0.0");
@@ -298,6 +330,7 @@ public class FrameGame extends JFrame {
 		panel.add(pbMP2);
 		
 		pbSP2 = new JProgressBar();
+		pbSP2.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		pbSP2.setValue(0);
 		pbSP2.setStringPainted(true);
 		pbSP2.setString("0.0/0.0");
@@ -305,22 +338,27 @@ public class FrameGame extends JFrame {
 		panel.add(pbSP2);
 		
 		JLabel label_5 = new JLabel("SP:");
+		label_5.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		label_5.setBounds(20, 337, 100, 14);
 		panel.add(label_5);
 		
 		JLabel label_6 = new JLabel("HP:");
+		label_6.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		label_6.setBounds(146, 339, 100, 14);
 		panel.add(label_6);
 		
 		lblStatuses2 = new JLabel("Statuses:");
+		lblStatuses2.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		lblStatuses2.setBounds(139, 389, 138, 14);
 		panel.add(lblStatuses2);
 		
 		lblBuffs2 = new JLabel("Buffs:");
+		lblBuffs2.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		lblBuffs2.setBounds(10, 389, 120, 14);
 		panel.add(lblBuffs2);
 		
 		 tfDesc = new JTextPane();
+		 tfDesc.setFont(new Font("Comic Sans MS", Font.PLAIN, 13));
 		 tfDesc.setBounds(10, 198, 267, 65);
 		 panel.add(tfDesc);
 		 
@@ -329,10 +367,12 @@ public class FrameGame extends JFrame {
 		 panel.add(separator);
 		 
 		 JLabel lblBal = new JLabel("Bal:");
+		 lblBal.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		 lblBal.setBounds(10, 115, 100, 14);
 		 panel.add(lblBal);
 		 
 		 pbBal = new JProgressBar();
+		 pbBal.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		 pbBal.setValue(0);
 		 pbBal.setStringPainted(true);
 		 pbBal.setString("0.0/0.0");
@@ -340,10 +380,12 @@ public class FrameGame extends JFrame {
 		 panel.add(pbBal);
 		 
 		 JLabel label_7 = new JLabel("Bal:");
+		 label_7.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		 label_7.setBounds(20, 364, 100, 14);
 		 panel.add(label_7);
 		 
 		 pbBal2 = new JProgressBar();
+		 pbBal2.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		 pbBal2.setValue(0);
 		 pbBal2.setStringPainted(true);
 		 pbBal2.setString("0.0/0.0");
@@ -351,10 +393,12 @@ public class FrameGame extends JFrame {
 		 panel.add(pbBal2);
 		 
 		 tfSkill = new JTextPane();
+		 tfSkill.setFont(new Font("Comic Sans MS", Font.PLAIN, 13));
 		 tfSkill.setBounds(10, 36, 267, 41);
 		 panel.add(tfSkill);
 		 
 		 tfSkill2 = new JTextPane();
+		 tfSkill2.setFont(new Font("Comic Sans MS", Font.PLAIN, 13));
 		 tfSkill2.setBounds(10, 274, 267, 41);
 		 panel.add(tfSkill2);
 
@@ -370,62 +414,75 @@ public class FrameGame extends JFrame {
 		panelTerrain.setLayout(null);
 		
 		lblWeather = new JLabel("Weather");
+		lblWeather.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		lblWeather.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWeather.setBounds(62, 11, 176, 14);
 		panelTerrain.add(lblWeather);
 		
 		JLabel lblTemp = new JLabel("Temp:");
+		lblTemp.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		lblTemp.setBounds(10, 36, 46, 14);
 		panelTerrain.add(lblTemp);
 		
 		JLabel lblNewLabel = new JLabel("Humid:");
+		lblNewLabel.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		lblNewLabel.setBounds(10, 61, 46, 14);
 		panelTerrain.add(lblNewLabel);
 		
 		JLabel lblVisibility = new JLabel("Visibility:");
+		lblVisibility.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		lblVisibility.setBounds(10, 86, 70, 14);
 		panelTerrain.add(lblVisibility);
 		
 		JLabel lblWind = new JLabel("Wind:");
+		lblWind.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		lblWind.setBounds(10, 111, 46, 14);
 		panelTerrain.add(lblWind);
 		
 		lblTerrain = new JLabel("Terrain");
+		lblTerrain.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		lblTerrain.setBounds(51, 136, 200, 14);
 		lblTerrain.setHorizontalAlignment(JLabel.CENTER);
 		panelTerrain.add(lblTerrain);
 		
 		JLabel lblRoughness = new JLabel("Rugged:");
+		lblRoughness.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		lblRoughness.setBounds(10, 158, 66, 14);
 		panelTerrain.add(lblRoughness);
 		
 		 pbTemp = new JProgressBar();
+		 pbTemp.setFont(new Font("Comic Sans MS", Font.PLAIN, 11));
 		pbTemp.setStringPainted(true);
-		pbTemp.setBounds(60, 36, 196, 16);
+		pbTemp.setBounds(72, 36, 196, 16);
 		panelTerrain.add(pbTemp);
 		
 		 pbHumid = new JProgressBar();
+		 pbHumid.setFont(new Font("Comic Sans MS", Font.PLAIN, 11));
 		pbHumid.setStringPainted(true);
-		pbHumid.setBounds(60, 61, 196, 16);
+		pbHumid.setBounds(72, 61, 196, 16);
 		panelTerrain.add(pbHumid);
 		
 		 pbVis = new JProgressBar();
+		 pbVis.setFont(new Font("Comic Sans MS", Font.PLAIN, 11));
 		pbVis.setStringPainted(true);
-		pbVis.setBounds(60, 86, 196, 16);
+		pbVis.setBounds(72, 86, 196, 16);
 		panelTerrain.add(pbVis);
 		
 		 pbWind = new JProgressBar();
+		 pbWind.setFont(new Font("Comic Sans MS", Font.PLAIN, 11));
 		pbWind.setStringPainted(true);
-		pbWind.setBounds(60, 111, 196, 16);
+		pbWind.setBounds(72, 111, 196, 16);
 		panelTerrain.add(pbWind);
 		
 		pbRugged = new JProgressBar();
+		pbRugged.setFont(new Font("Comic Sans MS", Font.PLAIN, 11));
 		pbRugged.setStringPainted(true);
 		pbRugged.setBounds(60, 160, 196, 16);
 		panelTerrain.add(pbRugged);
 		
 		JButton btnNextFloor = new JButton("Next Floor");
-		btnNextFloor.setBounds(178, 204, 85, 23);
+		btnNextFloor.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
+		btnNextFloor.setBounds(171, 204, 97, 23);
 		panelTerrain.add(btnNextFloor);
 		btnNextFloor.addActionListener(new ActionListener() {
 			
@@ -475,15 +532,18 @@ public class FrameGame extends JFrame {
 		panelTerrain.add(scrollPane);
 		
 		JLabel lblMonsters = new JLabel("Monsters on this floor:");
+		lblMonsters.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		lblMonsters.setHorizontalAlignment(SwingConstants.CENTER);
 		scrollPane.setColumnHeaderView(lblMonsters);
 		
 		JButton btnLastFloor = new JButton("Last Floor");
-		btnLastFloor.setBounds(40, 204, 81, 23);
+		btnLastFloor.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
+		btnLastFloor.setBounds(20, 204, 97, 23);
 		panelTerrain.add(btnLastFloor);
 		
 		JButton btnStay = new JButton("Stay");
-		btnStay.setBounds(120, 204, 64, 23);
+		btnStay.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
+		btnStay.setBounds(111, 204, 64, 23);
 		btnStay.addActionListener(new ActionListener() {
 			
 			@Override
@@ -496,11 +556,13 @@ public class FrameGame extends JFrame {
 		panelTerrain.add(btnStay);
 		
 		pbFloor = new JProgressBar();
+		pbFloor.setFont(new Font("Comic Sans MS", Font.PLAIN, 11));
 		pbFloor.setBounds(10, 183, 272, 16);
 		pbFloor.setStringPainted(true);
 		panelTerrain.add(pbFloor);
 		
 		JLabel lblTime = new JLabel("Time:");
+		lblTime.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		lblTime.setBounds(10, 238, 272, 14);
 		panelTerrain.add(lblTime);
 		
@@ -529,6 +591,7 @@ public class FrameGame extends JFrame {
 		splitPane_3.setLeftComponent(scrollPane_2);
 		
 		 listAllies = new JList(modelAllies);
+		 listAllies.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		scrollPane_2.setViewportView(listAllies);
 		listAllies.addMouseListener(new MouseAdapter() {
 			@Override
@@ -564,6 +627,7 @@ public class FrameGame extends JFrame {
 		});
 		
 		JLabel lblAllies = new JLabel("Allies");
+		lblAllies.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		lblAllies.setHorizontalAlignment(SwingConstants.CENTER);
 		scrollPane_2.setColumnHeaderView(lblAllies);
 		
@@ -571,6 +635,7 @@ public class FrameGame extends JFrame {
 		splitPane_3.setRightComponent(scrollPane_3);
 		
 		listEnemies = new JList<String>(modelEnemies);
+		listEnemies.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		scrollPane_3.setViewportView(listEnemies);
 		listEnemies.addMouseListener(new MouseAdapter() {
 			@Override
@@ -595,6 +660,7 @@ public class FrameGame extends JFrame {
 		});
 		
 		JLabel lblEnemies = new JLabel("Enemies");
+		lblEnemies.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		lblEnemies.setHorizontalAlignment(SwingConstants.CENTER);
 		scrollPane_3.setColumnHeaderView(lblEnemies);
 		
@@ -630,6 +696,7 @@ public class FrameGame extends JFrame {
 		panelAction.add(btnNextTick, BorderLayout.EAST);
 		
 		tfCommand = new TextPaneMango();
+		tfCommand.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		tfCommand.setText("use skill basic kick on Bob");
 		tfCommand.setBorder(BorderFactory.createEtchedBorder());
 		tfCommand.addKeyListener(new KeyAdapter() {
@@ -641,7 +708,6 @@ public class FrameGame extends JFrame {
 				
 				case KeyEvent.VK_ENTER:
 					Command.execute(tfCommand.getText());
-					System.out.println("called");
 					e.consume();
 					break;
 
@@ -654,6 +720,7 @@ public class FrameGame extends JFrame {
 		panelAction.add(tfCommand, BorderLayout.CENTER);
 		
 		lblTimePassed = new JLabel("Time Passed:");
+		lblTimePassed.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		lblTimePassed.setHorizontalAlignment(SwingConstants.CENTER);
 		panelAction.add(lblTimePassed, BorderLayout.NORTH);
 		
@@ -662,18 +729,30 @@ public class FrameGame extends JFrame {
 		panelNarration.add(scrollMango, BorderLayout.CENTER);
 		
 		 tfNarration = new TextPaneMango();
+		 tfNarration.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		 tfNarration.setEditable(false);
 		scrollMango.setViewportView(tfNarration);
 		
 		JLabel lblNarration = new JLabel("Narration");
+		lblNarration.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		lblNarration.setHorizontalAlignment(SwingConstants.CENTER);
 		scrollMango.setColumnHeaderView(lblNarration);
 		
 		 tfTime = new TextPaneMango();
+		 tfTime.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		 tfTime.setToolTipText("Indicates the number of seconds passed since last tick");
 		 tfTime.setEditable(false);
 		//tfTime.setText("[0.0]\n");
 		scrollMango.setRowHeaderView(tfTime);
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				FrameMainMenu mainMenu = new FrameMainMenu();
+				mainMenu.setVisible(true);
+				super.windowClosing(e);
+			}
+		});
 	}
 	
     public class MyCellRenderer extends DefaultListCellRenderer
@@ -754,9 +833,12 @@ public class FrameGame extends JFrame {
 		
 		
 		
-		character = character.getTarget();
-		if (character == null)
+		character = character.target;
+		if (character == null || (character != null && character.isDead)){
+			if (game.charsEnemies.size() == 0)
+				return;
 				character = game.charsEnemies.getFirst();
+		}
 		lblPName2.setText(character.name);
 		pbHP2.setValue((int) ((int) character.getHp()/character.getMaxHP()*100));
 		pbHP2.setString( character.getHp() + "/" +character.getMaxHP());

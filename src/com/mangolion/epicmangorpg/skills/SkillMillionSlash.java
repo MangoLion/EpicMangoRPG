@@ -15,8 +15,7 @@ public class SkillMillionSlash extends Skill {
 
 	public SkillMillionSlash() {
 		super("Million Slash", "Despite the cool sounding name, it only executes 6 times, has a very small chance of stunning for each slash.",Weapons.Dagger, ActionType.MeleeStab);
-		addSteps(new StepMeleeSlash(this, "First Slash","", 0.2f, 0.1f, 0.4f, 0,
-				0, 10, 4,1f) {
+		addSteps(new StepMeleeSlash(this, "First Slash","", 0.2f, 0.1f, 0.4f,0.7f) {
 			@Override
 			public boolean isCancelfromStun() {
 				// TODO Auto-generated method stub
@@ -30,8 +29,8 @@ public class SkillMillionSlash extends Skill {
 			public float getAgiBuff() {
 				return prof*5;
 			};
-		}.setStatus(new StatusStun(null, 0.2f), 1f), new StepMeleeSlash(this, "Second Slash","", 0.2f, 0.1f, 0.2f, 0, 0, 7,
-				5,0.6f) {
+		}.setStatus(new StatusStun(null, 0.2f), 1f).setCost(12, 0, 5, 0), 
+		new StepMeleeSlash(this, "Second Slash","", 0.2f, 0.1f, 0.2f,0.9f) {
 			@Override
 			public boolean isCancelfromStun() {
 				// TODO Auto-generated method stub
@@ -44,8 +43,8 @@ public class SkillMillionSlash extends Skill {
 			public float getAgiBuff() {
 				return prof*6;
 			};
-		}.setStatus(new StatusStun(null, 0.2f), 1f), new StepMeleeSlash(this, "Third Slash", "",0.2f, 0.1f, 0.2f, 0, 0, 15,
-				6, 0.7f) {
+		}.setStatus(new StatusStun(null, 0.2f), 1f).setCost(12, 0, 5, 0), 
+		new StepMeleeSlash(this, "Third Slash", "",0.2f, 0.1f, 0.2f,1f) {
 			@Override
 			public boolean isCancelfromStun() {
 				// TODO Auto-generated method stub
@@ -58,8 +57,8 @@ public class SkillMillionSlash extends Skill {
 			public float getAgiBuff() {
 				return prof*7;
 			};
-		}.setStatus(new StatusStun(null, 0.2f), 1f), new StepMeleeSlash(this, "Fourth Slash", "",0.1f, 0.1f, 0.3f, 0, 0, 10,
-				7, 0.8f) {
+		}.setStatus(new StatusStun(null, 0.2f), 1f).setCost(16, 0, 8, 0), 
+		new StepMeleeSlash(this, "Fourth Slash", "",0.1f, 0.1f, 0.3f, 1.2f) {
 			@Override
 			public boolean isCancelfromStun() {
 				// TODO Auto-generated method stub
@@ -72,8 +71,8 @@ public class SkillMillionSlash extends Skill {
 			public float getAgiBuff() {
 				return prof*8;
 			};
-		}.setStatus(new StatusStun(null, 0.2f), 1f), new StepMeleeSlash(this, "Fifth Slash","", 0.1f, 0.1f, 0.2f, 0, 0, 7,
-				8, 0.9f) {
+		}.setStatus(new StatusStun(null, 0.2f), 1f).setCost(18, 0, 10, 0), 
+		new StepMeleeSlash(this, "Fifth Slash","", 0.1f, 0.1f, 0.2f,1.4f) {
 			@Override
 			public boolean isCancelfromStun() {
 				// TODO Auto-generated method stub
@@ -86,8 +85,8 @@ public class SkillMillionSlash extends Skill {
 			public float getAgiBuff() {
 				return prof*8;
 			};
-		}, new StepMeleeSlash(this, "Final Slash", "",0.1f, 0.1f, 1.0f, 0, 0, 15,
-				9, 1.2f) {
+		}.setStatus(new StatusStun(null, 0.2f), 1f).setCost(20, 0, 8, 0),  
+		new StepMeleeSlash(this, "Final Slash", "",0.1f, 0.1f, 1.0f, 2f) {
 			@Override
 			public boolean isCancelfromStun() {
 				// TODO Auto-generated method stub
@@ -100,7 +99,7 @@ public class SkillMillionSlash extends Skill {
 			public float getAgiBuff() {
 				return prof*10;
 			};
-		}.setStatus(new StatusStun(null, 1f), 1f));
+		}.setStatus(new StatusStun(null, 1f), 1f).setCost(25, 0, 8, 0));
 	}
 
 }

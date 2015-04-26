@@ -18,7 +18,7 @@ public class SkillBodySlam extends Skill {
 	public SkillBodySlam() {
 		super("Body Slam", "can stun and take target off balance, cannot be parried.",Weapons.ALL, ActionType.MeleeSpecial);
 		addSteps(new StepMeleeKick(this, "Body Slam", "",0.8f,
-				0.3f, 1f, 0, 0, 10, 50, 60, 3.5f) {
+				0.3f, 1f, 60, 3.5f) {
 			@Override
 			public void init() {
 				super.init();
@@ -29,7 +29,20 @@ public class SkillBodySlam extends Skill {
 				setMessages(null, null, null);
 				setObservable(true, 1f);
 			}
-		}.setChances(1, 0, 0.2f));
+			
+			@Override
+			public float getSPBuff() {
+				// TODO Auto-generated method stub
+				return prof*10;
+			}
+			
+			@Override
+			public float getBalBuff() {
+				// TODO Auto-generated method stub
+				return prof*20;
+			}
+		}.setChances(1, 0, 0.2f)
+		.setCost(30, 0, 50, 0));
 	}
 	
 }

@@ -1,5 +1,6 @@
 package com.mangolion.epicmangorpg.steps;
 
+import java.util.LinkedList;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
@@ -36,11 +37,32 @@ public abstract class Step implements Cloneable, StatBuff {
 	protected float  dmgPercent = 0;
 	public Element element;
 	public Status status;
-
+	public boolean isAOE = false;
+	public LinkedList<Character> aoeExceptions = new LinkedList<Character>();
+	 
+	public boolean checkConndition(){
+		if (getCharacter().getSp() <stamCost || getCharacter().getMp() < mpCost || getCharacter().getBal() < balCost || getCharacter().getHp() < hpCost)
+			return false;
+		return true;
+	}
+	
 	public boolean cancelfromStun = true, strBased = true, intBased = false;;
 	
 	public void init(){
 		
+	}
+	
+	public Step setCost(float sp,float mp,float bal,float hp){
+		stamCost = sp;
+		mpCost = mp;
+		balCost = bal;
+		hpCost = hp;
+		return this;
+	}
+	
+	public Step setAOE(boolean s){
+		isAOE = s;
+		return this;
 	}
 	
 	public Step setElement(Element element){
@@ -71,9 +93,9 @@ public abstract class Step implements Cloneable, StatBuff {
 			gained *= 2;
 			if (p.source == CharacterPlayer.instance)
 			if (Game.getInstance().nextFloor)
-				Game.getInstance().floorPercent+= p.type*50;
+				Game.getInstance().floorPercent+= p.type*10;
 			else if(Game.getInstance().lastFloor)
-				Game.getInstance().floorPercent -= p.type*100;
+				Game.getInstance().floorPercent -= p.type*20;
 		}
 		if (getCharacter() == CharacterPlayer.instance)
 			LogMsg.appendLog(", \n" + name +" gained " +gained*100 + "% proficiency");
@@ -89,9 +111,16 @@ public abstract class Step implements Cloneable, StatBuff {
 		float dmg = getDamage() - subtract;
 		if (dmg <= 0)
 			dmg = 1;
+		if (!isAOE){
 			target.setDamage(getCharacter(), dmg);
 		if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus)
 			target.addStatus(getStatus());
+		}else
+			for (Character character: Game.getInstance().getEnemies(getCharacter())){
+				character.setDamage(getCharacter(), dmg);
+				if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus)
+					character.addStatus(getStatus());
+			}
 		
 		addProf(new Proficiency(getCharacter(), target));
 		if (target.isDead)
@@ -107,19 +136,36 @@ public abstract class Step implements Cloneable, StatBuff {
 
 	public void damage(Character target){
 		float eleMult = -2;
-		for (Element element: target.elements){
+		for (Element element: target.getElements()){
 			if (this.element != null)
-				eleMult = (eleMult == -2)? element.type.calculate(this.element.type): (eleMult + element.type.calculate(this.element.type))/2;
-				else
-					eleMult = (eleMult == -2)? element.type.calculate(getCharacter().elements.getFirst().type): (eleMult + element.type.calculate(getCharacter().elements.getFirst().type))/2;
+				eleMult = (eleMult == -2)? Elements.getElement(element.type).calculate(this.element.type): (eleMult +  Elements.getElement(element.type).calculate(this.element.type))/2;
+				else if (getCharacter().getElements().size() > 0)
+					eleMult = (eleMult == -2)?  Elements.getElement(element.type).calculate(getCharacter().getElements().getFirst().type): (eleMult +  Elements.getElement(element.type).calculate(getCharacter().getElements().getFirst().type))/2;
 		}
-		System.out.println(getCharacter().name + " " + eleMult);
+		//System.out.println(getCharacter().name + " " + eleMult);
 		if (eleMult == -2)
 			eleMult = 1;
 		float dmg = getDamage()*eleMult;
+		if (!isAOE){
 			target.setDamage(getCharacter(), dmg);
-			if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus)
-				target.addStatus(getStatus());
+		if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus)
+			target.addStatus(getStatus());
+		}else
+			for (Character character: Game.getInstance().getEnemies(getCharacter())){
+				boolean excepted = false;
+				for (Character character2 : aoeExceptions){
+					System.out.println(character.name + " " + character2.name); 
+				if (character == character2)
+					excepted = true;
+				}
+				if (excepted)
+					continue;
+				
+				character.setDamage(getCharacter(), dmg);
+				if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus)
+					character.addStatus(getStatus());
+			}
+		aoeExceptions.clear();
 			addProf(new Proficiency(getCharacter(), target));
 	}
 	
@@ -155,18 +201,20 @@ public abstract class Step implements Cloneable, StatBuff {
 		return parent.character;
 	}
 
-	public Step(Skill parent, String name,  String desc, float timeLoad, float timeExecute,
-			float timeCooldown) {
+	public Step(Skill parent, String name,  String desc, ActionType type, float timeLoad, float timeExecute,
+			float timeCooldown, float dmgPercent) {
 		this.parent = parent;
 		this.name = name;
+		this.type = type;
 		this.timeLoad = timeLoad;
 		this.timeExecute = timeExecute;
 		this.timeCooldown = timeCooldown;
 		this.desc = desc;
+		this.dmgPercent = dmgPercent;
 		init();
 	}
 
-	public Step(Skill parent, String name, String desc,  ActionType type, float timeLoad,
+/*	public Step(Skill parent, String name, String desc,  ActionType type, float timeLoad,
 			float timeExecute, float timeCooldown, float hpCost, float mpCost, float balCost,
 			float stamCost, float dmgPercent) {
 		this.parent = parent;
@@ -182,7 +230,7 @@ public abstract class Step implements Cloneable, StatBuff {
 		this.dmgPercent = dmgPercent;
 		this.desc = desc;
 		init();
-	}
+	}*/
 
 	public void load() {
 		// Utility.narrate(character.name + " is loading " + step.name
@@ -200,8 +248,8 @@ public abstract class Step implements Cloneable, StatBuff {
 		else
 			StylePainter.append(msgLoad.getMessage(parent.character,
 					parent.character.getTarget(), getLoadTime()));
-		getCharacter().useStamina(stamCost/2);
-		getCharacter().useMana(mpCost/2);
+		getCharacter().useStamina(stamCost*(prof + 1)/2);
+		getCharacter().useMana(mpCost*(prof + 1)/2);
 	}
 
 	public void execute() {
@@ -213,8 +261,8 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 	
 	public void execute(Character target, float time) {
-		getCharacter().useStamina(stamCost/2);
-		getCharacter().useMana(mpCost/2);
+		getCharacter().useStamina(stamCost*(prof + 1)/2);
+		getCharacter().useMana(mpCost*(prof + 1)/2);
 		// Utility.narrate(getCharacter().name + " is executing " + step.name
 		// + ",  execution time is " + time + " seconds");
 		LogMsg.addLog(new LogMsg(getCharacter().name + " is executing " + name
@@ -260,6 +308,8 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 
 	public float getExecutionTime() {
+		
+		
 		if (timeExecute >= 0)
 			return Utility.format4(timeExecute*getCharacter().weapon.speedModifier*(1 - prof/2));
 
@@ -311,7 +361,7 @@ public abstract class Step implements Cloneable, StatBuff {
 	
 	public float getCP(){
 		if (cp == 0)
-			return getDamage()/2;
+			return getDmgPercent()*10;
 		else
 			return cp;
 	}

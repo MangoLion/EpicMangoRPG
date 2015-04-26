@@ -1,9 +1,9 @@
 package com.mangolion.epicmangorpg.components;
 
 public class Element {
-	public Elements type;
+	public String type;
 	public float value;
-	public Element(Elements type, float value) {
+	public Element(String type, float value) {
 		this.type = type;
 		this.value = value;
 	}

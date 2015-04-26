@@ -59,8 +59,7 @@ public class Command {
 					if (!i.hasNext()){
 					for (Skill skill: control.skills)
 						if (skill.name.replace(" ", "").toLowerCase().equals(skillName)){
-							skill.execute(Game.getInstance().getCharacter(target));
-							//Game.getInstance().nextTick(true);
+							if (skill.execute(Game.getInstance().getCharacter(target)))
 							Game.getInstance().timer.start();
 						}
 					}
@@ -70,8 +69,7 @@ public class Command {
 								float time = Float.parseFloat(i.next());
 								for (Skill skill: control.skills)
 									if (skill.name.replace(" ", "").toLowerCase().equals(skillName)){
-										skill.execute(Game.getInstance().getCharacter(target), time);
-										//Game.getInstance().nextTick(true);
+										if (skill.execute(Game.getInstance().getCharacter(target), time))
 										Game.getInstance().timer.start();
 									}
 							}

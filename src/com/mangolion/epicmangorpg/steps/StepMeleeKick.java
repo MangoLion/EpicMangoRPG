@@ -20,10 +20,9 @@ public abstract class StepMeleeKick extends StepMeleeSlash {
 
 
 	public StepMeleeKick(Skill parent, String name, String desc, float timeLoad,
-			float timeExecute, float timeCooldown, float hpCost, float mpCost,
-			float stamCost, float balCost, float baseDamage_, float dmgPercent) {
+			float timeExecute, float timeCooldown, float baseDamage_, float dmgPercent) {
 		super(parent, name, desc, timeLoad, timeExecute,
-				timeCooldown, hpCost, mpCost, stamCost, balCost, dmgPercent);
+				timeCooldown, dmgPercent);
 		setMessages(new MsgKickLoad(), new MsgKickExecute(), new MsgBasicCD());
 		chanceBlock = 0.5f;
 		chanceParry = 0;

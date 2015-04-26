@@ -21,7 +21,7 @@ public class SkillSummon extends Skill {
 		setObservable(false, 0);
 		this.summon = summon;
 		this.chanceSuccess = chanceSuccess; 
-		addSteps(new Step(this, "Summon", "",ActionType.Summon, 1f, 0.1f, 0.2f, 0, 20, 0, 5,0 ){
+		addSteps(new Step(this, "Summon", "",ActionType.Summon, 1f, 0.1f, 0.2f, 0 ){
 			@Override
 			public void execute(Character target) {
 				if (rand.nextFloat() <= chanceSuccess && !summoned){
@@ -36,7 +36,8 @@ public class SkillSummon extends Skill {
 					StylePainter.append(new Msg("There are no reinforcement around to respond to $name's call.").getMessage(getCharacter(), null, 0));
 					
 			}			
-		}.setMessages(new Msg("Seeing the situation turning for the worst, $name called for backup"), new Msg("$name had successfully called for backup."), null));
+		}.setMessages(new Msg("Seeing the situation turning for the worst, $name called for backup"), new Msg("$name had successfully called for backup."), null)
+		.setCost(20, 20, 0, 0));
 	}
 
 }

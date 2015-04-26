@@ -6,8 +6,8 @@ import com.mangolion.epicmangorpg.components.Elements;
 public class BuffEleIce extends BuffElemental {
 
 	public BuffEleIce(float time) {
-		super("Ice Elemental", time, new Element(Elements.Ice, 1));
-		// TODO Auto-generated constructor stub
+		super("Ice Elemental", time, new Element("Ice", 1));
+		
 	}
 
 }
