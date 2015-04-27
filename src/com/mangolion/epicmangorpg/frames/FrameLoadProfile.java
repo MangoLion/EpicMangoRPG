@@ -107,6 +107,7 @@ public class FrameLoadProfile extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String name = JOptionPane.showInputDialog("Enter name: ");
 				CharacterPlayer player = new CharacterPlayer(name);
+				player.init();
 				Profile profile = new Profile(player, 0, 0, true, false, Themes.getCurrentTheme());
 				WiniWriter.saveProfile(profile);
 				

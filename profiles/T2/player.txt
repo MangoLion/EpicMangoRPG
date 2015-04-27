@@ -1,6 +1,6 @@
 [general info]
-Name = Mango
-Gender = male
+Name = T2
+Gender =  male
 hp = 60.0
 mp = 60.0
 sp = 80.0
@@ -9,9 +9,13 @@ str = 40.0
 dex = 10.0
 int = 20.0
 agi = 10.0
-def = 0.0
+def = 1000.0
 prot = 0.0
 skills = Basic Sword Combo|Block|Basic Kick|Barrel Roll|Parry|Stab|Slash|Wait|Sidestep Slash|Fire Coat|Side Step|Respite|Sword Mastery|Combat Mastery|
+
+[Inventory]
+Consumables = 
+ItemCustoms = 
 
 [Basic Sword Combo]
 prof = 0.0
@@ -37,7 +41,7 @@ Step 0 = 0.0
 
 [Stab]
 prof = 0.0
-Step 0 = 0.02
+Step 0 = 0.0
 
 [Slash]
 prof = 0.0
@@ -57,15 +61,15 @@ Step 0 = 0.0
 
 [Side Step]
 prof = 0.0
-Step 0 = 0.02
+Step 0 = 0.0
 
 [Respite]
 prof = 0.0
 Step 0 = 0.0
 
 [Sword Mastery]
-prof = 0.02
+prof = 0.0
 
 [Combat Mastery]
-prof = 0.02
+prof = 0.0
 

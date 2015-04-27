@@ -163,11 +163,14 @@ public class Game {
 				else
 					limitCP = allyCP;
 				
+				boolean firstAdd = true;
 				while (enemyCP < limitCP ){
 					Character enemy = floors.get(currentFloor).getSpawn();
 					enemyCP += enemy.getCP();
-					if (enemyCP < allyCP * 1.2)
+					if (enemyCP < allyCP * 1.2 || firstAdd){
 					charsEnemies.add(enemy);
+					firstAdd = false;
+					}
 				}
 				
 				frame.updateInfoTab();
@@ -176,7 +179,7 @@ public class Game {
 				for (Character character : allChars) {
 					addTick(character, rand.nextFloat(), Tick.ACTION);
 				}
-				
+				System.out.println(charsEnemies.size());
 					frame.	updateInfoTab();
 				/*for (Character character : charsEnemies) {
 					addTick(character, rand.nextFloat()*2, Tick.ACTION);

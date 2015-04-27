@@ -70,6 +70,7 @@ public class StylePainter {
 	
 	public static void append(StyleSegment ... segments){
 		 paneMango = FrameGame.instance.tfNarration;
+			paneTime = FrameGame.instance.tfTime;
 		StyledDocument document = paneMango.getStyledDocument();
 		lineNum ++;
 		for (StyleSegment segment: segments){
@@ -100,6 +101,7 @@ public class StylePainter {
 
 	public static void append(LinkedList<StyleSegment> message) {
 		 paneMango = FrameGame.instance.tfNarration;
+			paneTime = FrameGame.instance.tfTime;
 		lineNum ++;
 		StyledDocument document = paneMango.getStyledDocument();
 		for (StyleSegment segment: message){

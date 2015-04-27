@@ -43,6 +43,9 @@ public abstract class Event {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return name + " to " + target.name + ": " + time;
+		if (target != null)
+			return name + " to " + target.name + ": " + time;
+		else 
+			return name + "will be cancelled in " + time;
 	}
 }

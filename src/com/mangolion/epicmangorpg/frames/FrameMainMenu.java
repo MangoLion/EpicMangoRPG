@@ -79,7 +79,7 @@ public class FrameMainMenu extends JFrame {
 				CharacterPlayer player = new CharacterPlayer(name);
 				Profile profile = new Profile(player, 0, 0, true, false, Themes.getCurrentTheme());
 				WiniWriter.saveProfile(profile);
-				
+				player.init();
 				//Game game = new Game();
 				//game.loadGame(profile);
 				FrameGame.start();

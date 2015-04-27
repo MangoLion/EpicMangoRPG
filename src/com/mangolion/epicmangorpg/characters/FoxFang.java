@@ -26,7 +26,7 @@ import com.mangolion.epicmangorpg.weapons.Weapons;
 public class FoxFang extends Character{
 
 	public FoxFang() {
-		super("Fanged Fox", "A slightly more dangerous looking fox with much sharper teeth that are poisoned.",65, 70, 80, 30, 10, 80, 30, 10, 0, 0,new Weapon("Claws", 0, 100, Weapons.Fang, 1, 1, 1f),  new SkillSideJump(), new SkillSlashBasic());
+		super("Fanged Fox", "A slightly more dangerous looking fox with much sharper teeth that are poisoned.",65, 70, 80, 30, 10, 80, 30, 10, 0, 0,new Weapon("Claws", 0, 100, Weapons.Claws, 1, 1, 1f),  new SkillSideJump(), new SkillSlashBasic());
 		addElements(new Element("Furry", 1));
 		ai = new AISimple(this);
 		SkillBite bite = new SkillBite();

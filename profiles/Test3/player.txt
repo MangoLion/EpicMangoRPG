@@ -1,6 +1,6 @@
 [general info]
-Name = Lion
-Gender = male
+Name = Test3
+Gender =  male
 hp = 60.0
 mp = 60.0
 sp = 80.0
@@ -10,8 +10,8 @@ dex = 10.0
 int = 20.0
 agi = 10.0
 def = 0.0
-prot = 0.0
-skills = Sword Mastery|Combat Mastery|Sword Mastery|Combat Mastery|Sword Mastery|Combat Mastery|Basic Sword Combo|Block|Basic Kick|Barrel Roll|Parry|Stab|Slash|Wait|Sidestep Slash|Fire Coat|Side Step|Respite|Sword Mastery|Combat Mastery|Side Jump|
+prot = 1000.0
+skills = Basic Sword Combo|Block|Basic Kick|Barrel Roll|Parry|Stab|Slash|Wait|Sidestep Slash|Fire Coat|Side Step|Respite|Sword Mastery|Combat Mastery|
 
 [Inventory]
 Consumables = Small Potion|5|
@@ -47,29 +47,23 @@ isEquipted = false
 
 [Metal Boots]
 durability = 15.0
-isEquipted = true
+isEquipted = false
 
 [Metal Guantlet]
 durability = 15.0
-isEquipted = true
+isEquipted = false
 
 [Metal Helm]
 durability = 15.0
-isEquipted = true
+isEquipted = false
 
 [Plate Armor Lower]
 durability = 15.0
-isEquipted = true
+isEquipted = false
 
 [Plate Armor Upper]
 durability = 15.0
-isEquipted = true
-
-[Sword Mastery]
-prof = 0.10841196
-
-[Combat Mastery]
-prof = 0.10841196
+isEquipted = false
 
 [Basic Sword Combo]
 prof = 0.0
@@ -95,11 +89,11 @@ Step 0 = 0.0
 
 [Stab]
 prof = 0.0
-Step 0 = 0.117423914
+Step 0 = 0.0
 
 [Slash]
 prof = 0.0
-Step 0 = 0.0596
+Step 0 = 0.0
 
 [Wait]
 prof = 0.0
@@ -111,7 +105,7 @@ Step 0 = 0.0
 
 [Fire Coat]
 prof = 0.0
-Step 0 = 0.0398
+Step 0 = 0.0
 
 [Side Step]
 prof = 0.0
@@ -121,7 +115,9 @@ Step 0 = 0.0
 prof = 0.0
 Step 0 = 0.0
 
-[Side Jump]
+[Sword Mastery]
 prof = 0.0
-Step 0 = -0.1
+
+[Combat Mastery]
+prof = 0.0
 

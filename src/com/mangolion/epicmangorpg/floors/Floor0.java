@@ -33,7 +33,7 @@ public class Floor0 extends Floor {
 		addSpawn( WildFox.class , 0.2f);
 		//addSpawn(RockTurtle.class, 1);
 		
-		addAlly(AdventurerNewb.class, 1);
+		//addAlly(AdventurerNewb.class, 1);
 
 	}
 }

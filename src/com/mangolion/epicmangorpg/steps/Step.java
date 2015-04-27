@@ -304,14 +304,14 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 
 	public float getLoadTime() {
-		return Utility.format4(timeLoad*getCharacter().weapon.speedModifier*(1 - prof/2));
+		return Utility.format4(timeLoad*getCharacter().getMeleeSpeed()*(1 - prof/2));
 	}
 
 	public float getExecutionTime() {
 		
 		
 		if (timeExecute >= 0)
-			return Utility.format4(timeExecute*getCharacter().weapon.speedModifier*(1 - prof/2));
+			return Utility.format4(timeExecute*getCharacter().getMeleeSpeed()*(1 - prof/2));
 
 		Skill skill = (getCharacter().getTarget() != null )? parent.character.getTarget().skillCurrent: null;
 		if (skill != null) {
@@ -327,7 +327,7 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 
 	public float getCooldownTime() {
-		return Utility.format4(timeCooldown*getCharacter().weapon.speedModifier*(1 - prof/2));
+		return Utility.format4(timeCooldown*getCharacter().getMeleeSpeed()*(1 - prof/2));
 	}
 
 	public Step copy() {

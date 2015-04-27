@@ -8,6 +8,10 @@ import org.ini4j.Wini;
 import com.mangolion.epicmangorpg.characters.CharacterPlayer;
 import com.mangolion.epicmangorpg.components.Themes;
 import com.mangolion.epicmangorpg.frames.FrameGame;
+import com.mangolion.epicmangorpg.items.Item;
+import com.mangolion.epicmangorpg.items.ItemCustom;
+import com.mangolion.epicmangorpg.items.ItemStack;
+import com.mangolion.epicmangorpg.items.Items;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.Skills;
 import com.mangolion.epicmangorpg.steps.Step;
@@ -59,6 +63,20 @@ public class WiniWriter {
 			wini.put("general info", "agi", player.agi);
 			wini.put("general info", "def", player.def);
 			wini.put("general info", "prot", player.prot);
+			
+			String str = "";
+			for (ItemStack stack : player.inventory.itemStacks)
+				str += stack.item.name + "|" + stack.stack + "|";
+			wini.put("Inventory", "Consumables", str);
+			
+			str = "";
+			for (ItemCustom item: player.inventory.itemCustoms){
+				str += item.name + "|";
+				wini.put(item.name, "durability", item.durability);
+				wini.put(item.name, "isEquipted", player.isEquipted(item));
+			}
+			wini.put("Inventory", "ItemCustoms", str);
+			
 			
 			String skills = "";
 			for (Skill skill: player.skills)
@@ -118,6 +136,38 @@ public class WiniWriter {
 			player.agi = wini.get("general info", "agi", Float.class);
 			player.def = wini.get("general info", "def",Float.class);
 			player.prot = wini.get("general info", "prot", Float.class);
+			
+			String items = wini.get("Inventory", "Consumables");
+			
+			boolean getStack = false;
+			ItemStack stack = null;
+			
+			for (String str: items.split("\\|")){
+				if (!getStack){
+					Item item = Items.getItem(str);
+					if (item != null)
+						stack = new ItemStack(player.inventory, item, 0);
+					getStack = true;
+							
+				}else {
+					stack.stack = Integer.valueOf(str);
+					getStack = false;
+					player.inventory.itemStacks.add(stack);
+				}
+			}
+			
+			items = wini.get("Inventory", "ItemCustoms");
+			for (String str: items.split("\\|")){
+				ItemCustom item = Items.getItemCustom(str);
+				if (item != null)
+					item = Utility.getInstance(item.getClass());
+				float dur = wini.get(item.name, "durability", Float.class);
+				item.durability = dur;
+				player.inventory.addItem(item);
+				if (wini.get(item.name, "isEquipted", Boolean.class)){
+					player.equip(item);
+				}
+			}
 			
 			String skills = wini.get("general info", "skills");
 			for (String str: skills.split("\\|")){

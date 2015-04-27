@@ -14,7 +14,7 @@ import com.mangolion.epicmangorpg.weapons.WeaponLongSword;
 public class Dummy extends Character{
 
 	public Dummy() {
-		super("Dummy", "An indestructable dummy used for testing",1000000, 100, 100, 40, 10, 100, 10, 10,0,0, new WeaponLongSword());
+		super("Dummy", "An indestructable dummy used for testing",1000000, 100, 100, 40, 10, 100, 10, 10,1000,0, new WeaponLongSword());
 		ai = new AISimple(this);
 	}
 

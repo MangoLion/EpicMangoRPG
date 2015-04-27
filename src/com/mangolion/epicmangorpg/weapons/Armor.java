@@ -4,22 +4,28 @@ import com.mangolion.epicmangorpg.components.StatBuff;
 import com.mangolion.epicmangorpg.items.Item;
 import com.mangolion.epicmangorpg.items.ItemCustom;
 
-public class Weapon extends ItemCustom implements StatBuff{
-	public String name;
-	public float baseDamage, speedModifier, sizeModifier, meleeDamageModifier, baseMagicDmg = 0, baseMagicDmgMod = 1;
-	public Weapons type;
+public class Armor extends ItemCustom implements StatBuff{
+	public static final int ACCESSORY = 0,
+			HEAD = 1,
+			BODY = 2,
+			LEG = 3,
+			FEET = 4,
+			ROBE = 5,
+			HAND = 6;
 	
-	public Weapon(String name, float baseDamage, float maxDurability, Weapons type, float meleespeedModifier, float sizeModifier, float meleeDmgMod) {
-		super(name, "", ItemCustom.Type.Weapon);
+	public String name;
+	public float baseDamage, speedModifier = 1, meleeDamageModifier, baseMagicDmg = 0, baseMagicDmgMod = 1, deffBuff, protBuff,agiBuff;
+	public int type;
+	
+	public Armor(String name, String desc, float maxDurability, int type, float deffBuff, float protBuff, float agiBuff) {
+		super(name, desc, ItemCustom.Type.Armor);
 		this.name = name;
-		this.baseDamage = baseDamage;
 		this.maxDurability = maxDurability;
 		this.durability = maxDurability;
 		this.type = type;
-		this.speedModifier = meleespeedModifier;
-		this.sizeModifier = sizeModifier;
-		this.speedModifier = meleespeedModifier;
-		meleeDamageModifier = meleeDmgMod;
+		this.deffBuff = deffBuff;
+		this.protBuff = protBuff;
+		this.agiBuff = agiBuff;
 	}
 
 	@Override
@@ -91,18 +97,18 @@ public class Weapon extends ItemCustom implements StatBuff{
 	@Override
 	public float getAgiBuff() {
 		// TODO Auto-generated method stub
-		return 0;
+		return agiBuff;
 	}
 
 	@Override
 	public float getDefBuff() {
 		// TODO Auto-generated method stub
-		return 0;
+		return deffBuff;
 	}
 
 	@Override
 	public float getProtBuff() {
 		// TODO Auto-generated method stub
-		return 0;
+		return protBuff;
 	}
 }

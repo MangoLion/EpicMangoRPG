@@ -81,7 +81,7 @@ public class FrameCharacterInfo extends JFrame {
 		String str;
 		
 		if (character.getElements().size()>0){
-		str  = "Element: ";
+		str  = "";
 		float ice = -2, water = -2, lightning = -2, fire = -2, lava = -2, earth = -2, wind = -2, light = -2, dark = -2;
 		for (Element element: character.getElements()){
 			str +=  Elements.getElement(element.type).name + " ";
@@ -98,7 +98,7 @@ public class FrameCharacterInfo extends JFrame {
 		lblElement.setText(str);
 		lblIce.setText("" + ice*100 + "%");
 		lblWater.setText("" + water*100 + "%");
-		lblLightning.setText("Lightning: " + lightning*100 + "%");
+		lblLightning.setText("" + lightning*100 + "%");
 		lblFire.setText("" + fire*100 + "%");
 		lblLava.setText("" + lava*100 + "%");
 		lblEarth.setText("" + earth*100 + "%");
@@ -106,6 +106,17 @@ public class FrameCharacterInfo extends JFrame {
 		lblLight.setText("" + light*100 + "%");
 		lblDark.setText("" + dark*100 + "%");
 
+		}else {
+			lblElement.setText("None");
+			lblIce.setText(" 100%");
+			lblWater.setText(" 100%");
+			lblLightning.setText(" 100%");
+			lblFire.setText(" 100%");
+			lblLava.setText(" 100%");
+			lblEarth.setText(" 100%");
+			lblWind.setText(" 100%");
+			lblLight.setText(" 100%");
+			lblDark.setText(" 100%");
 		}
 		
 		//update current skill
@@ -291,7 +302,7 @@ public class FrameCharacterInfo extends JFrame {
 				inventory.setVisible(true);
 			}
 		});
-		btnInventory.setBounds(290, 109, 100, 23);
+		btnInventory.setBounds(349, 129, 109, 23);
 		contentPane.add(btnInventory);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
@@ -455,6 +466,18 @@ public class FrameCharacterInfo extends JFrame {
 		label_9.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		label_9.setBounds(481, 234, 84, 14);
 		contentPane.add(label_9);
+		
+		JButton btnEquipments = new JButton("Equipments");
+		btnEquipments.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
+		btnEquipments.setBounds(349, 95, 109, 23);
+		btnEquipments.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new FrameEquips(character).setVisible(true); 
+			}
+		});
+		contentPane.add(btnEquipments);
 		
 		
 		refresh();
