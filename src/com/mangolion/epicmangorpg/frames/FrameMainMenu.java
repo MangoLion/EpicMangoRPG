@@ -76,6 +76,8 @@ public class FrameMainMenu extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String name = JOptionPane.showInputDialog("Enter name: ");
+				if (name == null)
+					return;
 				CharacterPlayer player = new CharacterPlayer(name);
 				Profile profile = new Profile(player, 0, 0, true, false, Themes.getCurrentTheme());
 				WiniWriter.saveProfile(profile);

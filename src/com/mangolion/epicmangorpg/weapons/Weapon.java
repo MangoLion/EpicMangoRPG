@@ -6,10 +6,12 @@ import com.mangolion.epicmangorpg.items.ItemCustom;
 
 public class Weapon extends ItemCustom implements StatBuff{
 	public String name;
-	public float baseDamage, speedModifier, sizeModifier, meleeDamageModifier, baseMagicDmg = 0, baseMagicDmgMod = 1;
-	public Weapons type;
+	public float baseDamage, speedModifier, sizeModifier, meleeDamageModifier, baseMagicDmg = 0, baseMagicDmgMod = 1, alchemyMod = 1, gunMod = 1, reloadTime = 0, alchemyDamage = 0, gunDamage = 0;
+	public Weapons type[];
+	public boolean useAmmo = false;
+	public int ammo = 0, maxAmmo = 0, fireRate = 0;
 	
-	public Weapon(String name, float baseDamage, float maxDurability, Weapons type, float meleespeedModifier, float sizeModifier, float meleeDmgMod) {
+	public Weapon(String name, float baseDamage, float maxDurability, float meleespeedModifier, float sizeModifier, float meleeDmgMod, Weapons... type) {
 		super(name, "", ItemCustom.Type.Weapon);
 		this.name = name;
 		this.baseDamage = baseDamage;
@@ -20,6 +22,35 @@ public class Weapon extends ItemCustom implements StatBuff{
 		this.sizeModifier = sizeModifier;
 		this.speedModifier = meleespeedModifier;
 		meleeDamageModifier = meleeDmgMod;
+	}
+	
+	public Weapon(String name, float baseDamage, float maxDurability, Weapons type, float meleespeedModifier, float sizeModifier, float meleeDmgMod) {
+		super(name, "", ItemCustom.Type.Weapon);
+		this.name = name;
+		this.baseDamage = baseDamage;
+		this.maxDurability = maxDurability;
+		this.durability = maxDurability;
+		Weapons[] temp =  {type};
+		this.type =temp;
+		this.speedModifier = meleespeedModifier;
+		this.sizeModifier = sizeModifier;
+		this.speedModifier = meleespeedModifier;
+		meleeDamageModifier = meleeDmgMod;
+	}
+	
+	public void setReload(int maxAmmo, float reloadTime, int fireRate){
+		useAmmo = true;
+		this.maxAmmo = maxAmmo;
+		this.reloadTime = reloadTime;
+		this.fireRate = fireRate;
+		ammo = maxAmmo;
+	}
+	
+	public boolean checkType(Weapons type){
+		for (Weapons w: this.type)
+			if (w == type)
+				return true;
+		return false;
 	}
 
 	@Override

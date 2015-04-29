@@ -25,6 +25,8 @@ import com.mangolion.epicmangorpg.messages.MsgSlashMiss;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.SkillDodge;
 import com.mangolion.epicmangorpg.statuses.Status;
+import com.mangolion.epicmangorpg.weapons.Weapon;
+import com.mangolion.epicmangorpg.weapons.Weapons;
 
 public abstract class Step implements Cloneable, StatBuff {
 	public ActionType type;
@@ -32,16 +34,25 @@ public abstract class Step implements Cloneable, StatBuff {
 	public String name, desc;
 	public Random rand = new Random();
 	public float chanceMiss = 1, chanceDodge  = 1, chanceParry = 1, chanceBlock =1;
-	public float prof = 0, timeLoad, timeExecute, timeCooldown, hpCost = 0, balCost = 0,
-			mpCost = 0, stamCost = 0, value = 0, chanceStatus = 0, cp = 0, dmgBase = 0;
+	public float prof = 0, timeLoad, timeExecute, timeCooldown, value = 0, chanceStatus = 0, cp = 0, dmgBase = 0;
+	protected float  hpCost = 0, balCost = 0, mpCost = 0, stamCost = 0, percentBlock = 1;
 	protected float  dmgPercent = 0;
 	public Element element;
 	public Status status;
 	public boolean isAOE = false;
 	public LinkedList<Character> aoeExceptions = new LinkedList<Character>();
+	public boolean useAmmo = false;
+	public int ammoUse = 0;
 	 
 	public boolean checkConndition(){
-		if (getCharacter().getSp() <stamCost || getCharacter().getMp() < mpCost || getCharacter().getBal() < balCost || getCharacter().getHp() < hpCost)
+		if (useAmmo){
+			ammoUse = getCharacter().weapon.fireRate;
+			if (getCharacter().weapon.ammo < ammoUse){
+				Utility.narrate(getCharacter().name + " doesn't have enough ammo, weapon has " + getCharacter().weapon.ammo + " ammo while " + ammoUse + " is required.");
+				return false;				
+			}
+		}
+		if (getCharacter().getSp() <stamCost*(prof + 1) || getCharacter().getMp() < mpCost*(prof + 1) || getCharacter().getBal() < balCost*(prof + 1) || getCharacter().getHp() < hpCost*(prof + 1) || (getCharacter().weapon.useAmmo && getCharacter().weapon.ammo < ammoUse))
 			return false;
 		return true;
 	}
@@ -83,6 +94,8 @@ public abstract class Step implements Cloneable, StatBuff {
 				skilDmg = skill.getTotalDamagePercent()+1;
 		if (strBased)
 			return ((getCharacter().weapon.baseDamage + dmgBase + getCharacter().getStrDamage())*getDmgPercent()*getCharacter().weapon.meleeDamageModifier)*skilDmg;
+		else if (getCharacter().weapon.checkType(Weapons.Gun))
+			return (getDmgPercent()*getCharacter().weapon.gunDamage*getCharacter().weapon.gunMod)*skilDmg;
 		else
 			return ((getCharacter().weapon.baseMagicDmg + dmgBase + getCharacter().getIntDamage())*getDmgPercent()*getCharacter().weapon.baseMagicDmgMod)*skilDmg;
 	}
@@ -263,6 +276,11 @@ public abstract class Step implements Cloneable, StatBuff {
 	public void execute(Character target, float time) {
 		getCharacter().useStamina(stamCost*(prof + 1)/2);
 		getCharacter().useMana(mpCost*(prof + 1)/2);
+		if (useAmmo){
+		getCharacter().weapon.ammo -= ammoUse;
+		Weapon weapon = getCharacter().weapon;
+		Utility.narrate(getCharacter().name + "'s "  + weapon.name + " has " + weapon.ammo + " ammo left.");
+		}
 		// Utility.narrate(getCharacter().name + " is executing " + step.name
 		// + ",  execution time is " + time + " seconds");
 		LogMsg.addLog(new LogMsg(getCharacter().name + " is executing " + name
@@ -310,10 +328,10 @@ public abstract class Step implements Cloneable, StatBuff {
 	public float getExecutionTime() {
 		
 		
-		if (timeExecute >= 0)
+		if (timeExecute > 0)
 			return Utility.format4(timeExecute*getCharacter().getMeleeSpeed()*(1 - prof/2));
 
-		Skill skill = (getCharacter().getTarget() != null )? parent.character.getTarget().skillCurrent: null;
+		Skill skill = (getCharacter().getTarget() != null && getCharacter().getTarget() != getCharacter() )? parent.character.getTarget().skillCurrent: null;
 		if (skill != null) {
 			float time = 0;
 			for (Step step : skill.steps)
@@ -417,6 +435,38 @@ public abstract class Step implements Cloneable, StatBuff {
 		return 0;
 	}
 	
+	public float getHpCost() {
+		return hpCost*(prof + 1);
+	}
+
+	public void setHpCost(float hpCost) {
+		this.hpCost = hpCost;
+	}
+
+	public float getBalCost() {
+		return balCost*(prof + 1);
+	}
+
+	public void setBalCost(float balCost) {
+		this.balCost = balCost;
+	}
+
+	public float getMpCost() {
+		return mpCost*(prof + 1);
+	}
+
+	public void setMpCost(float mpCost) {
+		this.mpCost = mpCost;
+	}
+
+	public float getStamCost() {
+		return stamCost*(prof + 1);
+	}
+
+	public void setStamCost(float stamCost) {
+		this.stamCost = stamCost;
+	}
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub

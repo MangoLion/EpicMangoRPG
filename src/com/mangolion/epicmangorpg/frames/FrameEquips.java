@@ -13,6 +13,7 @@ import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.characters.CharacterPlayer;
 import com.mangolion.epicmangorpg.weapons.Armor;
 import com.mangolion.epicmangorpg.weapons.Weapon;
+import com.mangolion.epicmangorpg.weapons.Barehands;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -103,6 +104,15 @@ public class FrameEquips extends JFrame {
 		 btnViewFeet = new JButton("View");
 		 btnViewFeet.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		btnViewFeet.setBounds(156, 85, 61, 23);
+		btnViewFeet.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Armor armor = character.feet;
+				if (armor != null)
+					new FrameArmorView(armor, character);
+			}
+		});
 		contentPane.add(btnViewFeet);
 		
 		btnEquipFeet = new JButton("Unequip");
@@ -121,9 +131,18 @@ public class FrameEquips extends JFrame {
 		btnViewRobe = new JButton("View");
 		btnViewRobe.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		btnViewRobe.setBounds(156, 110, 61, 23);
+		btnViewRobe.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Armor armor = character.robe;
+				if (armor != null)
+					new FrameArmorView(armor, character);
+			}
+		});
 		contentPane.add(btnViewRobe);
 		
-		btnEquipRobe = new JButton();
+		btnEquipRobe = new JButton("Unequip Robe");
 		btnEquipRobe.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		btnEquipRobe.setBounds(221, 111, 79, 23);
 		btnEquipRobe.addActionListener(new ActionListener() {
@@ -149,16 +168,41 @@ public class FrameEquips extends JFrame {
 		btnViewWeapon = new JButton("View");
 		btnViewWeapon.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		btnViewWeapon.setBounds(156, 199, 61, 23);
+		btnViewWeapon.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+					new FrameWeaponView(character.weapon, character);
+			}
+		});
 		contentPane.add(btnViewWeapon);
 		
 		btnEquipWeapon = new JButton("Unequip");
 		btnEquipWeapon.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		btnEquipWeapon.setBounds(221, 200, 79, 23);
+		btnEquipWeapon.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				character.weapon = new Barehands();
+				refresh();
+			}
+		});
+		
 		contentPane.add(btnEquipWeapon);
 		
 		btnViewLegs = new JButton("View");
 		btnViewLegs.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		btnViewLegs.setBounds(156, 55, 61, 23);
+		btnViewLegs.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Armor armor = character.legs;
+				if (armor != null)
+					new FrameArmorView(armor, character);
+			}
+		});
 		contentPane.add(btnViewLegs);
 		
 		btnEquipLegs = new JButton("Unequip");
@@ -182,6 +226,15 @@ public class FrameEquips extends JFrame {
 		btnViewAcc = new JButton("View");
 		btnViewAcc.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		btnViewAcc.setBounds(156, 173, 61, 23);
+		btnViewAcc.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Armor armor = character.accessory;
+				if (armor != null)
+					new FrameArmorView(armor, character);
+			}
+		});
 		contentPane.add(btnViewAcc);
 		
 		btnEquipAcc = new JButton("Unequip");
@@ -205,6 +258,15 @@ public class FrameEquips extends JFrame {
 		btnViewHands = new JButton("View");
 		btnViewHands.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		btnViewHands.setBounds(156, 147, 61, 23);
+		btnViewHands.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Armor armor = character.hands;
+				if (armor != null)
+					new FrameArmorView(armor, character);
+			}
+		});
 		contentPane.add(btnViewHands);
 		
 		btnEquipHands = new JButton("Unequip");
@@ -263,6 +325,12 @@ public class FrameEquips extends JFrame {
 		if (armor != null)
 			str += armor.name;
 		lblHands.setText(str);
+		
+		str = "Robe: ";
+		armor = character.robe;
+		if (armor != null)
+			str += armor.name;
+		lblRobes.setText(str);
 		
 		str = "Accessories: ";
 		armor = character.accessory;

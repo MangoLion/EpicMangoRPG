@@ -11,6 +11,7 @@ public class SkillStab extends Skill {
 
 	public SkillStab() {
 		super("Stab", "Leaves lots of openings, but used to bypass the block skill, can be easily(higher chance) parried and dodged.",Weapons.Sword, ActionType.MeleeStab) ;
+		isTwoHanded = false;
 		addSteps(new StepStab(this, "Stab", "", 0.6f, 0.3f, 0.4f, 2f){
 			public float getStrBuff() {
 				// TODO Auto-generated method stub

@@ -149,7 +149,7 @@ public class Game {
 			//	if (rand.nextInt(2) == 0)
 				if (getCurrentFloor().allies.size()>0)
 					for (int i = 0; i < 4; i ++)
-						if (rand.nextInt(3) == 0)
+						if (rand.nextInt(6) == 0)
 							charsAllies.add(floors.get(currentFloor).getAlly());
 				
 				for (Character character: charsAllies)
@@ -354,7 +354,8 @@ public class Game {
 						return c;
 				return charsEnemies.get(rand.nextInt(charsEnemies.size()));
 			}else
-				charsEnemies.getFirst();
+				return charsEnemies.getFirst();
+			
 		}
 		if (!character.isAllied){
 			if (charsAllies.size() > 1){
@@ -447,5 +448,21 @@ public class Game {
 	
 	public Floor getCurrentFloor(){
 		return floors.get(currentFloor);
+	}
+
+	public Character getRandomEnemy(Character character) {
+		if (character.isAllied){
+			if (charsEnemies.size() > 1)
+			return charsEnemies.get(rand.nextInt(charsEnemies.size()));
+		else
+			return charsEnemies.getFirst();
+	}
+		if (!character.isAllied){
+				if (charsAllies.size() > 1)
+				return charsAllies.get(rand.nextInt(charsAllies.size()));
+			else
+				return charsAllies.getFirst();
+		}
+		return null;
 	}
 }

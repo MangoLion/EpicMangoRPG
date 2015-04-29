@@ -14,14 +14,14 @@ import com.mangolion.epicmangorpg.skills.SkillParry;
 import com.mangolion.epicmangorpg.skills.SkillSlashHeavy;
 import com.mangolion.epicmangorpg.skills.SkillStab;
 import com.mangolion.epicmangorpg.skills.SkillWait;
-import com.mangolion.epicmangorpg.weapons.WeaponGreatCopperSword;
-import com.mangolion.epicmangorpg.weapons.WeaponLongSword;
+import com.mangolion.epicmangorpg.weapons.GreatCopperSword;
+import com.mangolion.epicmangorpg.weapons.LongSword;
 
 public class CharacterBob extends Character{
 
 	public CharacterBob() {
 		super("Bob", "",100, 80, 100, 40, 10, 100, 10, 10, 0, 0,
-				new WeaponLongSword(), new SkillBasicSwordCombo(),
+				new LongSword(), new SkillBasicSwordCombo(),
 				new SkillBlock(), new SkillKickBasic(), new SkillDodge(),
 				new SkillParry(), new SkillStab(), new SkillSlashBasic(),
 				new SkillHealBasic(), new SkillWait(), new SkillSlashHeavy(), new SkillMillionSlash(), new SkillSidestepSlash());

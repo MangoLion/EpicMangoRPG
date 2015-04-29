@@ -11,13 +11,13 @@ import com.mangolion.epicmangorpg.skills.SkillDodge;
 import com.mangolion.epicmangorpg.skills.SkillParry;
 import com.mangolion.epicmangorpg.skills.SkillSlashHeavy;
 import com.mangolion.epicmangorpg.skills.SkillStab;
-import com.mangolion.epicmangorpg.weapons.WeaponGreatCopperSword;
-import com.mangolion.epicmangorpg.weapons.WeaponLongSword;
+import com.mangolion.epicmangorpg.weapons.GreatCopperSword;
+import com.mangolion.epicmangorpg.weapons.LongSword;
 
 public class Minotaur extends Character{
 
 	public Minotaur() {
-		super("Minotaur", "",300, 100, 100, 80, 10, 300, 10, 10, 0, 0,new WeaponGreatCopperSword(),  new SkillBasicSwordCombo(), new SkillBlock(),  new SkillKickBasic(), new SkillParry(), new SkillSlashBasic(), new SkillSlashHeavy());
+		super("Minotaur", "",300, 100, 100, 80, 10, 300, 10, 10, 0, 0,new GreatCopperSword(),  new SkillBasicSwordCombo(), new SkillBlock(),  new SkillKickBasic(), new SkillParry(), new SkillSlashBasic(), new SkillSlashHeavy());
 		ai = new AISimple(this);
 	}
 

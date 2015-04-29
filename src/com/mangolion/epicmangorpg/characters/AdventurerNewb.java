@@ -16,14 +16,14 @@ import com.mangolion.epicmangorpg.skills.SkillParry;
 import com.mangolion.epicmangorpg.skills.SkillSlashHeavy;
 import com.mangolion.epicmangorpg.skills.SkillStab;
 import com.mangolion.epicmangorpg.skills.SkillWait;
-import com.mangolion.epicmangorpg.weapons.WeaponGreatCopperSword;
-import com.mangolion.epicmangorpg.weapons.WeaponLongSword;
+import com.mangolion.epicmangorpg.weapons.GreatCopperSword;
+import com.mangolion.epicmangorpg.weapons.LongSword;
 
 public class AdventurerNewb extends Character{
 
 	public AdventurerNewb() {
 		super("Adventurer Newbie", "",70, 40, 100, 40, 10, 100, 10, 10, 0, 0,
-				new WeaponLongSword(), new SkillBasicSwordCombo(),
+				new LongSword(), new SkillBasicSwordCombo(),
 				new SkillBlock(), new SkillKickBasic(), new SkillDodge(),
 				new SkillParry(), new SkillStab(), new SkillSlashBasic(),
 				new SkillSidestepSlash(), new SkillSideStep(),  new SkillBoltIce());

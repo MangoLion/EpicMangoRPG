@@ -1,5 +1,6 @@
 package com.mangolion.epicmangorpg.floors;
 
+import com.mangolion.epicmangorpg.characters.AdventurerNewb;
 import com.mangolion.epicmangorpg.characters.SlimeBlue;
 import com.mangolion.epicmangorpg.characters.FoxFang;
 import com.mangolion.epicmangorpg.characters.RabbitFang;
@@ -31,5 +32,8 @@ public class Floor1 extends Floor {
 		addSpawn( SpiderWolf.class, 0.2f);
 		addSpawn( SpiderFang.class, 0.15f);
 		addSpawn( SlimeKing.class, 0.1f);
+		
+		addAlly(AdventurerNewb.class, 1);
+		addAlly(AdventurerNewb.class, 1);
 	}
 }

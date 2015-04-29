@@ -12,8 +12,8 @@ public class Floor {
 	public LinkedList<Spawn> allies = new LinkedList<Floor.Spawn>();
 	public LinkedList<Terrain> terrains = new LinkedList<Terrain>();
 	Random rand = new Random();
-	public void addSpawn( Class<? extends Character> character, float scale){
-		spawns.add(new Spawn(character, scale));
+	public void addSpawn( Class<? extends Character> character, float chance){
+		spawns.add(new Spawn(character, chance, 1));
 	}
 
 	public void addSpawn( Class<? extends Character> character, float chance, float scale){
@@ -33,7 +33,10 @@ public class Floor {
 					character.scale(spawn.scale);
 				return character;
 		}*/
-		return  Utility.getInstance( spawns.get(rand.nextInt(spawns.size())).character);
+		Spawn spawn = spawns.get(rand.nextInt(spawns.size()));
+		Character character = Utility.getInstance(spawn.character);
+		character.scale(spawn.scale);
+		return  character;
 	}
 	
 	public Character getAlly(){

@@ -10,10 +10,12 @@ public enum ActionType {
 	RecoverHP(GeneralType.Recover),
 	RecoverMP(GeneralType.Recover),
 	RecoverSP(GeneralType.Recover),
+	RecoverAmmo(GeneralType.Recover),
 	Dodge(GeneralType.Defend), 
 	RangeNormal(GeneralType.Attack),
 	Summon(GeneralType.Recover),
 	WeaponMastery (GeneralType.Passive),
+	Defend(GeneralType.Defend),
 	None(GeneralType.None);
 	
 	GeneralType type;

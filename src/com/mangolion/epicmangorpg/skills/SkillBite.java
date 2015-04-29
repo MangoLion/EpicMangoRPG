@@ -15,7 +15,7 @@ public class SkillBite extends Skill {
 
 
 	public SkillBite() {
-		super("Bite", "Used by monsters with sharp teeth, beware of those with poison.",Weapons.Fang, ActionType.MeleeStab);
+		super("Bite", "Used by monsters with sharp teeth, beware of those with poison.",Weapons.ALL, ActionType.MeleeStab);
 		addSteps(new StepMeleeSlash(this, "Bite","", 0.5f,
 				0.3f, 0.3f,1.3f) {
 			

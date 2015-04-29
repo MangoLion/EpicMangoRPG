@@ -20,7 +20,7 @@ import com.mangolion.epicmangorpg.weapons.Weapons;
 public class SkillMeditate extends Skill{
 
 	public SkillMeditate() {
-		super("Meditate", "Recovers mp 4 times as fast  while int is left at 30%.",Weapons.ALL, ActionType.RecoverMP);
+		super("Meditate", "Recovers mp 4 times as fast  while int is left at 30% for x seconds",Weapons.ALL, ActionType.RecoverMP);
 		addSteps(new StepMeditate(this, 0.1f, 0.0f, 0.0f).setCost(0, 0, 0, 0));
 	}
 

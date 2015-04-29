@@ -37,7 +37,6 @@ public class WiniWriter {
 			winiGame.put("game", "next floor", profile.nextFloor);
 			winiGame.put("game", "floor percent", profile.floorPercent);
 			winiGame.put("game", "theme", profile.theme);
-			System.out.println(profile.theme);
 			winiGame.store();
 		
 		File playerFile = new File(file.getAbsolutePath() + "\\\\" + "player.txt" );
@@ -156,30 +155,34 @@ public class WiniWriter {
 				}
 			}
 			
-			items = wini.get("Inventory", "ItemCustoms");
-			for (String str: items.split("\\|")){
-				ItemCustom item = Items.getItemCustom(str);
-				if (item != null)
-					item = Utility.getInstance(item.getClass());
-				float dur = wini.get(item.name, "durability", Float.class);
-				item.durability = dur;
-				player.inventory.addItem(item);
-				if (wini.get(item.name, "isEquipted", Boolean.class)){
-					player.equip(item);
-				}
-			}
-			
 			String skills = wini.get("general info", "skills");
 			for (String str: skills.split("\\|")){
 				Skill skill = Skills.getSkill(str);
 				if (skill == null)
 					continue;
+				System.out.println(skill.name);
 				skill.prof = wini.get(skill.name, "prof", Float.class);
 				for (int i = 0; i < skill.steps.size(); i ++){
 					Step step = skill.steps.get(i);
 					step.prof = wini.get(skill.name, "Step " + i, Float.class );
 				}
 				player.addSkills(skill);
+			}
+			
+			items = wini.get("Inventory", "ItemCustoms");
+			for (String str: items.split("\\|")){
+				ItemCustom item = Items.getItemCustom(str);
+				if (item != null)
+					item = Utility.getInstance(item.getClass());
+				else
+					continue;
+			//	System.out.println(player.name + " "+ item.name);
+				float dur = wini.get(item.name, "durability", Float.class);
+				item.durability = dur;
+				player.inventory.addItem(item);
+				if (wini.get(item.name, "isEquipted", Boolean.class)){
+					player.equip(item);
+				}
 			}
 
 				

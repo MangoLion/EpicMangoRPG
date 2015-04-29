@@ -2,14 +2,15 @@ package com.mangolion.epicmangorpg.items;
 
 import com.mangolion.epicmangorpg.characters.Character;
 
-public class Item {
+public abstract class Item {
 	public  enum Type{
 		ChangeStat,
 		Damage,
 		Heal,
 		Craft,
 		Equip,
-		Custom
+		Custom, 
+		Ammunition
 	}
 	
 	public Type type;

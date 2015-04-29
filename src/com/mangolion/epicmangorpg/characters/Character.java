@@ -103,18 +103,26 @@ public class Character implements Cloneable {
 	
 	public void equip (Weapon weapon){
 		this.weapon = weapon;
-		if (FrameGame.instance != null)
+		if (this instanceof CharacterPlayer && FrameGame.instance != null)
 			StylePainter.append(new Msg("$name has equipted $weapon").getMessage(this, null, 0));
-		for (Skill skill: getSkill(ActionType.WeaponMastery))
+		/*for (Skill skill: getSkill(ActionType.WeaponMastery))
 			if (skill.checkWeapon(weapon))
-				return;
+				return;*/
 		for (Skill skill : Skills.masteries)
-			if (skill.checkWeapon(weapon)){
+			if (skill.checkWeapon(weapon) && !hasSkill(skill)){
 				addSkills(Utility.getInstance(skill.getClass()));
 				if (this instanceof CharacterPlayer && FrameGame.instance != null)
 					StylePainter.append(new Msg("$name has learned " + skill.name).getMessage(this, null, 0));
 			}
 		
+	}
+	
+	public boolean hasSkill(Skill skill){
+		for (Skill s: skills){
+			if (s.name.equals(skill.name))
+				return true;
+		}
+		return false;
 	}
 	
 	public void equip (Armor armor){
@@ -174,6 +182,10 @@ public class Character implements Cloneable {
 			armor = robe;
 			robe = null;
 		break;
+		case Armor.BODY:
+			armor = robe;
+			robe = null;
+		break;
 
 		default:
 			break;
@@ -210,8 +222,11 @@ public class Character implements Cloneable {
 				target = Game.getInstance().findEnemy(this);
 			else
 				target = Game.getInstance().findAlly(this);
-		if (ai != null)
+		if (ai != null){
+			if (target == null)
+				Utility.narrate(name + "couldn't find a target!");
 			ai.nextAction();
+		}
 	}
 
 	public void tick(float deltaTime) {
@@ -302,8 +317,8 @@ public class Character implements Cloneable {
 		Utility.narrate(source.name + " dealt " + String.valueOf(cdmg) + " damage to " + name);
 		LogMsg.addLog(source.name + " dealt " + String.valueOf(cdmg) + " damage to " + name);
 		hp -= cdmg;
-		if (bal > 0 && damage > 1)
-			bal -= rand.nextInt(Math.abs((int) (damage/2))) + damage/2;
+		if (bal > 0 && cdmg > 1)
+			bal -=cdmg/2;//rand.nextInt(Math.abs((int) (cdmg/2))) + cdmg/2;
 		if (hp <= 0){
 			Utility.narrate(name + " has been defeated by " + source.name + "\n");
 			Game.getInstance().removeChar(this);

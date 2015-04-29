@@ -479,15 +479,14 @@ public class FrameCharacterInfo extends JFrame {
 		});
 		contentPane.add(btnEquipments);
 		
-		
-		refresh();
-		addFocusListener(new FocusAdapter() {
+		addMouseListener(new MouseAdapter() {
 			@Override
-			public void focusGained(FocusEvent e) {
+			public void mouseEntered(MouseEvent e) {
 				refresh();
-				super.focusGained(e);
+				super.mouseEntered(e);
 			}
 		});
+		refresh();
 	}
 }
 

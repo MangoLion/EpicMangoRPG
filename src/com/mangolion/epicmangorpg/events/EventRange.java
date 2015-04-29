@@ -2,6 +2,7 @@ package com.mangolion.epicmangorpg.events;
 
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.components.ActionType;
+import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.game.StylePainter;
 import com.mangolion.epicmangorpg.game.StyleSegment;
 import com.mangolion.epicmangorpg.messages.Msg;
@@ -18,6 +19,7 @@ public class EventRange extends Event{
 	public Msg msgLoad, msgCooldown, msgMiss = new MsgSlashMiss(), msgParry;
 	public float dmgBase, chanceStatus = 0;
 	public Status status;
+	public boolean isAOE = false;
 
 	
 	public EventRange(String name, String desc, float time, Character souce,
@@ -26,10 +28,24 @@ public class EventRange extends Event{
 		this.dmgBase = dmgbase;
 	}
 	
+	public EventRange(String name, String desc, float time, Character souce,
+			Character target, float dmgbase, Step step, boolean aoe) {
+		super(name, desc, time, souce, target, null, step);
+		this.dmgBase = dmgbase;
+		isAOE = aoe;
+	}
+	
 	@Override
 	public void execute() {
-		if (!calculateChance(target)){
+		if (!isAOE && !calculateChance(target)){
 			step.damage(target);
+			super.execute();
+		}else  if (isAOE)
+		{
+			for (Character character: Game.getInstance().getEnemies(step.getCharacter())){
+				if (!calculateChance(character))
+					step.damage(character);
+			}
 			super.execute();
 		}
 	}
@@ -116,7 +132,7 @@ public class EventRange extends Event{
 			return true;
 		}
 
-		if (step.type == ActionType.MeleeBlock && skill.isExecuting) {
+		if (step.type == ActionType.MeleeBlock && skill.isExecuting && chanceBlock > 0) {
 			StylePainter.append(new StyleSegment(StylePainter.NAME,
 					source.name), new StyleSegment(null, "'s "),
 					new StyleSegment(StylePainter.SKILL, name),

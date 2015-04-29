@@ -20,8 +20,8 @@ import com.mangolion.epicmangorpg.skills.SkillStab;
 import com.mangolion.epicmangorpg.skills.SkillSting;
 import com.mangolion.epicmangorpg.skills.SkillTailSwing;
 import com.mangolion.epicmangorpg.weapons.Weapon;
-import com.mangolion.epicmangorpg.weapons.WeaponGreatCopperSword;
-import com.mangolion.epicmangorpg.weapons.WeaponLongSword;
+import com.mangolion.epicmangorpg.weapons.GreatCopperSword;
+import com.mangolion.epicmangorpg.weapons.LongSword;
 import com.mangolion.epicmangorpg.weapons.Weapons;
 
 public class ScropionWolf extends Character{

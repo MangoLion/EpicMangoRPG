@@ -1,9 +1,9 @@
 package com.mangolion.epicmangorpg.frames;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -23,31 +23,25 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-import com.mangolion.epicmangorpg.characters.SlimeBlue;
 import com.mangolion.epicmangorpg.characters.Character;
-import com.mangolion.epicmangorpg.characters.CharacterBob;
 import com.mangolion.epicmangorpg.characters.CharacterPlayer;
-import com.mangolion.epicmangorpg.characters.Dummy;
-import com.mangolion.epicmangorpg.characters.FoxFang;
-import com.mangolion.epicmangorpg.characters.SlimeHeal;
-import com.mangolion.epicmangorpg.characters.SlimeKing;
-import com.mangolion.epicmangorpg.characters.Minotaur;
-import com.mangolion.epicmangorpg.characters.SpiderWolf;
 import com.mangolion.epicmangorpg.components.Command;
 import com.mangolion.epicmangorpg.components.LogMsg;
 import com.mangolion.epicmangorpg.components.MenuHelp;
 import com.mangolion.epicmangorpg.components.MenuSetting;
 import com.mangolion.epicmangorpg.components.TextPaneMango;
 import com.mangolion.epicmangorpg.components.Themes;
+import com.mangolion.epicmangorpg.components.Tick;
 import com.mangolion.epicmangorpg.events.Event;
 import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.game.StylePainter;
@@ -57,13 +51,6 @@ import com.mangolion.epicmangorpg.game.Weather;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.statuses.Buff;
 import com.mangolion.epicmangorpg.statuses.Status;
-
-import javax.swing.JProgressBar;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.JSeparator;
-import java.awt.Font;
 
 public class FrameGame extends JFrame {
  
@@ -825,7 +812,12 @@ public class FrameGame extends JFrame {
 				str += "Executing";
 			if (skill.isCooldown)
 				str += "Cooldown";
-			str += " for " + Game.getInstance().findTick(character).time + " seconds";
+			
+			Tick tick = Game.getInstance().findTick(character);
+			if (tick == null)
+				return;
+			
+			str += " for " + tick.time + " seconds";
 			tfSkill.setText(str);		
 		}else
 			tfSkill.setText("Idling");

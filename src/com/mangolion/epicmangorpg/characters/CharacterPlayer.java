@@ -2,6 +2,7 @@ package com.mangolion.epicmangorpg.characters;
 
 import java.util.LinkedList;
 
+import com.mangolion.epicmangorpg.armor.ClothRobe;
 import com.mangolion.epicmangorpg.armor.LeatherGloves;
 import com.mangolion.epicmangorpg.armor.LeatherHat;
 import com.mangolion.epicmangorpg.armor.LeatherJacket;
@@ -16,12 +17,26 @@ import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.items.ItemCustom;
 import com.mangolion.epicmangorpg.items.Items;
 import com.mangolion.epicmangorpg.skills.Skill;
+import com.mangolion.epicmangorpg.skills.SkillArrowFlame;
+import com.mangolion.epicmangorpg.skills.SkillArrowJumpBack;
+import com.mangolion.epicmangorpg.skills.SkillArrowPierce;
+import com.mangolion.epicmangorpg.skills.SkillArrowRain;
+import com.mangolion.epicmangorpg.skills.SkillArrowRapid;
+import com.mangolion.epicmangorpg.skills.SkillArrowSideStep;
+import com.mangolion.epicmangorpg.skills.SkillArrowSwift;
 import com.mangolion.epicmangorpg.skills.SkillBarrelRoll;
 import com.mangolion.epicmangorpg.skills.SkillBasicSwordCombo;
 import com.mangolion.epicmangorpg.skills.SkillBlock;
+import com.mangolion.epicmangorpg.skills.SkillBowSweep;
+import com.mangolion.epicmangorpg.skills.SkillCharge;
+import com.mangolion.epicmangorpg.skills.SkillCombatMastery;
 import com.mangolion.epicmangorpg.skills.SkillFireCoating;
+import com.mangolion.epicmangorpg.skills.SkillGunShoot;
+import com.mangolion.epicmangorpg.skills.SkillJumpBack;
 import com.mangolion.epicmangorpg.skills.SkillKickBasic;
+import com.mangolion.epicmangorpg.skills.SkillMaterySword;
 import com.mangolion.epicmangorpg.skills.SkillParry;
+import com.mangolion.epicmangorpg.skills.SkillReload;
 import com.mangolion.epicmangorpg.skills.SkillRespite;
 import com.mangolion.epicmangorpg.skills.SkillSideStep;
 import com.mangolion.epicmangorpg.skills.SkillSidestepSlash;
@@ -30,18 +45,21 @@ import com.mangolion.epicmangorpg.skills.SkillStab;
 import com.mangolion.epicmangorpg.skills.SkillWait;
 import com.mangolion.epicmangorpg.statuses.Status;
 import com.mangolion.epicmangorpg.weapons.Armor;
+import com.mangolion.epicmangorpg.weapons.BasicRifle;
 import com.mangolion.epicmangorpg.weapons.Weapon;
-import com.mangolion.epicmangorpg.weapons.WeaponCopperDagger;
-import com.mangolion.epicmangorpg.weapons.WeaponLongSword;
+import com.mangolion.epicmangorpg.weapons.Barehands;
+import com.mangolion.epicmangorpg.weapons.BowShort;
+import com.mangolion.epicmangorpg.weapons.CopperDagger;
+import com.mangolion.epicmangorpg.weapons.LongSword;
 
 public class CharacterPlayer extends Character {
 	public static CharacterPlayer instance;
-	static Weapon weapon = new WeaponLongSword();
+	static Weapon weapon = new LongSword();
 	public CharacterPlayer(String name) {
-		super(name, "", 60, 60, 80, 40, 10, 60, 20, 10,0, 0,weapon
-				, new SkillBasicSwordCombo(),
-				new SkillBlock(), new SkillKickBasic(), new SkillBarrelRoll(),
-				new SkillParry(), new SkillStab(), new SkillSlashBasic(), new SkillWait(), new SkillSidestepSlash(), new SkillFireCoating(), new SkillSideStep(), new SkillRespite());
+		super(name, "", 60, 60, 80, 40, 10, 60, 20, 10,0, 0,new Barehands(),
+				new SkillBlock(), new SkillKickBasic(), new SkillBarrelRoll(),  new SkillSlashBasic(),
+				new SkillParry(), new SkillStab(), new SkillSlashBasic(), new SkillWait(), new SkillFireCoating(), new SkillSideStep(), new SkillRespite(),
+				new SkillCharge(), new SkillJumpBack(), new SkillGunShoot(), new SkillReload());
 		isPlayer = true;
 		isAllied = true;
 		instance = this;
@@ -52,8 +70,12 @@ public class CharacterPlayer extends Character {
 	
 	public void init(){
 		inventory.addItem(Items.potionSmall, 5);
+		inventory.addItem(Items.arrow, 200);
+		inventory.addItem(Items.bullet, 200);
 		inventory.addItem(weapon);
-		inventory.addItem(new WeaponCopperDagger());
+		inventory.addItem(new BasicRifle());
+		inventory.addItem(new BowShort());
+		inventory.addItem(new CopperDagger());
 		inventory.addItem(new LeatherGloves());
 		inventory.addItem(new LeatherPants());
 		inventory.addItem(new LeatherJacket());
@@ -64,6 +86,7 @@ public class CharacterPlayer extends Character {
 		inventory.addItem(new MetalHelm());
 		inventory.addItem(new PlateArmorLower());
 		inventory.addItem(new PlateArmorUpper());
+		inventory.addItem(new ClothRobe());
 	}
 
 	@Override

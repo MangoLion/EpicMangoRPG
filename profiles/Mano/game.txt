@@ -2,6 +2,6 @@
 current floor = 0
 last floor = false
 next floor = true
-floor percent = 0.0
+floor percent = 40.0
 theme = Dust Coffee
 

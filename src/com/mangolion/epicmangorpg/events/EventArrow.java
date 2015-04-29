@@ -13,5 +13,10 @@ public class EventArrow extends EventRange{
 		super("Arrow", "", time, source, target, dmgbase, step);
 		setMessages(null, null, null, new Msg("$name had parried $targetname's $targetskill"));
 	}
+	
+	public EventArrow(float time, Character source, Character target, float dmgbase, Step step, boolean isAOE) {
+		super("Arrow", "", time, source, target, dmgbase, step, isAOE);
+		setMessages(null, null, null, new Msg("$name had parried $targetname's $targetskill"));
+	}
 
 }

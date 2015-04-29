@@ -18,14 +18,14 @@ import com.mangolion.epicmangorpg.skills.SkillSpitPoison;
 import com.mangolion.epicmangorpg.skills.SkillStab;
 import com.mangolion.epicmangorpg.skills.SkillSummon;
 import com.mangolion.epicmangorpg.weapons.Weapon;
-import com.mangolion.epicmangorpg.weapons.WeaponGreatCopperSword;
-import com.mangolion.epicmangorpg.weapons.WeaponLongSword;
+import com.mangolion.epicmangorpg.weapons.GreatCopperSword;
+import com.mangolion.epicmangorpg.weapons.LongSword;
 import com.mangolion.epicmangorpg.weapons.Weapons;
 
 public class RatGiant extends Character{
 
 	public RatGiant() {
-		super("Giant Rat", "A huge rat with a hungry appetite. May call for its friends when injured", 60, 0, 100, 40, 20, 100, 10, 10, 10, 5,new Weapon("Claws", 7, 100, Weapons.Sword, 1, 1, 1.2f),  new SkillBite(), new SkillDodge(), new SkillSummon(RatGiant.class, 0.5f));
+		super("Giant Rat", "A huge rat with a hungry appetite. May call for its friends when injured", 60, 0, 100, 50, 20, 100, 10, 10, 10, 5,new Weapon("Claws", 7, 100, Weapons.Claws, 1, 1, 1.2f),  new SkillBite(), new SkillDodge(), new SkillSummon(RatGiant.class, 0.5f));
 		ai = new AISummon(this);
 	}
 }

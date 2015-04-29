@@ -27,7 +27,7 @@ public class Skill implements StatBuff {
 	public Character character;
 	public String name, desc;
 	public LinkedList<Step> steps = new LinkedList<Step>();
-	public boolean isExecuting, isCooldown, isLoading, isObservable = false;
+	public boolean isExecuting, isCooldown, isLoading, isObservable = false, isTwoHanded = true;;
 	public int stepCurrent;
 	public LinkedList<Weapons> weapons = new LinkedList<Weapons>();
 	public ActionType type;
@@ -139,9 +139,14 @@ public class Skill implements StatBuff {
 				step.execute(target);
 			}
 		} else {
+			if (!checkWeapon(character.weapon)){
+				Utility.narrate(character.name + " do not have the right weapon to use this skill");
+				return false;
+			}
+			
 			if (!step.checkConndition()){
 				if (character == CharacterPlayer.instance)
-					Utility.narrate("You do not have enough sp/mp to use this skill");
+					Utility.narrate("You do not have enough sp/mp to use " + name);
 				return false;
 			}
 			
@@ -213,28 +218,28 @@ public class Skill implements StatBuff {
 	public float getTotalHPCost() {
 		float result = 0;
 		for (Step step: steps)
-			result += step.hpCost;
+			result += step.getHpCost();
 		return Utility.format(result);
 	}
 
 	public float getTotalMPCost() {
 		float result = 0;
 		for (Step step: steps)
-			result += step.mpCost;
+			result += step.getMpCost();
 		return Utility.format(result);
 	}
 	
 	public float getTotalSPCost() {
 		float result = 0;
 		for (Step step: steps)
-			result += step.stamCost;
+			result += step.getStamCost();
 		return Utility.format(result);
 	}
 	
 	public float getTotalBalCost() {
 		float result = 0;
 		for (Step step: steps)
-			result += step.balCost;
+			result += step.getBalCost();
 		return Utility.format(result);
 	}
 
@@ -363,8 +368,9 @@ public class Skill implements StatBuff {
 	public boolean checkWeapon(Weapon weapon) {
 		
 		for (Weapons w: weapons)
-			if (w == weapon.type || w == Weapons.ALL)
-				return true;
+			for (Weapons w2:weapon.type)
+				if (w == w2 || w == Weapons.ALL)
+					return true;
 		return false;
 	}
 }

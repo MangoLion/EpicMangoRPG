@@ -16,7 +16,7 @@ public class SkillSlashBasic extends Skill {
 
 
 	public SkillSlashBasic() {
-		super("Slash", "Basic  slash, fast, but weak.Very fast loading speed, but slightly longer cooldown",Weapons.Sword, ActionType.MeleeSwing);
+		super("Slash", "Basic  slash, fast, but weak. fast loading speed, works with most weapons.",Weapons.ALL, ActionType.MeleeSwing);
 		addSteps(new StepMeleeSlash(this, "Slash","", 0.5f,
 				0.2f, 0.4f,1f) {
 			public float getStrBuff() {

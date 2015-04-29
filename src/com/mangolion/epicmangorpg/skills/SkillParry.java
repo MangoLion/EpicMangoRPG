@@ -16,6 +16,7 @@ public class SkillParry extends Skill{
 	public SkillParry() {
 		super("Parry", "Very high chance of success compared to dodge, used to deflect most melee attacks and even some ranged attack, if succeed, the user will receive no damage and also can take advantage of the target's opening.",Weapons.ALL, ActionType.MeleeParry);
 		addSteps(new StepParry(this, 0.3f, 0.4f, 0.2f).setCost(10, 0, 0, 0));
+		isTwoHanded = false;
 	}
 
 	public static class StepParry extends Step{

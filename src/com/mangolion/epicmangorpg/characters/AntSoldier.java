@@ -19,8 +19,8 @@ import com.mangolion.epicmangorpg.skills.SkillSpitPoison;
 import com.mangolion.epicmangorpg.skills.SkillStab;
 import com.mangolion.epicmangorpg.skills.SkillSummon;
 import com.mangolion.epicmangorpg.weapons.Weapon;
-import com.mangolion.epicmangorpg.weapons.WeaponGreatCopperSword;
-import com.mangolion.epicmangorpg.weapons.WeaponLongSword;
+import com.mangolion.epicmangorpg.weapons.GreatCopperSword;
+import com.mangolion.epicmangorpg.weapons.LongSword;
 import com.mangolion.epicmangorpg.weapons.Weapons;
 
 public class AntSoldier extends Character{
