@@ -28,7 +28,7 @@ public class AISimple extends AI {
 		if (!checkDefense())
 		if (!executeSkill(GeneralType.Attack))
 			executeSkill(GeneralType.Defend);
-			
+		System.out.println("no skills");
 		super.nextAction();
 	}
 	

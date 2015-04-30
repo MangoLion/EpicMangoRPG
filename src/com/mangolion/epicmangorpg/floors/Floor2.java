@@ -1,6 +1,7 @@
 package com.mangolion.epicmangorpg.floors;
 
 import com.mangolion.epicmangorpg.characters.AdventurerNewb;
+import com.mangolion.epicmangorpg.characters.Bird;
 import com.mangolion.epicmangorpg.characters.BoarWild;
 import com.mangolion.epicmangorpg.characters.SlimeBlue;
 import com.mangolion.epicmangorpg.characters.FoxFang;
@@ -41,6 +42,7 @@ public class Floor2 extends Floor {
 		addSpawn(WolfGray.class, 0.2f);
 		addSpawn(WolfWhite.class, 0.2f);
 		addSpawn(BoarWild.class, 0.2f);
+		addSpawn(Bird.class, 0.2f);
 
 		
 		addAlly(AdventurerNewb.class, 1.2f);

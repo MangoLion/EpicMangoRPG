@@ -6,9 +6,9 @@ import com.mangolion.epicmangorpg.items.ItemCustom;
 
 public class Weapon extends ItemCustom implements StatBuff{
 	public String name;
-	public float baseDamage, speedModifier, sizeModifier, meleeDamageModifier, baseMagicDmg = 0, baseMagicDmgMod = 1, alchemyMod = 1, gunMod = 1, reloadTime = 0, alchemyDamage = 0, gunDamage = 0;
+	public float baseDamage, speedModifier, sizeModifier, meleeDamageModifier, baseMagicDmg = 0, baseMagicDmgMod = 1, alchemyMod = 1, gunMod = 1, reloadTime = 0, alchemyDamage = 0, gunDamage = 0, chanceJam = 0;
 	public Weapons type[];
-	public boolean useAmmo = false;
+	public boolean useAmmo = false, isJammed = false, isAutomatic = false, canToggleAutomatic = true;
 	public int ammo = 0, maxAmmo = 0, fireRate = 0;
 	
 	public Weapon(String name, float baseDamage, float maxDurability, float meleespeedModifier, float sizeModifier, float meleeDmgMod, Weapons... type) {
@@ -38,11 +38,12 @@ public class Weapon extends ItemCustom implements StatBuff{
 		meleeDamageModifier = meleeDmgMod;
 	}
 	
-	public void setReload(int maxAmmo, float reloadTime, int fireRate){
+	public void setReload(int maxAmmo, float reloadTime, int fireRate, float jam){
 		useAmmo = true;
 		this.maxAmmo = maxAmmo;
 		this.reloadTime = reloadTime;
 		this.fireRate = fireRate;
+		this.chanceJam = jam;
 		ammo = maxAmmo;
 	}
 	
@@ -133,6 +134,18 @@ public class Weapon extends ItemCustom implements StatBuff{
 
 	@Override
 	public float getProtBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getAccuracyBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getCriticalBuff() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

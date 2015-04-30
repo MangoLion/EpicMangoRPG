@@ -13,11 +13,18 @@ import com.mangolion.epicmangorpg.steps.Step;
 import com.mangolion.epicmangorpg.weapons.Weapon;
 import com.mangolion.epicmangorpg.weapons.Weapons;
 
-public class SkillGunShoot extends Skill {
+public class SkillSniperShot extends Skill {
 
-	public SkillGunShoot() {
-		super("Shoot", "Takes proper aim and shoot, standard gun attack.",Weapons.Gun, ActionType.RangeNormal);
-		addSteps(new Step(this, "Shoot", "",ActionType.RangeNormal, 0.5f, 0.1f, 0.15f,1){
+	public SkillSniperShot() {
+		super("Sniper Shot", "Focus and takes time aiming at target's weakspot, higher crit chance. The weapon's automatic mode is automatically turned off.",Weapons.Gun, ActionType.RangeNormal);
+		addSteps(new Step(this, "Sniper Shot", "",ActionType.RangeNormal, 0.9f, 0.1f, 0.1f,1.5f){
+			
+			public boolean checkConndition() {
+				if (getCharacter().weapon.canToggleAutomatic || !getCharacter().weapon.isAutomatic)
+					return super.checkConndition();
+				Utility.narrate(getCharacter().name + "'s weapon cannot be toggled.");
+				return false;
+			};
 			
 			public void init() {
 				useAmmo = true;
@@ -25,9 +32,11 @@ public class SkillGunShoot extends Skill {
 			
 			@Override
 			public void execute(Character target) {
-
+				critBase = 0.2f * (1 + prof/2);
+				chanceMiss -= prof/2;
+				getCharacter().weapon.isAutomatic = false;
 				for (int i = 0; i < ammoUse; i ++)
-					Event.addEvent(new EventRange("Bullet", "", 0.3f, getCharacter(), target, 0, this));
+					Event.addEvent(new EventRange("Bullet", "", 0.2f, getCharacter(), target, 0, this));
 				super.execute(target);
 			}			
 			
@@ -38,7 +47,7 @@ public class SkillGunShoot extends Skill {
 			public float getSPBuff() {
 				return prof*15;
 			};
-		}.setCost(5, 0, 0, 0).setChances(1, 1, 0f));
+		}.setCost(5, 0, 0, 0).setChances(1, 1, -0.15f));
 	}
 
 }

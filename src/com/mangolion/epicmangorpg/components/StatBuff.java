@@ -3,7 +3,7 @@ package com.mangolion.epicmangorpg.components;
 import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.steps.Step;
 
-public interface StatBuff {
+public abstract interface StatBuff {
 	public float getHPBuff();
 	public float getMPBuff();
 	public float getSPBuff();
@@ -18,4 +18,6 @@ public interface StatBuff {
 	public float getAgiBuff();
 	public float getDefBuff();
 	public float getProtBuff();
+	public float getAccuracyBuff();
+	public float getCriticalBuff();
 }

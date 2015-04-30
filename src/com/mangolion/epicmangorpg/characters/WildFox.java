@@ -25,7 +25,7 @@ import com.mangolion.epicmangorpg.weapons.Weapons;
 public class WildFox extends Character{
 
 	public WildFox() {
-		super("Wild Fox", "A small, wild fox, why are you bullying it?",50, 20, 80, 30, 10, 30, 20, 10, 0, 0,new Weapon("Fox Teeth", 0, 100, Weapons.Fang, 1, 1, 0.8f),  new SkillSideStep(), new SkillBite(), new SkillSlashBasic());
+		super("Wild Fox", "A small, wild fox, why are you bullying it?",50, 20, 80, 30, 20, 30, 20, 10, 0, 0,new Weapon("Fox Teeth", 0, 100, Weapons.Fang, 1, 1, 0.8f),  new SkillSideStep(), new SkillBite(), new SkillSlashBasic());
 		addElements(new Element("Furry", 1));
 		ai = new AISimple(this);
 	}

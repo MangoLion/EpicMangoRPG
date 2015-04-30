@@ -30,7 +30,7 @@ public abstract class StepMeleeSlash extends Step {
 		chanceParry = 0.5f;// both skills goes pass
 							// each other and deal
 							// damage,
-		chanceMiss = 0.2f;
+		chanceMiss = 0f;
 		setMessages(new MsgSlashLoad(), new MsgSlashExecute(), new MsgBasicCD());
 	}
 	
@@ -51,6 +51,8 @@ public abstract class StepMeleeSlash extends Step {
 	public boolean calculateChance(Character target) {
 		if (target == null)
 			return false;
+		
+
 
 		Skill skill = target.skillCurrent;
 		Step step = target.getCurrentStep();
@@ -138,11 +140,6 @@ public abstract class StepMeleeSlash extends Step {
 			}
 		}
 
-		if (rand.nextFloat() <= chanceMiss) {
-			StylePainter.append(new MsgSlashMiss().getMessage(getCharacter(),
-					target, 0));
-			return true;
-		}
 		return false;
 	}
 

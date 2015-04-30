@@ -20,6 +20,7 @@ import com.mangolion.epicmangorpg.messages.Msg;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.Skills;
 import com.mangolion.epicmangorpg.statuses.Buff;
+import com.mangolion.epicmangorpg.statuses.BuffAirborne;
 import com.mangolion.epicmangorpg.statuses.Status;
 import com.mangolion.epicmangorpg.steps.Step;
 import com.mangolion.epicmangorpg.weapons.Armor;
@@ -262,11 +263,18 @@ public class Character implements Cloneable {
 	
 	public void applyBuff(Buff buff){
 		for (Buff b: buffs)
-			if (b.name.equals(buff.name) && b.type == buff.type){
+			if (b.name.equals(buff.name) && b.types == buff.types){
 				b.time += buff.time;
 				return;
 			}
 		buffs.add(buff);		
+	}
+	
+	public void removeBuff(String name){
+		Iterator<Buff> it = buffs.iterator();
+		while(it.hasNext())
+			if (it.next().name.equals(name))
+				it.remove();
 	}
 	
 	public void tickBuff(Buff buff, float deltaTime){
@@ -440,10 +448,30 @@ public class Character implements Cloneable {
 		
 	}
 	
+	public float getAccuracy(Character target){
+		float acc = 0.8f;
+		acc+= (getDex()-target.getAgi())*0.02;
+		acc += getAccuracyBuff();
+		if (acc > 0.95f)
+			acc = 0.95f;
+		if (acc < 0.15f)
+			acc = 0.15f;
+			return acc;
+	}
+	
+	public float getCritical(Character target){
+		float crit = 0.5f;
+		crit += (getAgi()-target.getAgi())*0.02;
+		crit += (getDex()-target.getAgi())*0.02;
+		crit += getCriticalBuff();
+		crit -= target.prot*0.02;
+		return crit;
+	}
+	
 	public LinkedList<Buff> getBuff(Buff.Type type){
 		LinkedList<Buff> results = new LinkedList<Buff>();
 		for (Buff buff: buffs)
-			if (buff.type == type)
+			if (buff.checkType(type))
 				results.add(buff);
 		return results;
 	}
@@ -453,9 +481,22 @@ public class Character implements Cloneable {
 		return armors;
 	}
 	
+	public boolean isAirborne(){
+		boolean result = (getBuff(Buff.Type.airborne).size() > 0);
+		return (getBuff(Buff.Type.airborne).size() > 0);
+	}
+	
+	public void setAirborne(float time){
+		if (!isAirborne()){
+			applyBuff(new BuffAirborne(time));
+		}else{
+			getBuff(Buff.Type.airborne).getFirst().time = time;
+		}
+	}
+	
 	public float getMeleeSpeed(){
 		float result = meleeSpeedMod;
-		result *= weapon.sizeModifier;
+		result *= weapon.speedModifier;
 		for (Armor armor: getArmors())
 			if (armor != null)
 			result *= armor.speedModifier;
@@ -590,7 +631,7 @@ public class Character implements Cloneable {
 		float result = cpBase;
 		for (Skill skill : skills)
 			result += skill.getCP();
-		result += getMaxHP() + getMaxMP() + getMaxBal()/2 + getMaxSP()/2 + getAgi() + getDex()/2 + getInt() + getStr();
+		result +=/* getMaxHP() + */getMaxMP() + getMaxBal()/2 + getMaxSP()/2 + getAgi() + getDex()/2 + getInt() + getStr();
 		return Utility.format(result);
 	}
 	
@@ -640,6 +681,28 @@ public class Character implements Cloneable {
 			if (armor != null)
 				result += armor.getMPRegenBuff();
 		return Utility.format4( result);
+	}
+	
+	public float getAccuracyBuff(){
+		float acc = 0;
+		for (Armor armor: getArmors())
+			if (armor != null)
+			acc += armor.getAccuracyBuff();
+		for (Buff buff: getBuff(Buff.Type.accuracy))
+			acc += buff.value;
+		acc += weapon.getAccuracyBuff();
+		return acc;
+	}
+	
+	public float getCriticalBuff(){
+		float crit = 0;
+		for (Armor armor: getArmors())
+			if (armor != null)
+				crit += armor.getCriticalBuff();
+		for (Buff buff: getBuff(Buff.Type.crit))
+			crit += buff.value;
+		crit += weapon.getCriticalBuff();
+		return crit;
 	}
 	
 	

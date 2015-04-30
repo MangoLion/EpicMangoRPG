@@ -111,4 +111,16 @@ public class Armor extends ItemCustom implements StatBuff{
 		// TODO Auto-generated method stub
 		return protBuff;
 	}
+
+	@Override
+	public float getAccuracyBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getCriticalBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

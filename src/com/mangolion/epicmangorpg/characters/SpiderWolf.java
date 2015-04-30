@@ -26,7 +26,7 @@ import com.mangolion.epicmangorpg.weapons.Weapons;
 public class SpiderWolf extends Character{
 
 	public SpiderWolf() {
-		super("Wolf Spider", "A dog sized spider, kill it with fire!!!",60, 0, 100, 80, 10, 60, 10, 10, 0, 0,new WeaponSpiderFang(),   new SkillBlock(), new SkillDodge(), new SkillJumpAtk(), new SkillWebFiring(), new SkillBite());
+		super("Wolf Spider", "A dog sized spider, kill it with fire!!!",60, 0, 100, 80, 15, 60, 10, 10, 0, 0,new WeaponSpiderFang(),   new SkillBlock(), new SkillDodge(), new SkillJumpAtk(), new SkillWebFiring(), new SkillBite());
 		addElements(new Element("Furry", 1));
 		ai = new AISimple(this);
 	}

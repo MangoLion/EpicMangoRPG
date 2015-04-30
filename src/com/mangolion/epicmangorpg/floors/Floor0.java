@@ -1,6 +1,7 @@
 package com.mangolion.epicmangorpg.floors;
 
 import com.mangolion.epicmangorpg.characters.AdventurerNewb;
+import com.mangolion.epicmangorpg.characters.Bird;
 import com.mangolion.epicmangorpg.characters.RatGiant;
 import com.mangolion.epicmangorpg.characters.SlimeBlue;
 import com.mangolion.epicmangorpg.characters.Dummy;
@@ -26,15 +27,17 @@ public class Floor0 extends Floor {
 		terrains.add(Terrain.Plain);
 		terrains.add(Terrain.Taiga);
 		
-		addSpawn( SlimeBlue.class, 0.2f);
+		/*addSpawn( SlimeBlue.class, 0.2f);
 		addSpawn(SlimeHeal.class, 0.2f);
 		addSpawn( SlimePoison.class, 0.15f);
 		addSpawn( RabbitWild.class, 0.2f);
 		addSpawn( RabbitGiant.class, 0.1f);
-		addSpawn( WildFox.class , 0.2f);
+		addSpawn( WildFox.class , 0.2f);*/
+		addSpawn(Bird.class, 0.2f);
 		//addSpawn(RockTurtle.class, 1);
+	//	addSpawn(Dummy.class, 1);
 		
-		addAlly(AdventurerNewb.class, 1);
+		//addAlly(AdventurerNewb.class, 1);
 
 	}
 }

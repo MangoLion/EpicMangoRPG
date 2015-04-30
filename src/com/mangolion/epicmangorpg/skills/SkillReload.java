@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.components.ActionType;
+import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.items.Items;
 import com.mangolion.epicmangorpg.messages.MsgBasicCD;
 import com.mangolion.epicmangorpg.messages.MsgMeleeBlockExecute;
@@ -14,7 +15,7 @@ import com.mangolion.epicmangorpg.weapons.Weapons;
 public class SkillReload extends Skill {
 
 	public SkillReload() {
-		super("Reload", "", Weapons.ALL, ActionType.RecoverAmmo);
+		super("Reload", "", Weapons.Reloadable, ActionType.RecoverAmmo);
 		addSteps(new Step(this, "Reload", "", ActionType.RecoverAmmo, 0f, 0.1f,
 				0f, 0) {
 			public void execute(Character target, float time) {
@@ -27,6 +28,7 @@ public class SkillReload extends Skill {
 			public boolean checkConndition() {
 				if (getCharacter().inventory.getItemNumber(Items.bullet) > getCharacter().weapon.maxAmmo)
 					return super.checkConndition();
+
 				return false;
 			};
 

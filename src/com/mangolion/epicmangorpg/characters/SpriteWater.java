@@ -26,7 +26,7 @@ import com.mangolion.epicmangorpg.weapons.Weapons;
 public class SpriteWater extends Character{
 
 	public SpriteWater() {
-		super("Water Sprite", "A floating ball of water with wings, mainly use water skills.",70, 70, 40, 40, 10, 100, 60, 10, 0, 0,new Weapon("Water", 0, 100, Weapons.BareHand, 1, 1, 1f),  new SkillBodySlam(), new SkillBlock(), new SkillSlashBasic(), new SkillBoltFire());
+		super("Water Sprite", "A floating ball of water with wings, mainly use water skills.",70, 70, 40, 40, 5, 100, 60, 10, 0, 0,new Weapon("Water", 0, 100, Weapons.BareHand, 1, 1, 1f),  new SkillBodySlam(), new SkillBlock(), new SkillSlashBasic(), new SkillBoltFire());
 		addElements(new Element("Fire", 1));
 		ai = new AISimple(this);
 	}

@@ -12,5 +12,7 @@ public enum Weapons {
 	GreatSword,
 	Fang,
 	Claws,
+	Reloadable,
+	Bladed,
 	ALL
 }

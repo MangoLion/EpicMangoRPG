@@ -148,7 +148,7 @@ public class Game {
 				
 			//	if (rand.nextInt(2) == 0)
 				if (getCurrentFloor().allies.size()>0)
-					for (int i = 0; i < 4; i ++)
+					for (int i = 0; i < 2; i ++)
 						if (rand.nextInt(6) == 0)
 							charsAllies.add(floors.get(currentFloor).getAlly());
 				

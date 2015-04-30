@@ -373,4 +373,16 @@ public class Skill implements StatBuff {
 					return true;
 		return false;
 	}
+
+	@Override
+	public float getAccuracyBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getCriticalBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

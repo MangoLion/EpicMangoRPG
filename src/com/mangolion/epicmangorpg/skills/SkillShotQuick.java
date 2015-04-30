@@ -6,28 +6,30 @@ import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.components.ActionType;
 import com.mangolion.epicmangorpg.events.Event;
 import com.mangolion.epicmangorpg.events.EventArrow;
+import com.mangolion.epicmangorpg.events.EventRange;
+import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.items.Items;
 import com.mangolion.epicmangorpg.steps.Step;
+import com.mangolion.epicmangorpg.weapons.Weapon;
 import com.mangolion.epicmangorpg.weapons.Weapons;
 
-public class SkillArrowShoot extends Skill {
+public class SkillShotQuick extends Skill {
 
-	public SkillArrowShoot() {
-		super("Shoot Arrow", "Pulls back the bowstring and let loose an arrow, standard bow attack.",Weapons.Bow, ActionType.RangeNormal);
-		addSteps(new Step(this, "Shoot Arrow", "",ActionType.RangeNormal, 0.6f, 0.1f, 0.1f,1){
+	public SkillShotQuick() {
+		super("Quick Shot", "fires the moment the gun is poiting towards the target, fast but unaccurate",Weapons.Gun, ActionType.RangeNormal);
+		addSteps(new Step(this, "Quick Shot", "",ActionType.RangeNormal, 0.3f, 0.1f, 0.15f,1){
+			
+			public void init() {
+				useAmmo = true;
+			};
 			
 			@Override
 			public void execute(Character target) {
-				Event.addEvent(new EventArrow(0.5f, getCharacter(), target, 30, this));
-				getCharacter().inventory.removeItem(Items.arrow, 1);
+
+				for (int i = 0; i < ammoUse; i ++)
+					Event.addEvent(new EventRange("Bullet", "", 0.3f, getCharacter(), target, 0, this));
 				super.execute(target);
 			}			
-			
-			public boolean checkConndition() {
-				if (getCharacter().inventory.getItemNumber(Items.arrow) > 0)
-					return super.checkConndition();
-				return false;
-			};
 			
 			public float getStrBuff() {
 				// TODO Auto-generated method stub
@@ -36,7 +38,7 @@ public class SkillArrowShoot extends Skill {
 			public float getSPBuff() {
 				return prof*15;
 			};
-		}.setCost(15, 0, 0, 0).setChances(1, 1, 0f));
+		}.setCost(5, 0, 0, 0).setChances(1, 1, 0.15f));
 	}
 
 }

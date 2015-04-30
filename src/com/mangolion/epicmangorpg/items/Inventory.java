@@ -56,7 +56,7 @@ public class Inventory {
 		int num = 0;
 		for (ItemStack itemStack: itemStacks)
 			if (itemStack.item == item)
-				num ++;
+				num += itemStack.stack;
 		return num;
 	}
 	public ItemStack getItem(String name){

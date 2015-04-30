@@ -27,7 +27,7 @@ import com.mangolion.epicmangorpg.weapons.Weapons;
 public class AntLionGiant extends Character{
 
 	public AntLionGiant() {
-		super("Giant Antlion", "A giant ant lion, hidden in the sand, deep in its steep hole.", 200, 100, 250, 50, 20, 100, 10, 10, 15, 7,new Weapon("Claws", 10, 100, Weapons.Claws, 1, 1, 1f),  new SkillBite(), new SkillParry(), new SkillAvalancheSand());
+		super("Giant Antlion", "A giant ant lion, hidden in the sand, deep in its steep hole.", 200, 100, 250, 50, 0, 100, 10, 10, 15, 7,new Weapon("Claws", 10, 100, Weapons.Claws, 1, 1, 1f),  new SkillBite(), new SkillParry(), new SkillAvalancheSand());
 		ai = new AISimple(this);
 		addElements(new Element("Tough Scales", 1));
 	}

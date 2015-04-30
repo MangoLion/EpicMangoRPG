@@ -1,5 +1,5 @@
 [general info]
-Name = Lion
+Name = Mango
 Gender =  male
 hp = 60.0
 mp = 60.0
@@ -11,17 +11,25 @@ int = 20.0
 agi = 10.0
 def = 0.0
 prot = 0.0
-skills = Block|Basic Kick|Barrel Roll|Slash|Parry|Stab|Slash|Wait|Fire Coat|Side Step|Respite|Charge|Jump Back|Shoot|Reload|Combat Mastery|
+skills = Block|Basic Kick|Barrel Roll|Slash|Parry|Stab|Wait|Fire Coat|Side Step|Respite|Charge|Jump Back|Combat Mastery|
 
 [Inventory]
-Consumables = Small Potion|5|Arrow|100|Arrow|100|Arrow|100|Arrow|100|Arrow|100|Arrow|100|Arrow|100|Arrow|100|Arrow|100|Arrow|100|
-ItemCustoms = Long Sword|Basic Rifle|Short Bow|Copper Dagger|Leather Gloves|Leather Pants|Leather Jacket|Leather Hat|Leather Shoes|Metal Boots|Metal Guantlet|Metal Helm|Plate Armor Lower|Plate Armor Upper|Cloth Robe|
+Consumables = Small Potion|5|Arrow|100|Arrow|100|Bullet|100|Bullet|100|
+ItemCustoms = Long Sword|Basic Machinegun|Sniper Rifle|Basic Semi-automatic Rifle|Short Bow|Copper Dagger|Leather Gloves|Leather Pants|Leather Jacket|Leather Hat|Leather Shoes|Metal Boots|Metal Guantlet|Metal Helm|Plate Armor Lower|Plate Armor Upper|Cloth Robe|
 
 [Long Sword]
 durability = 10.0
 isEquipted = false
 
-[Basic Rifle]
+[Basic Machinegun]
+durability = 7.0
+isEquipted = false
+
+[Sniper Rifle]
+durability = 7.0
+isEquipted = false
+
+[Basic Semi-automatic Rifle]
 durability = 7.0
 isEquipted = false
 
@@ -123,14 +131,6 @@ Step 0 = 0.0
 Step 1 = 0.0
 
 [Jump Back]
-prof = 0.0
-Step 0 = 0.0
-
-[Shoot]
-prof = 0.0
-Step 0 = 0.0
-
-[Reload]
 prof = 0.0
 Step 0 = 0.0
 

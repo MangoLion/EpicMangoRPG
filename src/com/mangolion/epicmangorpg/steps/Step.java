@@ -33,8 +33,8 @@ public abstract class Step implements Cloneable, StatBuff {
 	public Skill parent;
 	public String name, desc;
 	public Random rand = new Random();
-	public float chanceMiss = 1, chanceDodge  = 1, chanceParry = 1, chanceBlock =1;
-	public float prof = 0, timeLoad, timeExecute, timeCooldown, value = 0, chanceStatus = 0, cp = 0, dmgBase = 0;
+	public float chanceMiss = 0, chanceDodge  = 1, chanceParry = 1, chanceBlock =1,
+			prof = 0, timeLoad, timeExecute, timeCooldown, value = 0, chanceStatus = 0, cp = 0, dmgBase = 0, critBase = 0;
 	protected float  hpCost = 0, balCost = 0, mpCost = 0, stamCost = 0, percentBlock = 1;
 	protected float  dmgPercent = 0;
 	public Element element;
@@ -46,9 +46,16 @@ public abstract class Step implements Cloneable, StatBuff {
 	 
 	public boolean checkConndition(){
 		if (useAmmo){
-			ammoUse = getCharacter().weapon.fireRate;
+			Weapon weapon = getCharacter().weapon;
+			if (weapon.isAutomatic)
+				ammoUse = getCharacter().weapon.fireRate;
+			else 
+				ammoUse = 1;
 			if (getCharacter().weapon.ammo < ammoUse){
 				Utility.narrate(getCharacter().name + " doesn't have enough ammo, weapon has " + getCharacter().weapon.ammo + " ammo while " + ammoUse + " is required.");
+				return false;				
+			}else if(getCharacter().weapon.isJammed){
+				Utility.narrate(getCharacter().name + " can't do that because his weapon is jammed.");
 				return false;				
 			}
 		}
@@ -92,10 +99,10 @@ public abstract class Step implements Cloneable, StatBuff {
 		for (Skill skill: getCharacter().skills)
 			if (skill.type == ActionType.WeaponMastery && skill.checkWeapon(getCharacter().weapon))
 				skilDmg = skill.getTotalDamagePercent()+1;
+		if (getCharacter().weapon.checkType(Weapons.Reloadable))
+			return (getDmgPercent()*getCharacter().weapon.gunDamage*getCharacter().weapon.gunMod)*skilDmg;
 		if (strBased)
 			return ((getCharacter().weapon.baseDamage + dmgBase + getCharacter().getStrDamage())*getDmgPercent()*getCharacter().weapon.meleeDamageModifier)*skilDmg;
-		else if (getCharacter().weapon.checkType(Weapons.Gun))
-			return (getDmgPercent()*getCharacter().weapon.gunDamage*getCharacter().weapon.gunMod)*skilDmg;
 		else
 			return ((getCharacter().weapon.baseMagicDmg + dmgBase + getCharacter().getIntDamage())*getDmgPercent()*getCharacter().weapon.baseMagicDmgMod)*skilDmg;
 	}
@@ -121,9 +128,27 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 	
 	public void damage(Character target, float subtract){
+		float miss = ( chanceMiss) + (1 - getCharacter().getAccuracy(target));
+		if (getCharacter().weapon.isAutomatic)
+			miss *= 1.3f;
+		System.out.println("" + miss);
+		if (rand.nextFloat() <= miss) {
+			StylePainter.append(new MsgSlashMiss().getMessage(getCharacter(),
+					target, 0));
+			return;
+		}
+		
 		float dmg = getDamage() - subtract;
+		
 		if (dmg <= 0)
 			dmg = 1;
+		
+		float crit = getCharacter().getCritical(target) + critBase;
+		if (rand.nextFloat() <= crit) {
+			StylePainter.append(new Msg("$name has landed a critical!").getMessage(getCharacter(), null, 0));
+			dmg *= 1.5;
+		}
+		
 		if (!isAOE){
 			target.setDamage(getCharacter(), dmg);
 		if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus)
@@ -148,6 +173,18 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 
 	public void damage(Character target){
+	
+		
+		float miss = ( chanceMiss) + (1 - getCharacter().getAccuracy(target));
+		if (getCharacter().weapon.isAutomatic)
+			miss *= 1.3f;
+		System.out.println("" + miss);
+		if (rand.nextFloat() <= miss) {
+			StylePainter.append(new MsgSlashMiss().getMessage(getCharacter(),
+					target, 0));
+			return;
+		}
+		
 		float eleMult = -2;
 		for (Element element: target.getElements()){
 			if (this.element != null)
@@ -159,6 +196,14 @@ public abstract class Step implements Cloneable, StatBuff {
 		if (eleMult == -2)
 			eleMult = 1;
 		float dmg = getDamage()*eleMult;
+		
+		float crit = getCharacter().getCritical(target) + critBase;
+		System.out.println("" + crit);
+		if (rand.nextFloat() <= crit) {
+			StylePainter.append(new Msg("$name has landed a critical!").getMessage(getCharacter(), null, 0));
+			dmg *= 1.5;
+		}
+		
 		if (!isAOE){
 			target.setDamage(getCharacter(), dmg);
 		if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus)
@@ -246,6 +291,14 @@ public abstract class Step implements Cloneable, StatBuff {
 	}*/
 
 	public void load() {
+		if (useAmmo && rand.nextFloat() <= getCharacter().weapon.chanceJam){
+			getCharacter().weapon.isJammed = true;
+			StylePainter.append(new Msg("$name's $weapon is jammed!").getMessage(getCharacter(), null, 0));
+			cancel();
+			return;
+		}
+		
+		
 		// Utility.narrate(character.name + " is loading " + step.name
 		// + ",  execution in " + time + " seconds");
 		LogMsg.addLog(new LogMsg(getCharacter().name + " is loading " + name
@@ -274,6 +327,16 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 	
 	public void execute(Character target, float time) {
+		if ((type == ActionType.MeleeBlock || type == ActionType.MeleeSpecial||type == ActionType.MeleeStab||type == ActionType.MeleeSwing) && target.isAirborne()){
+			StylePainter.append(new Msg("$name cannot reach $targetname because $p is airborne!").getMessage(getCharacter(), target, 0));
+			return;
+		}
+		if ((type == ActionType.MeleeBlock || type == ActionType.MeleeSpecial||type == ActionType.MeleeStab||type == ActionType.MeleeSwing) && getCharacter().isAirborne()){
+			StylePainter.append(new Msg("$name is no longer airborne.").getMessage(getCharacter(), target, 0));
+			getCharacter().removeBuff("Airborne");
+			return;
+		}
+		
 		getCharacter().useStamina(stamCost*(prof + 1)/2);
 		getCharacter().useMana(mpCost*(prof + 1)/2);
 		if (useAmmo){
@@ -435,6 +498,18 @@ public abstract class Step implements Cloneable, StatBuff {
 		return 0;
 	}
 	
+	@Override
+	public float getAccuracyBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	};
+	
+	@Override
+	public float getCriticalBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
 	public float getHpCost() {
 		return hpCost*(prof + 1);
 	}
@@ -466,6 +541,7 @@ public abstract class Step implements Cloneable, StatBuff {
 	public void setStamCost(float stamCost) {
 		this.stamCost = stamCost;
 	}
+
 
 	@Override
 	public String toString() {

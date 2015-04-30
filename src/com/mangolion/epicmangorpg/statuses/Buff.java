@@ -9,16 +9,32 @@ import com.mangolion.epicmangorpg.messages.Msg;
 public class Buff {
 	public String name;
 	public float value, time;
-	public Type type;
+	public Type types[];
 	public GenType genType;
 	public Element element;
 	
 	public Buff(String name, float value, float time, Type type, GenType genType) {
 		this.name = name;
 		this.value = value;
-		this.type = type;
+		Type temp[] = {type};
+		this.types = temp;
 		this.time = time;
 		this.genType = genType;
+	}
+	
+	public Buff(String name, float value, float time, GenType genType, Type ... type) {
+		this.name = name;
+		this.value = value;
+		this.types = type;
+		this.time = time;
+		this.genType = genType;
+	}
+	
+	public boolean checkType(Type type){
+		for (Type t: types)
+			if (t == type)
+				return true;
+		return false;
 	}
 	
 	public static enum Type{
@@ -39,7 +55,10 @@ public class Buff {
 		intRegen,
 		dexRegen,
 		strRegen,
-		elemental
+		elemental,
+		crit,
+		airborne,
+		accuracy
 	}
 	
 	public static enum GenType{

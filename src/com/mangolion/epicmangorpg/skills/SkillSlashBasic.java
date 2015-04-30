@@ -23,11 +23,7 @@ public class SkillSlashBasic extends Skill {
 				// TODO Auto-generated method stub
 				return prof * 10;
 			}
-			
-
 		}.setCost(15, 0, 3, 0));
-		weapons.add(Weapons.Dagger);
-		weapons.add(Weapons.GreatSword);
 	}
 	
 }
