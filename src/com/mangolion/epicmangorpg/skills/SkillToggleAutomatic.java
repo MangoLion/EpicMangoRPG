@@ -24,6 +24,6 @@ public class SkillToggleAutomatic extends Skill {
 				else
 					return super.checkConndition();
 			};
-		}.setCost(15, 0, 0, 0));
+		}.setCost(8, 0, 0, 0));
 	}
 }

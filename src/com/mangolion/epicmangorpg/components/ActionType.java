@@ -7,6 +7,7 @@ public enum ActionType {
 	MeleeParry(GeneralType.Defend),
 	MeleeSpecial(GeneralType.Attack),
 	Magic(GeneralType.Attack),
+	Alchemy(GeneralType.Attack),
 	RecoverHP(GeneralType.Recover),
 	RecoverMP(GeneralType.Recover),
 	RecoverSP(GeneralType.Recover),

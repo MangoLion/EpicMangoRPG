@@ -19,6 +19,8 @@ import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.game.StylePainter;
 import com.mangolion.epicmangorpg.game.StyleSegment;
 import com.mangolion.epicmangorpg.game.Utility;
+import com.mangolion.epicmangorpg.items.Inventory;
+import com.mangolion.epicmangorpg.items.Item;
 import com.mangolion.epicmangorpg.messages.Msg;
 import com.mangolion.epicmangorpg.messages.MsgParrySuccess;
 import com.mangolion.epicmangorpg.messages.MsgSlashMiss;
@@ -34,17 +36,38 @@ public abstract class Step implements Cloneable, StatBuff {
 	public String name, desc;
 	public Random rand = new Random();
 	public float chanceMiss = 0, chanceDodge  = 1, chanceParry = 1, chanceBlock =1,
-			prof = 0, timeLoad, timeExecute, timeCooldown, value = 0, chanceStatus = 0, cp = 0, dmgBase = 0, critBase = 0;
+			prof = 0, timeLoad, timeExecute, timeCooldown, value = 0, chanceStatus = 0, cp = 0, dmgBase = 0, critBase = 0, timeChargeLoad = 0.1f, timeChargeExecute = 0.1f, timeChargeCD = 0.1f;
 	protected float  hpCost = 0, balCost = 0, mpCost = 0, stamCost = 0, percentBlock = 1;
 	protected float  dmgPercent = 0;
 	public Element element;
 	public Status status;
 	public boolean isAOE = false;
 	public LinkedList<Character> aoeExceptions = new LinkedList<Character>();
-	public boolean useAmmo = false;
-	public int ammoUse = 0;
+	public boolean useAmmo = false, useItem = false, isCharged = false;
+	public int ammoUse = 0, itemUse = 0;
+	public Item item;
+	
+	public void setUseItem(Item item, int num){
+		useItem = true;
+		itemUse = num;
+		this.item = item;
+	}
 	 
 	public boolean checkConndition(){
+		if (isCharged)
+			if (getCharacter().skillCharged != null && getCharacter().skillCharged != parent){
+				StylePainter.append(new Msg("$name cannot do " + name + " because $p already is charged with " + getCharacter().skillCharged.name).getMessage(getCharacter(), null, 0));
+				return false;
+			}
+			
+		if (useItem){
+			Inventory inv = getCharacter().inventory;
+			if (inv.getItemNumber(item) < itemUse){
+				Utility.narrate(name + " needs " + itemUse + " " + item.name  + ", " + name + " only has " + inv.getItemNumber(item)) ;
+				return false;
+			}
+		}
+		
 		if (useAmmo){
 			Weapon weapon = getCharacter().weapon;
 			if (weapon.isAutomatic)
@@ -99,8 +122,10 @@ public abstract class Step implements Cloneable, StatBuff {
 		for (Skill skill: getCharacter().skills)
 			if (skill.type == ActionType.WeaponMastery && skill.checkWeapon(getCharacter().weapon))
 				skilDmg = skill.getTotalDamagePercent()+1;
-		if (getCharacter().weapon.checkType(Weapons.Reloadable))
+		if (getCharacter().weapon.checkType(Weapons.Gun))
 			return (getDmgPercent()*getCharacter().weapon.gunDamage*getCharacter().weapon.gunMod)*skilDmg;
+		if (getCharacter().weapon.checkType(Weapons.Cylinder))
+			return (getDmgPercent()*getCharacter().weapon.alchemyDamage*getCharacter().weapon.alchemyMod)*skilDmg;
 		if (strBased)
 			return ((getCharacter().weapon.baseDamage + dmgBase + getCharacter().getStrDamage())*getDmgPercent()*getCharacter().weapon.meleeDamageModifier)*skilDmg;
 		else
@@ -234,6 +259,10 @@ public abstract class Step implements Cloneable, StatBuff {
 		return this;
 	}
 	
+	public void releaseCharge(Character target, float time){
+		
+	}
+	
 	public boolean isCancelfromStun() {
 		return cancelfromStun;
 	}
@@ -291,6 +320,10 @@ public abstract class Step implements Cloneable, StatBuff {
 	}*/
 
 	public void load() {
+		
+		if (useItem)
+			getCharacter().inventory.removeItem(item, itemUse);
+		
 		if (useAmmo && rand.nextFloat() <= getCharacter().weapon.chanceJam){
 			getCharacter().weapon.isJammed = true;
 			StylePainter.append(new Msg("$name's $weapon is jammed!").getMessage(getCharacter(), null, 0));
@@ -327,16 +360,19 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 	
 	public void execute(Character target, float time) {
+		if (isCharged){
+			if (getCharacter().skillCharged == parent){
+				getCharacter().skillCharged = null;
+				releaseCharge(target, time);
+			}
+			else
+				getCharacter().skillCharged = parent;
+		}
+		
 		if ((type == ActionType.MeleeBlock || type == ActionType.MeleeSpecial||type == ActionType.MeleeStab||type == ActionType.MeleeSwing) && target.isAirborne()){
 			StylePainter.append(new Msg("$name cannot reach $targetname because $p is airborne!").getMessage(getCharacter(), target, 0));
 			return;
 		}
-		if ((type == ActionType.MeleeBlock || type == ActionType.MeleeSpecial||type == ActionType.MeleeStab||type == ActionType.MeleeSwing) && getCharacter().isAirborne()){
-			StylePainter.append(new Msg("$name is no longer airborne.").getMessage(getCharacter(), target, 0));
-			getCharacter().removeBuff("Airborne");
-			return;
-		}
-		
 		getCharacter().useStamina(stamCost*(prof + 1)/2);
 		getCharacter().useMana(mpCost*(prof + 1)/2);
 		if (useAmmo){
@@ -363,6 +399,11 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 
 	public void cooldown() {
+		if ((type == ActionType.MeleeBlock || type == ActionType.MeleeSpecial||type == ActionType.MeleeStab||type == ActionType.MeleeSwing) && getCharacter().isAirborne()){
+			StylePainter.append(new Msg("$name is no longer airborne.").getMessage(getCharacter(), null, 0));
+			getCharacter().removeBuff("Airborne");
+			return;
+		}
 		/*
 		 * Utility.narrate(character.name + "'s  " + step.name +
 		 * " has completed and has left an opening for " + time + " seconds");
@@ -385,12 +426,14 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 
 	public float getLoadTime() {
+		if (isCharged && getCharacter().skillCharged == parent)
+			return timeChargeLoad;
 		return Utility.format4(timeLoad*getCharacter().getMeleeSpeed()*(1 - prof/2));
 	}
 
 	public float getExecutionTime() {
-		
-		
+		if (isCharged && getCharacter().skillCharged == parent)
+			return timeChargeExecute;
 		if (timeExecute > 0)
 			return Utility.format4(timeExecute*getCharacter().getMeleeSpeed()*(1 - prof/2));
 
@@ -408,6 +451,8 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 
 	public float getCooldownTime() {
+		if (isCharged && getCharacter().skillCharged == parent)
+			return timeChargeCD;
 		return Utility.format4(timeCooldown*getCharacter().getMeleeSpeed()*(1 - prof/2));
 	}
 
@@ -511,6 +556,8 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 	
 	public float getHpCost() {
+		if (isCharged && getCharacter().skillCharged == parent)
+			return 0;
 		return hpCost*(prof + 1);
 	}
 
@@ -519,6 +566,8 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 
 	public float getBalCost() {
+		if (isCharged && getCharacter().skillCharged == parent)
+			return 0;
 		return balCost*(prof + 1);
 	}
 
@@ -527,14 +576,18 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 
 	public float getMpCost() {
+		if (isCharged && getCharacter().skillCharged == parent)
+			return 0;
 		return mpCost*(prof + 1);
 	}
 
-	public void setMpCost(float mpCost) {
+	public void setMpCost(float mpCost) {		
 		this.mpCost = mpCost;
 	}
 
 	public float getStamCost() {
+		if (isCharged && getCharacter().skillCharged == parent)
+			return 0;
 		return stamCost*(prof + 1);
 	}
 

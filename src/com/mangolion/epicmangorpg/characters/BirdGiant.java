@@ -24,10 +24,10 @@ import com.mangolion.epicmangorpg.weapons.GreatCopperSword;
 import com.mangolion.epicmangorpg.weapons.LongSword;
 import com.mangolion.epicmangorpg.weapons.Weapons;
 
-public class Bird extends Character{
+public class BirdGiant extends Character{
 
-	public Bird() {
-		super("Bird", "Not enough time to think of a desc >.<",60, 20, 80, 30, 20, 30, 20, 10, 0, 0,new Weapon("Claws", 0, 100, Weapons.Claws, 1, 1, 0.8f),  new SkillSlashBasic(), new SkillFlight(), new SkillKickBasic(), new SkillParry());
+	public BirdGiant() {
+		super("Giant Bird", "Not enough time to think of a desc >.<",80, 20, 80, 30, 20, 30, 30, 10, 0, 0,new Weapon("Claws", 0, 100, Weapons.Claws, 1, 1, 0.8f),  new SkillSlashBasic(), new SkillFlight(), new SkillKickBasic(), new SkillParry());
 		addElements(new Element("Furry", 1));
 		ai = new AIFlight(this);
 		setAirborne(10);

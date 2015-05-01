@@ -43,6 +43,7 @@ import com.mangolion.epicmangorpg.skills.SkillSidestepSlash;
 import com.mangolion.epicmangorpg.skills.SkillSlashBasic;
 import com.mangolion.epicmangorpg.skills.SkillStab;
 import com.mangolion.epicmangorpg.skills.SkillWait;
+import com.mangolion.epicmangorpg.skills.SkillWaterCannon;
 import com.mangolion.epicmangorpg.statuses.Status;
 import com.mangolion.epicmangorpg.weapons.Armor;
 import com.mangolion.epicmangorpg.weapons.BasicMachinegun;
@@ -61,7 +62,7 @@ public class CharacterPlayer extends Character {
 		super(name, "", 60, 60, 80, 40, 10, 60, 20, 10,0, 0,new Barehands(),
 				new SkillBlock(), new SkillKickBasic(), new SkillBarrelRoll(),  new SkillSlashBasic(),
 				new SkillParry(), new SkillStab(), new SkillWait(), new SkillFireCoating(), new SkillSideStep(), new SkillRespite(),
-				new SkillCharge(), new SkillJumpBack());
+				new SkillCharge(), new SkillJumpBack(), new SkillWaterCannon());
 		isPlayer = true;
 		isAllied = true;
 		instance = this;

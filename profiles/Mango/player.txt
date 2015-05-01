@@ -11,7 +11,7 @@ int = 20.0
 agi = 10.0
 def = 0.0
 prot = 0.0
-skills = Block|Basic Kick|Barrel Roll|Slash|Parry|Stab|Wait|Fire Coat|Side Step|Respite|Charge|Jump Back|Combat Mastery|
+skills = Block|Basic Kick|Barrel Roll|Slash|Parry|Stab|Wait|Fire Coat|Side Step|Respite|Charge|Jump Back|Water Cannon|Combat Mastery|
 
 [Inventory]
 Consumables = Small Potion|5|Arrow|100|Arrow|100|Bullet|100|Bullet|100|
@@ -131,6 +131,10 @@ Step 0 = 0.0
 Step 1 = 0.0
 
 [Jump Back]
+prof = 0.0
+Step 0 = 0.0
+
+[Water Cannon]
 prof = 0.0
 Step 0 = 0.0
 

@@ -1,11 +1,14 @@
 package com.mangolion.epicmangorpg.events;
 
+import java.util.LinkedList;
+
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.components.ActionType;
 import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.game.StylePainter;
 import com.mangolion.epicmangorpg.game.StyleSegment;
 import com.mangolion.epicmangorpg.messages.Msg;
+import com.mangolion.epicmangorpg.messages.MsgParrySuccess;
 import com.mangolion.epicmangorpg.messages.MsgSkillInterrupt;
 import com.mangolion.epicmangorpg.messages.MsgSkillInterruptFail;
 import com.mangolion.epicmangorpg.messages.MsgSlashMiss;
@@ -15,8 +18,8 @@ import com.mangolion.epicmangorpg.statuses.Status;
 import com.mangolion.epicmangorpg.steps.Step;
 
 public class EventRange extends Event{
-	public float chanceMiss = 0.2f, chanceDodge  = 1, chanceParry = 1, chanceBlock =1;
-	public Msg msgLoad, msgCooldown, msgMiss = new MsgSlashMiss(), msgParry;
+	public float chanceMiss = 0f, chanceDodge  = 1, chanceParry = 1, chanceBlock =1;
+	public Msg msgLoad, msgCooldown, msgMiss = new MsgSlashMiss(), msgParry = new MsgParrySuccess();
 	public float dmgBase, chanceStatus = 0;
 	public Status status;
 	public boolean isAOE = false;
@@ -42,7 +45,8 @@ public class EventRange extends Event{
 			super.execute();
 		}else  if (isAOE)
 		{
-			for (Character character: Game.getInstance().getEnemies(step.getCharacter())){
+			LinkedList<Character> enemies = Game.getInstance().getEnemies(step.getCharacter());
+			for (Character character:enemies ){
 				if (!calculateChance(character))
 					step.damage(character);
 			}
@@ -101,7 +105,7 @@ public class EventRange extends Event{
 	public boolean calculateChance(Character target) {
 		if (target == null)
 			return false;
-
+		
 		Skill skill = target.skillCurrent;
 		Step step = target.getCurrentStep();
 		if (step == null)
@@ -128,7 +132,6 @@ public class EventRange extends Event{
 				&& rand.nextFloat() <= ((StepParry) step).chanceParry
 						/ source.weapon.sizeModifier) {
 			StylePainter.append(msgParry.getMessage(target, source, 0));
-			;
 			return true;
 		}
 
@@ -177,11 +180,6 @@ public class EventRange extends Event{
 			}
 		}
 
-		if (rand.nextFloat() <= chanceMiss) {
-			StylePainter.append(new MsgSlashMiss().getMessage(source,
-					target, 0));
-			return true;
-		}
 		return false;
 	}
 

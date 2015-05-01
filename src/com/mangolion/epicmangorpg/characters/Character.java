@@ -30,7 +30,7 @@ public class Character implements Cloneable {
 	public Character target;
 	Random rand = new Random();
 	public String name, desc, pronoun = "he", pronoun2 = "him", pronoun3 =  "his", pronoun4 = "himself", gender = " male";
-	public Skill skillCurrent;
+	public Skill skillCurrent, skillCharged;
 	public LinkedList<Skill> skills = new LinkedList<Skill>();
 	public LinkedList<Status> statuses = new LinkedList<Status>();
 	public LinkedList<Buff> buffs = new LinkedList<Buff>();
@@ -103,6 +103,7 @@ public class Character implements Cloneable {
 	}
 	
 	public void equip (Weapon weapon){
+		skillCharged = null;
 		this.weapon = weapon;
 		if (this instanceof CharacterPlayer && FrameGame.instance != null)
 			StylePainter.append(new Msg("$name has equipted $weapon").getMessage(this, null, 0));
