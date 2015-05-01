@@ -47,10 +47,11 @@ public abstract class Step implements Cloneable, StatBuff {
 	public int ammoUse = 0, itemUse = 0;
 	public Item item;
 	
-	public void setUseItem(Item item, int num){
+	public Step setUseItem(Item item, int num){
 		useItem = true;
 		itemUse = num;
 		this.item = item;
+		return this;
 	}
 	 
 	public boolean checkConndition(){
@@ -60,10 +61,10 @@ public abstract class Step implements Cloneable, StatBuff {
 				return false;
 			}
 			
-		if (useItem){
+		if (useItem && (!isCharged || (isCharged && getCharacter().skillCharged == null))){
 			Inventory inv = getCharacter().inventory;
 			if (inv.getItemNumber(item) < itemUse){
-				Utility.narrate(name + " needs " + itemUse + " " + item.name  + ", " + name + " only has " + inv.getItemNumber(item)) ;
+				Utility.narrate(name + " needs " + itemUse + " " + item.name  + ", " + getCharacter().name + " only has " + inv.getItemNumber(item)) ;
 				return false;
 			}
 		}
@@ -123,9 +124,9 @@ public abstract class Step implements Cloneable, StatBuff {
 			if (skill.type == ActionType.WeaponMastery && skill.checkWeapon(getCharacter().weapon))
 				skilDmg = skill.getTotalDamagePercent()+1;
 		if (getCharacter().weapon.checkType(Weapons.Gun))
-			return (getDmgPercent()*getCharacter().weapon.gunDamage*getCharacter().weapon.gunMod)*skilDmg;
+			return (getDmgPercent()*(getCharacter().weapon.gunDamage + dmgBase)*getCharacter().weapon.gunMod)*skilDmg;
 		if (getCharacter().weapon.checkType(Weapons.Cylinder))
-			return (getDmgPercent()*getCharacter().weapon.alchemyDamage*getCharacter().weapon.alchemyMod)*skilDmg;
+			return (getDmgPercent()*(getCharacter().weapon.alchemyDamage + dmgBase)*getCharacter().weapon.alchemyMod)*skilDmg;
 		if (strBased)
 			return ((getCharacter().weapon.baseDamage + dmgBase + getCharacter().getStrDamage())*getDmgPercent()*getCharacter().weapon.meleeDamageModifier)*skilDmg;
 		else
@@ -321,7 +322,7 @@ public abstract class Step implements Cloneable, StatBuff {
 
 	public void load() {
 		
-		if (useItem)
+		if (useItem&& (!isCharged || (isCharged && getCharacter().skillCharged == null)))
 			getCharacter().inventory.removeItem(item, itemUse);
 		
 		if (useAmmo && rand.nextFloat() <= getCharacter().weapon.chanceJam){
@@ -360,6 +361,14 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 	
 	public void execute(Character target, float time) {
+		execute(target, getExecutionTime(), "");
+	}
+	
+	public void execute(Character target, String aug) {
+		execute(target, getExecutionTime(), aug);
+	}
+	
+	public void execute(Character target, float time, String aug){
 		if (isCharged){
 			if (getCharacter().skillCharged == parent){
 				getCharacter().skillCharged = null;

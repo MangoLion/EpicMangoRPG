@@ -36,6 +36,12 @@ public abstract class StepMeleeSlash extends Step {
 	
 	@Override
 	public void execute(Character target, float time) {
+		if (isCharged&& getCharacter().skillCharged != parent){
+				getCharacter().skillCharged = parent;
+				return;
+		}
+		
+		
 		if (!isAOE && !calculateChance(target)){
 			damage(target);
 			super.execute(target, time);

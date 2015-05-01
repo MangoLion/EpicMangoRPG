@@ -27,7 +27,7 @@ import com.mangolion.epicmangorpg.weapons.Armor;
 import com.mangolion.epicmangorpg.weapons.Weapon;
 
 public class Character implements Cloneable {
-	public Character target;
+	public Character target, summon;
 	Random rand = new Random();
 	public String name, desc, pronoun = "he", pronoun2 = "him", pronoun3 =  "his", pronoun4 = "himself", gender = " male";
 	public Skill skillCurrent, skillCharged;
@@ -745,7 +745,12 @@ public class Character implements Cloneable {
 		return name;
 	}
 
-
+	public Character getSummon(){
+		if (summon != null && !summon.isDead)
+			return summon;
+		return null;
+	}
+	
 
 
 

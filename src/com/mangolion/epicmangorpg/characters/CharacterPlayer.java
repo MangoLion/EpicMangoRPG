@@ -48,6 +48,7 @@ import com.mangolion.epicmangorpg.statuses.Status;
 import com.mangolion.epicmangorpg.weapons.Armor;
 import com.mangolion.epicmangorpg.weapons.BasicMachinegun;
 import com.mangolion.epicmangorpg.weapons.BasicRifle;
+import com.mangolion.epicmangorpg.weapons.CylinderBasic;
 import com.mangolion.epicmangorpg.weapons.SniperRifle;
 import com.mangolion.epicmangorpg.weapons.Weapon;
 import com.mangolion.epicmangorpg.weapons.Barehands;
@@ -62,7 +63,7 @@ public class CharacterPlayer extends Character {
 		super(name, "", 60, 60, 80, 40, 10, 60, 20, 10,0, 0,new Barehands(),
 				new SkillBlock(), new SkillKickBasic(), new SkillBarrelRoll(),  new SkillSlashBasic(),
 				new SkillParry(), new SkillStab(), new SkillWait(), new SkillFireCoating(), new SkillSideStep(), new SkillRespite(),
-				new SkillCharge(), new SkillJumpBack(), new SkillWaterCannon());
+				new SkillCharge(), new SkillJumpBack());
 		isPlayer = true;
 		isAllied = true;
 		instance = this;
@@ -75,7 +76,12 @@ public class CharacterPlayer extends Character {
 		inventory.addItem(Items.potionSmall, 5);
 		inventory.addItem(Items.arrow, 200);
 		inventory.addItem(Items.bullet, 200);
+		inventory.addItem(Items.crystalEarth, 100);
+		inventory.addItem(Items.crystalFire, 100);
+		inventory.addItem(Items.crystalWater, 100);
+		inventory.addItem(Items.crystalWind, 100);
 		inventory.addItem(weapon);
+		inventory.addItem(new CylinderBasic());
 		inventory.addItem(new BasicMachinegun());
 		inventory.addItem(new SniperRifle());
 		inventory.addItem(new BasicRifle());

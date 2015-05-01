@@ -72,6 +72,13 @@ public class Command {
 										if (skill.execute(Game.getInstance().getCharacter(target), time))
 										Game.getInstance().timer.start();
 									}
+							}else if(cmd.equals("with")){
+								String aug = i.next();
+								for (Skill skill: control.skills)
+									if (skill.name.replace(" ", "").toLowerCase().equals(skillName)){
+										if (skill.execute(Game.getInstance().getCharacter(target), aug))
+										Game.getInstance().timer.start();
+									}
 							}
 						}
 				}

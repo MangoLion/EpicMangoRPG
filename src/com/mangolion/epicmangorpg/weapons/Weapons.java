@@ -14,5 +14,6 @@ public enum Weapons {
 	Claws,
 	Reloadable,
 	Bladed,
+	Cylinder,
 	ALL
 }

@@ -10,6 +10,7 @@ import javax.swing.Timer;
 
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.characters.CharacterPlayer;
+import com.mangolion.epicmangorpg.characters.GolemEarth;
 import com.mangolion.epicmangorpg.components.ConcurrentDoublyLinkedList;
 import com.mangolion.epicmangorpg.components.Themes;
 import com.mangolion.epicmangorpg.components.Tick;
@@ -464,5 +465,12 @@ public class Game {
 				return charsAllies.getFirst();
 		}
 		return null;
+	}
+
+	public void addAlly(Character source, Character character) {
+		if (source.isAllied)
+			charsAllies.add(character);
+		else
+			charsEnemies.add(character);
 	}
 }

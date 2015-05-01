@@ -6,6 +6,7 @@ public enum Elements {
 	Ice("Ice", new Element("Fire", 1.5f),new Element("Lava", 2), new Element("Wind", 0.5f)),
 	Water("Water", new Element("Fire", 0.8f),new Element("Lava", 2.5f)),
 	Earth("Earth", new Element("Water", 2), new Element("Lightning", 0.5f), new Element("Fire", 0.5f),new Element("Lava", 1.5f), new Element("Wind", 0.5f)),
+	Stone("Stone", new Element("Water", 0.5f), new Element("Fire", 0.5f),new Element("Lava", 2f), new Element("Wind", 0.5f)),
 	Lightning("Lightning", new Element("Water", 2), new Element("Earth", 0.5f)),
 	Fire("Fire", new Element("Lava", 0f),new Element("Water", 2), new Element("Wind", 2f), new Element("Earth", 1.5f)),
 	Lava("Lava", new Element("Fire", 0f),new Element("Water", 2), new Element("Wind", 1.5f), new Element("Earth", 1.5f), new Element("Ice", 2)),
@@ -13,7 +14,9 @@ public enum Elements {
 	Plant(false, "Plant", new Element("Fire", 2f),new Element("Lava", 2f) ,new Element("Water", 0.5f),new Element("Lightning", 2f),new Element("Light", -1f)),
 	Furry(false, "Furry", new Element("Fire", 2f),new Element("Lava", 2f) ,new Element("Lightning", 2f)),
 	ToughHide(false, "Tough Hide",new Element("Lightning", 2f),new Element("Fire", 0.5f),  new Element("Wind", 0.5f), new Element("Ice", 0.5f)),
+	Metal(false, "Metal",new Element("Water", 1.5f),new Element("Lightning", 2f),new Element("Fire", 0.5f),  new Element("Wind", 0.5f), new Element("Ice", 0.5f)),
 	ToughScales(false, "Tough Scales",new Element("Lightning", 2f) ,new Element("Fire", 0.5f),  new Element("Wind", 0.5f), new Element("Ice", 2f)),
+	Feathered(false, "Feathered",new Element("Lightning", 2f) ,new Element("Fire", 1.5f),  new Element("Wind", 1.5f),  new Element("Earth", 0.5f)),
 	Light("Light", new Element("Dark", 2f)),
 	Dark("Dark", new Element("Light", 2f));
 	
@@ -77,6 +80,12 @@ public enum Elements {
 			return ToughHide;
 		else if (ele.equals("tough scales"))
 			return ToughScales;
+		else if (ele.equals("feathered"))
+			return Feathered;
+		else if (ele.equals("stone"))
+			return Stone;
+		else if (ele.equals("metal"))
+			return Metal;
 		return null;
 	}
 	

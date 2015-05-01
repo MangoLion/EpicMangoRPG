@@ -27,8 +27,8 @@ import com.mangolion.epicmangorpg.weapons.Weapons;
 public class BirdGiant extends Character{
 
 	public BirdGiant() {
-		super("Giant Bird", "Not enough time to think of a desc >.<",80, 20, 80, 30, 20, 30, 30, 10, 0, 0,new Weapon("Claws", 0, 100, Weapons.Claws, 1, 1, 0.8f),  new SkillSlashBasic(), new SkillFlight(), new SkillKickBasic(), new SkillParry());
-		addElements(new Element("Furry", 1));
+		super("Giant Bird", "Not enough time to think of a desc >.<",80, 20, 100, 100, 20, 30, 30, 10, 0, 0,new Weapon("Claws", 0, 100, Weapons.Claws, 1, 1, 0.8f),  new SkillSlashBasic(), new SkillFlight(), new SkillKickBasic(), new SkillParry());
+		addElements(new Element("Feathered", 1));
 		ai = new AIFlight(this);
 		setAirborne(10);
 	}

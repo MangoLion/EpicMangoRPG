@@ -15,32 +15,32 @@ import com.mangolion.epicmangorpg.statuses.StatusPoison;
 import com.mangolion.epicmangorpg.steps.Step;
 import com.mangolion.epicmangorpg.weapons.Weapons;
 
-public class SkillWaterCannon extends Skill {
+public class SkillWindBlast extends Skill {
 
-	public SkillWaterCannon() {
-		super("Water Cannon", "",Weapons.Cylinder, ActionType.Alchemy);
-		addSteps(new Step(this, "Water Cannon", "",ActionType.Alchemy, 0.3f, 0.1f, 0.1f,1f){
+	public SkillWindBlast() {
+		super("Wind Blast", "",Weapons.Cylinder, ActionType.Alchemy);
+		addSteps(new Step(this, "Wind Blast", "",ActionType.Alchemy, 0.3f, 0.1f, 0.1f,1f){
 			@Override
 			public void init() {
 			strBased = false;
 			dmgBase = 10;
 			isCharged = true;
 			chanceParry = 0;
-			setElement(new Element("Water", 1));
+			setElement(new Element("Wind", 1));
 				super.init();
 			}
 			@Override
 			public void releaseCharge(Character target, float time) {
-				Event.addEvent(new EventWaterCannon(0.5f, getCharacter(), target, 20, this));
+				Event.addEvent(new EventWindBlast(0.3f, getCharacter(), target, 20, this));
 				super.releaseCharge(target, time);
 			}
-		}.setCost(20, 0, 0, 0).setUseItem(Items.crystalWater, 1));
+		}.setCost(20, 0, 0, 0).setUseItem(Items.crystalWind, 1));
 		setObservable(true, 0.7f);
 	}
-	public class EventWaterCannon extends EventRange{
+	public class EventWindBlast extends EventRange{
 
-		public EventWaterCannon(float time, Character source, Character target, float dmgbase, Step step) {
-			super("Water Ball", "", time, source, target, dmgbase, step);
+		public EventWindBlast(float time, Character source, Character target, float dmgbase, Step step) {
+			super("Wind Gust", "", time, source, target, dmgbase, step);
 			setMessages(null, null, null, new Msg("$name had parried $targetname's $targetskill"));
 			//setStatus(new StatusPoison(null, 1), 1);
 		}

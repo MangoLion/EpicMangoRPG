@@ -89,7 +89,14 @@ public class Skill implements StatBuff {
 	}
 	
 	public boolean execute(Character target, float custime){
-		
+		return execute(target, custime, "");
+	}
+	public boolean execute(Character target, String aug) {
+		// TODO Auto-generated method stub
+		return execute(target, 0, aug);
+	}
+	
+	public boolean execute(Character target, float custime,  String aug) {
 		character.skillCurrent = this;
 		character.setTarget(target);
 		Step step = null;
@@ -136,7 +143,10 @@ public class Skill implements StatBuff {
 			}
 			else{
 				Game.getInstance().addTick(character, time, Tick.SKILL);
-				step.execute(target);
+				if (aug.equals(""))
+					step.execute(target);
+				else
+					step.execute(target, aug);
 			}
 		} else {
 			if (!checkWeapon(character.weapon)){
@@ -385,4 +395,6 @@ public class Skill implements StatBuff {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+
 }
