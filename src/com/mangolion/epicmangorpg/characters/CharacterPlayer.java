@@ -116,6 +116,8 @@ public class CharacterPlayer extends Character {
 		this.sp  = getMaxSP();
 		this.bal = getMaxBal();
 		statuses = new LinkedList<Status>();
+		summon = null;
+		skillCharged = null;
 		buffs.clear();
 		for (Skill skill :skills)
 			skill.reset();

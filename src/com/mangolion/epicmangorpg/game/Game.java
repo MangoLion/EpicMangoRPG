@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import com.mangolion.epicmangorpg.characters.Character;
@@ -36,6 +37,7 @@ public class Game {
 	public Terrain terrain;
 	public float timePassed = 0, lastWeatherTick = 0, timeSinceTick = 0, floorPercent = 0;
 	public boolean nextFloor = true, lastFloor = false, firstBattle = true; 
+	LinkedList<Character> toAdd = new LinkedList<Character>();
 	public Timer timer = new Timer(100, new ActionListener() {
 
 		@Override
@@ -337,8 +339,23 @@ public class Game {
 		for (Character character : charsEnemies)
 			if (character != exception)
 				character.tick(deltaTime);
-		FrameGame.instance.updateCharacterList();
-		FrameGame.instance.updateEventList();
+		for (Character character: toAdd){
+			if (character.isAllied)
+				charsAllies.add(character);
+			else
+				charsEnemies.add(character);
+		}
+		toAdd.clear();
+			
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				FrameGame.instance.updateCharacterList();
+				FrameGame.instance.updateEventList();
+			}
+		});
+
 	}
 
 	public void updateAll(float deltaTime) {
@@ -467,10 +484,7 @@ public class Game {
 		return null;
 	}
 
-	public void addAlly(Character source, Character character) {
-		if (source.isAllied)
-			charsAllies.add(character);
-		else
-			charsEnemies.add(character);
+	public void addCharacter(Character character) {
+		toAdd.add(character);
 	}
 }

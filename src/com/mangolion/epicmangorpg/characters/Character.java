@@ -47,6 +47,7 @@ public class Character implements Cloneable {
 	public float str, agi,  inte, dex, maxHP, maxMP, maxSP, maxBal, prot, def, meleeSpeedMod = 1, magicSpeedMod = 1, hpRegen = 0, mpRegen =0.05f, spRegen = 0.1f, balRegen = 0.1f, cpBase = 0 , learnRate = 0;;
 	float hp, mp, sp, bal;
 	LinkedList<Element> elements = new LinkedList<Element>();
+	public int chargeNum = 0;
 	
 	public LinkedList<Element> getElements(){
 		LinkedList<Element> results = new LinkedList<Element>();

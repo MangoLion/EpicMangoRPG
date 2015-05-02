@@ -36,10 +36,10 @@ public abstract class StepMeleeKick extends StepMeleeSlash {
 	}
 	
 	@Override
-	public void damage(Character target) {
+	public boolean damage(Character target) {
 		getCharacter().addBal( getCharacter().getBal()  - getDamage()/2);
 		target.addBal(target.getBal()  - getDamage()/2);
-		super.damage(target);
+		return super.damage(target);
 	}
 
 	

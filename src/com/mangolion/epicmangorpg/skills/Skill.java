@@ -32,6 +32,7 @@ public class Skill implements StatBuff {
 	public LinkedList<Weapons> weapons = new LinkedList<Weapons>();
 	public ActionType type;
 	public float chanceObserve = 0, prof = 0, dmgBoost = 1;
+	public String aug = "";
 	
 	public void setObservable(boolean ob, float chance){
 		isObservable = ob;
@@ -92,11 +93,12 @@ public class Skill implements StatBuff {
 		return execute(target, custime, "");
 	}
 	public boolean execute(Character target, String aug) {
-		// TODO Auto-generated method stub
-		return execute(target, 0, aug);
+		return execute(target, -1, aug);
 	}
 	
 	public boolean execute(Character target, float custime,  String aug) {
+		if (!aug.equals(""))
+			this.aug = aug;
 		character.skillCurrent = this;
 		character.setTarget(target);
 		Step step = null;
@@ -143,10 +145,11 @@ public class Skill implements StatBuff {
 			}
 			else{
 				Game.getInstance().addTick(character, time, Tick.SKILL);
-				if (aug.equals(""))
+				if (this.aug.equals(""))
 					step.execute(target);
 				else
-					step.execute(target, aug);
+					step.execute(target, this.aug);
+				this.aug = "";
 			}
 		} else {
 			if (!checkWeapon(character.weapon)){

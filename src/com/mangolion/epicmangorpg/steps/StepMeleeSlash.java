@@ -7,6 +7,7 @@ import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.game.StylePainter;
 import com.mangolion.epicmangorpg.game.StyleSegment;
 import com.mangolion.epicmangorpg.game.Utility;
+import com.mangolion.epicmangorpg.messages.Msg;
 import com.mangolion.epicmangorpg.messages.MsgBasicCD;
 import com.mangolion.epicmangorpg.messages.MsgSkillInterrupt;
 import com.mangolion.epicmangorpg.messages.MsgSkillInterruptFail;
@@ -43,14 +44,14 @@ public abstract class StepMeleeSlash extends Step {
 		
 		
 		if (!isAOE && !calculateChance(target)){
-			damage(target);
-			super.execute(target, time);
+			if (damage(target))
+				super.execute(target, time);
 		}else  if (isAOE)
 		{
 			for (Character character: Game.getInstance().getEnemies(getCharacter()))
 				calculateChance(character);
-			damage(target);
-			super.execute(target, time);
+			if (damage(target))
+				super.execute(target, time);
 		}
 	}
 
@@ -65,7 +66,7 @@ public abstract class StepMeleeSlash extends Step {
 		if (step == null)
 			return false;
 		if (skill.isLoading) {
-			if (rand.nextInt((int) (100 - target.getBal() / target.maxBal / 2)) == 0) {
+			if (rand.nextInt((int) (100 - target.getBal() / target.maxBal / 2*100)) == 0) {
 				StylePainter.append(new MsgSkillInterrupt().getMessage(
 						getCharacter(), target, 0));
 				step.cancel();
@@ -95,49 +96,21 @@ public abstract class StepMeleeSlash extends Step {
 			return true;
 		}
 		if (step.type == ActionType.MeleeBlock && skill.isExecuting && chanceBlock > 0) {
-			StylePainter.append(new StyleSegment(StylePainter.NAME,
-					parent.character.name), new StyleSegment(null, "'s "),
-					new StyleSegment(StylePainter.SKILL, name),
-					new StyleSegment(StylePainter.BOLD, " is blocked by "),
-					new StyleSegment(StylePainter.NAME, target.name),
-					new StyleSegment(null, "'s "), new StyleSegment(
-							StylePainter.SKILL, step.name, true));
-			float finalDamage = getDamage() - step.value;
-			if (finalDamage <= 0)
-				finalDamage = 1;
-			target.setDamage(parent.character, finalDamage);
-			System.out.println("blocked");
+			StylePainter.append(new Msg("$name's $skill is blocked by $targetname's $targetskill").getMessage(getCharacter(), target, 0));
+			subtractDamage = step.value;
 			aoeExceptions.add(target);
 			step.addProf(new Proficiency(target, getCharacter()));
-			return true;
+			return false;
 		}
 		if ((step.type == ActionType.MeleeSwing || step.type == ActionType.MeleeStab)
 				&& skill.isExecuting) {
-			// Utility.narrate("Chance of Interaction!!!");
 			if (rand.nextFloat() <= chanceBlock /  getCharacter().weapon.sizeModifier) {
-				StylePainter.append(new StyleSegment(StylePainter.NAME,
-						parent.character.name), new StyleSegment(null, "'s "),
-						new StyleSegment(StylePainter.SKILL, name),
-						new StyleSegment(StylePainter.BOLD, " is blocked by "),
-						new StyleSegment(StylePainter.NAME, target.name),
-						new StyleSegment(null, "'s "), new StyleSegment(
-								StylePainter.SKILL, step.name, true));
-				damage(target, step.value);
-				return true;
+				StylePainter.append(new Msg("$name's $skill is blocked by $targetname's $targetskill").getMessage(getCharacter(), target, 0));
+				subtractDamage =step.getDamage()/2 - getDamage(); 
+				return false;
 			} else if ((step.parent.isLoading || step.parent.isCooldown)
 					&& rand.nextFloat() <= chanceParry /  getCharacter().weapon.sizeModifier) {
-				/*
-				 * Utility.narrate(parent.character.name + "'s " +
-				 * parent.character.getCurrentStep().name + " is parried by " +
-				 * target.name + "'s " + step.name);
-				 */
-				StylePainter.append(new StyleSegment(StylePainter.NAME,
-						parent.character.name), new StyleSegment(null, "'s "),
-						new StyleSegment(StylePainter.SKILL, name),
-						new StyleSegment(StylePainter.BOLD, " is parried by "),
-						new StyleSegment(StylePainter.NAME, target.name),
-						new StyleSegment(null, "'s "), new StyleSegment(
-								StylePainter.SKILL, step.name, true));
+				StylePainter.append(new Msg("$name's $skill is parried by $targetname's $targetskill").getMessage(getCharacter(), target, 0));
 				step.addProf(new Proficiency(target, getCharacter()));
 				aoeExceptions.add(target);
 				step.cancel();

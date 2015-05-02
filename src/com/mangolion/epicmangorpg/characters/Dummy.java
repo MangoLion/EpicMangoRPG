@@ -17,8 +17,8 @@ import com.mangolion.epicmangorpg.weapons.LongSword;
 public class Dummy extends Character{
 
 	public Dummy() {
-		super("Dummy", "An indestructable dummy used for testing",1000000, 100, 100, 40, 10, 100, 10, 10,10,0, new Barehands(), new SkillFlight(), new SkillKickBasic());
-		ai = new AIFlight(this);
+		super("Dummy", "An indestructable dummy used for testing",100, 100, 100, 40, 10, 100, 10, 10,10,0, new Barehands(), new SkillBlock());
+		ai = new AISimple(this);
 	}
 
 }

@@ -26,7 +26,7 @@ import com.mangolion.epicmangorpg.weapons.Weapons;
 public class WolfGray extends Character{
 
 	public WolfGray() {
-		super("Gray Wolf", "A tough, agile and deadly creature.",100, 20, 120, 50, 50, 100, 20, 10, 5, 4,new Weapon("Claws", 0, 100, Weapons.Sword, 1, 1, 1f),  new SkillSideStep(), new SkillBite(), new SkillSlashBasic(), new SkillJumpAtk(), new SkillBodySlam(), new SkillSideJump());
+		super("Gray Wolf", "A tough, agile and deadly creature.",100, 20, 120, 50, 50, 100, 20, 10, 5, 4,new Weapon("Claws", 0, 100, Weapons.Claws, 1, 1, 1f),  new SkillSideStep(), new SkillBite(), new SkillSlashBasic(), new SkillJumpAtk(), new SkillBodySlam(), new SkillSideJump());
 		addElements(new Element("Furry", 1));
 		ai = new AISimple(this);
 	}

@@ -37,15 +37,15 @@ public abstract class Step implements Cloneable, StatBuff {
 	public Random rand = new Random();
 	public float chanceMiss = 0, chanceDodge  = 1, chanceParry = 1, chanceBlock =1,
 			prof = 0, timeLoad, timeExecute, timeCooldown, value = 0, chanceStatus = 0, cp = 0, dmgBase = 0, critBase = 0, timeChargeLoad = 0.1f, timeChargeExecute = 0.1f, timeChargeCD = 0.1f;
-	protected float  hpCost = 0, balCost = 0, mpCost = 0, stamCost = 0, percentBlock = 1;
+	protected float  hpCost = 0, balCost = 0, mpCost = 0, stamCost = 0, percentBlock = 1, subtractDamage = 0;
 	protected float  dmgPercent = 0;
 	public Element element;
 	public Status status;
 	public boolean isAOE = false;
 	public LinkedList<Character> aoeExceptions = new LinkedList<Character>();
 	public boolean useAmmo = false, useItem = false, isCharged = false;
-	public int ammoUse = 0, itemUse = 0;
-	public Item item;
+	public int ammoUse = 0, itemUse = 0, maxChage = 1;
+	public Item item;	
 	
 	public Step setUseItem(Item item, int num){
 		useItem = true;
@@ -123,6 +123,8 @@ public abstract class Step implements Cloneable, StatBuff {
 		for (Skill skill: getCharacter().skills)
 			if (skill.type == ActionType.WeaponMastery && skill.checkWeapon(getCharacter().weapon))
 				skilDmg = skill.getTotalDamagePercent()+1;
+		dmgBase -= subtractDamage;
+		subtractDamage = 0;
 		if (getCharacter().weapon.checkType(Weapons.Gun))
 			return (getDmgPercent()*(getCharacter().weapon.gunDamage + dmgBase)*getCharacter().weapon.gunMod)*skilDmg;
 		if (getCharacter().weapon.checkType(Weapons.Cylinder))
@@ -153,62 +155,27 @@ public abstract class Step implements Cloneable, StatBuff {
 			}
 	}
 	
-	public void damage(Character target, float subtract){
-		float miss = ( chanceMiss) + (1 - getCharacter().getAccuracy(target));
-		if (getCharacter().weapon.isAutomatic)
-			miss *= 1.3f;
-		System.out.println("" + miss);
-		if (rand.nextFloat() <= miss) {
-			StylePainter.append(new MsgSlashMiss().getMessage(getCharacter(),
-					target, 0));
-			return;
-		}
-		
-		float dmg = getDamage() - subtract;
-		
-		if (dmg <= 0)
-			dmg = 1;
-		
-		float crit = getCharacter().getCritical(target) + critBase;
-		if (rand.nextFloat() <= crit) {
-			StylePainter.append(new Msg("$name has landed a critical!").getMessage(getCharacter(), null, 0));
-			dmg *= 1.5;
-		}
-		
-		if (!isAOE){
-			target.setDamage(getCharacter(), dmg);
-		if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus)
-			target.addStatus(getStatus());
-		}else
-			for (Character character: Game.getInstance().getEnemies(getCharacter())){
-				character.setDamage(getCharacter(), dmg);
-				if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus)
-					character.addStatus(getStatus());
-			}
-		
-		addProf(new Proficiency(getCharacter(), target));
-		if (target.isDead)
-			cancel();
-	}
-	
 	private Status getStatus() {
 		Status newStatus =status.copy();
 		newStatus.character = getCharacter().getTarget();
 		newStatus.time *= (prof + 1);
 		return newStatus;
 	}
-
-	public void damage(Character target){
 	
+	public boolean damage(Character target){
+		return damage(target, true);
+	}
+	public boolean damage(Character target, boolean checkMiss){
+		
 		
 		float miss = ( chanceMiss) + (1 - getCharacter().getAccuracy(target));
 		if (getCharacter().weapon.isAutomatic)
 			miss *= 1.3f;
-		System.out.println("" + miss);
-		if (rand.nextFloat() <= miss) {
+		System.out.println("miss: " + miss);
+		if (rand.nextFloat() <= miss && !isAOE && checkMiss) {
 			StylePainter.append(new MsgSlashMiss().getMessage(getCharacter(),
 					target, 0));
-			return;
+			return false;
 		}
 		
 		float eleMult = -2;
@@ -224,7 +191,7 @@ public abstract class Step implements Cloneable, StatBuff {
 		float dmg = getDamage()*eleMult;
 		
 		float crit = getCharacter().getCritical(target) + critBase;
-		System.out.println("" + crit);
+		System.out.println("crit: " + crit);
 		if (rand.nextFloat() <= crit) {
 			StylePainter.append(new Msg("$name has landed a critical!").getMessage(getCharacter(), null, 0));
 			dmg *= 1.5;
@@ -251,6 +218,7 @@ public abstract class Step implements Cloneable, StatBuff {
 			}
 		aoeExceptions.clear();
 			addProf(new Proficiency(getCharacter(), target));
+			return true;
 	}
 	
 	public Step setChances(float block, float parry, float miss) {
@@ -361,7 +329,7 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 	
 	public void execute(Character target, float time) {
-		execute(target, getExecutionTime(), "");
+		execute(target, time, "");
 	}
 	
 	public void execute(Character target, String aug) {
@@ -389,19 +357,11 @@ public abstract class Step implements Cloneable, StatBuff {
 		Weapon weapon = getCharacter().weapon;
 		Utility.narrate(getCharacter().name + "'s "  + weapon.name + " has " + weapon.ammo + " ammo left.");
 		}
-		// Utility.narrate(getCharacter().name + " is executing " + step.name
-		// + ",  execution time is " + time + " seconds");
+
 		LogMsg.addLog(new LogMsg(getCharacter().name + " is executing " + name
 				 + ": " +time + " sec", Game.getInstance().timePassed));
 		if (msgExecute == null)
-			StylePainter.append(new StyleSegment(StylePainter.NAME,
-					getCharacter().name), new StyleSegment(StylePainter.NULL,
-					" is executing "), new StyleSegment(StylePainter.SKILL,
-					name),
-					new StyleSegment(StylePainter.NULL, ",  duration:  "),
-					new StyleSegment(StylePainter.NUMBER, ""
-							+ time), new StyleSegment(
-							StylePainter.NULL, " seconds\n"));
+			StylePainter.append(new Msg("$name is executing $skill, duration: " + time + " seconds").getMessage(getCharacter(), target, 0));
 		else
 			StylePainter.append(msgExecute.getMessage(parent.character,
 					target, getExecutionTime()));
@@ -413,22 +373,12 @@ public abstract class Step implements Cloneable, StatBuff {
 			getCharacter().removeBuff("Airborne");
 			return;
 		}
-		/*
-		 * Utility.narrate(character.name + "'s  " + step.name +
-		 * " has completed and has left an opening for " + time + " seconds");
-		 */
+
 		LogMsg.addLog(new LogMsg(getCharacter().name + "'s  " + name
 				+ " is on cooldown: "
 				+ getCooldownTime() + " sec", Game.getInstance().timePassed));
 		if (msgCooldown == null)
-			StylePainter.append(new StyleSegment(StylePainter.NAME,
-					parent.character.name), new StyleSegment(StylePainter.NULL,
-					"'s "), new StyleSegment(StylePainter.SKILL, name),
-					new StyleSegment(StylePainter.NULL,
-							"  has completed and has left an opening for "),
-					new StyleSegment(StylePainter.NUMBER, ""
-							+ getCooldownTime()), new StyleSegment(
-							StylePainter.NULL, " seconds\n"));
+			StylePainter.append(new Msg("$name's $skill has completed and has left an opening for " + getCooldownTime() + " seconds").getMessage(getCharacter(), null, 0));
 		else
 			StylePainter.append(msgCooldown.getMessage(parent.character,
 					parent.character.getTarget(), getCooldownTime()));

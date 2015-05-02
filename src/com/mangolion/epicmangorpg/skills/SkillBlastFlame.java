@@ -16,11 +16,11 @@ import com.mangolion.epicmangorpg.steps.Step;
 import com.mangolion.epicmangorpg.steps.StepMeleeSlash;
 import com.mangolion.epicmangorpg.weapons.Weapons;
 
-public class SkillFlameBurst extends Skill {
+public class SkillBlastFlame extends Skill {
 
-	public SkillFlameBurst() {
+	public SkillBlastFlame() {
 		super("Flame Burst", "",Weapons.Cylinder, ActionType.Alchemy);
-		addSteps(new StepMeleeSlash(this, "Flame Burst", "", 0.3f, 0.1f, 0.1f,1f){
+		addSteps(new StepMeleeSlash(this, "Flame Burst", "", 0.5f, 0.1f, 0.1f,1f){
 			@Override
 			public void init() {
 			type = ActionType.Alchemy;
@@ -28,6 +28,8 @@ public class SkillFlameBurst extends Skill {
 			dmgBase = 10;
 			isCharged = true;
 			chanceParry = 0;
+			isAOE = true;
+			timeChargeExecute = 0.4f;
 			setElement(new Element("Fire", 1));
 				super.init();
 			}

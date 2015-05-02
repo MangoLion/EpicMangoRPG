@@ -15,9 +15,9 @@ import com.mangolion.epicmangorpg.statuses.StatusPoison;
 import com.mangolion.epicmangorpg.steps.Step;
 import com.mangolion.epicmangorpg.weapons.Weapons;
 
-public class SkillWindBlast extends Skill {
+public class SkillBlastWind extends Skill {
 
-	public SkillWindBlast() {
+	public SkillBlastWind() {
 		super("Wind Blast", "",Weapons.Cylinder, ActionType.Alchemy);
 		addSteps(new Step(this, "Wind Blast", "",ActionType.Alchemy, 0.3f, 0.1f, 0.1f,1f){
 			@Override
@@ -26,6 +26,7 @@ public class SkillWindBlast extends Skill {
 			dmgBase = 10;
 			isCharged = true;
 			chanceParry = 0;
+			timeChargeExecute = 0.2f;
 			setElement(new Element("Wind", 1));
 				super.init();
 			}

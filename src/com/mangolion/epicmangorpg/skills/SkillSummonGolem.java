@@ -15,7 +15,7 @@ public class SkillSummonGolem extends Skill{
 
 	public SkillSummonGolem() {
 		super("Summon Golem", "Summons a golem to fight by your side. Available golems are Earth,Metal and Ice.The command is: use skill summongolem with [Golem type]." , Weapons.Cylinder, ActionType.Summon);
-		addSteps(new Step(this, name, desc, type, 1, 0.2f, 0, 0) {
+		addSteps(new Step(this, name, desc, type, 0.1f, 0.2f, 0, 0) {
 			@Override
 			public boolean checkConndition() {
 				if (getCharacter().getSummon() != null){
@@ -28,6 +28,7 @@ public class SkillSummonGolem extends Skill{
 			
 			@Override
 			public void execute(Character target, float time, String aug) {
+				System.out.println("executed");
 				Character golem = null;
 				if (aug.toLowerCase().equals("earth"))
 					golem = new GolemEarth();
@@ -36,12 +37,12 @@ public class SkillSummonGolem extends Skill{
 				else if (aug.toLowerCase().equals("ice"))
 					golem = new GolemIce();
 				else {
-					Utility.narrate("Thats not a golem type!");
+					Utility.narrate("[" +aug + "] is not a golem type!");
 					return;
 				}
-				Game.getInstance().addAlly(getCharacter(), golem);
+				getCharacter().summon = golem;
 				golem.isAllied = getCharacter().isAllied;
-				super.execute(target, time);
+				Game.getInstance().addCharacter(golem);
 			}
 		});
 	}
