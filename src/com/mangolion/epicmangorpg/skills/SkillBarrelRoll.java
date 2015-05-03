@@ -13,6 +13,7 @@ public class SkillBarrelRoll extends Skill{
 
 	public SkillBarrelRoll() {
 		super("Barrel Roll", "Barrelrollling to dodge long barrage of range attacks, works on melee attacks too, cannot dodge AOE skills. While it has a long execution time, the user looses alot of balance and it takes a longer cooldown.",Weapons.ALL, ActionType.Dodge);
+		hasTarget = false;
 		addSteps(new StepDodge("Barrel roll", this, 0.5f, 1.2f, 0.5f).setCost(30, 0, 30, 0));
 		setObservable(true, 1);
 	}

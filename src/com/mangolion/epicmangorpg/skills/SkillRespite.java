@@ -21,6 +21,8 @@ public class SkillRespite extends Skill{
 
 	public SkillRespite() {
 		super("Respite", "Recovers sp 4 times as fast while strength is left at 30% for x seconds",Weapons.ALL, ActionType.RecoverSP);
+		customTime = true;
+		hasTarget = false;
 		addSteps(new StepRespite(this, 0.1f, 0.0f, 0.0f).setCost(0, 0, 0, 0));
 	}
 

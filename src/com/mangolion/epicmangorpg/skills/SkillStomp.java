@@ -17,6 +17,7 @@ public class SkillStomp extends Skill {
 
 	public SkillStomp() {
 		super("Stomp", "Slam weapon on the ground with great force, knocking enemies off balance.",Weapons.ALL, ActionType.MeleeSwing);
+		hasTarget = false;
 		addSteps(new StepMeleeSlash(this, "Stomp","", 0.6f,
 				0.3f, 0.2f, 1f) {
 			

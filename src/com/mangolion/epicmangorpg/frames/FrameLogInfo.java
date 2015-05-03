@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
@@ -13,7 +14,7 @@ import com.mangolion.epicmangorpg.components.LogMsg;
 
 import javax.swing.SwingConstants;
 
-public class FrameLogInfo extends JFrame {
+public class FrameLogInfo extends JInternalFrame {
 
 	private JPanel contentPane;
 	public LogMsg msg;
@@ -23,8 +24,8 @@ public class FrameLogInfo extends JFrame {
 	 * Create the frame.
 	 */
 	public FrameLogInfo(LogMsg msg) {
+		super("", true, true, true, true);
 		this.msg = msg;
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 399, 205);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

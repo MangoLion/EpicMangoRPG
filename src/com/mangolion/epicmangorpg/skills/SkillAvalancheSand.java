@@ -20,6 +20,7 @@ public class SkillAvalancheSand extends Skill {
 
 	public SkillAvalancheSand() {
 		super("Sand Avalanche", "Cause sand everywhere to pour down and sweep targets of their feet, cannot be blocked, dodged or parried.",Weapons.ALL, ActionType.MeleeSpecial);
+		hasTarget = false;
 		addSteps(new Step(this, "Sand Avalanche", "",ActionType.MeleeSpecial, 0.8f, 0.3f, 0.1f,1f){
 			@Override
 			public void init() {

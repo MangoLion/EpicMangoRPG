@@ -2,8 +2,10 @@ package com.mangolion.epicmangorpg.frames;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Point;
 
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
@@ -19,7 +21,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 
-public class FrameEquips extends JFrame {
+public class FrameEquips extends JInternalFrame {
 
 	private JPanel contentPane;
 
@@ -31,10 +33,14 @@ public class FrameEquips extends JFrame {
 	 * Create the frame.
 	 */
 	public FrameEquips(final Character character) {
+		super("", true, true, true, true);
+		FrameGame.getInstance().addFrame(this);
 		this.character = character;
 		boolean isPlayer = (character == CharacterPlayer.instance);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 321, 319);
+		Point pt = FrameGame.getInstance().getMousePos();
+		setLocation(pt.x - getWidth()/2, pt.y - getHeight()/2);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);

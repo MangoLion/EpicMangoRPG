@@ -1,6 +1,7 @@
 package com.mangolion.epicmangorpg.frames;
 
 import java.awt.EventQueue;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -15,12 +16,14 @@ import javax.swing.JList;
 
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.steps.Step;
+
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 
-public class FrameSkillInfo extends JFrame {
+public class FrameSkillInfo extends JInternalFrame {
 
 	public Skill skill;
 	
@@ -30,8 +33,12 @@ public class FrameSkillInfo extends JFrame {
 	JLabel lblTotalTime, lblCost, lblTotalDamage, lblProficiency;
 	private JLabel lblCp;
 	public FrameSkillInfo(final Skill skill) {
+		super("", true, true, true, true);
+		FrameGame.getInstance().addFrame(this);
 		this.skill = skill;
 		setSize(346, 456);
+		Point pt = FrameGame.getInstance().getMousePos();
+		setLocation(pt.x - getWidth()/2, pt.y - getHeight()/2);
 		getContentPane().setLayout(null);
 		
 		lblDesc = new 	JTextArea("Desc:");

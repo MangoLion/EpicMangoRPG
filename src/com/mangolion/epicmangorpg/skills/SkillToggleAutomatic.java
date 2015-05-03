@@ -10,6 +10,7 @@ public class SkillToggleAutomatic extends Skill {
 
 	public SkillToggleAutomatic() {
 		super("Toggle Automatic", "", Weapons.Reloadable, ActionType.RecoverAmmo);
+		hasTarget = false;
 		addSteps(new Step(this, "Toggle Automatic", "", ActionType.RecoverAmmo, 0.2f, 0.1f,
 				0f, 0) {
 			public void execute(Character target, float time) {

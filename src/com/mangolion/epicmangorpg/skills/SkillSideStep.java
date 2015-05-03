@@ -14,6 +14,7 @@ public class SkillSideStep extends Skill{
 
 	public SkillSideStep() {
 		super("Side Step", "Side stepping to dodge most melee skills, cannot dodge AOE skills. Its fast but very short.",Weapons.ALL, ActionType.Dodge);
+		hasTarget = false;
 		addSteps(new StepDodge("Sidestep", this, 0.2f, 0.3f, 0.2f){
 			
 			@Override

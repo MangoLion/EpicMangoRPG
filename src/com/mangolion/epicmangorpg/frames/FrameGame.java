@@ -1,17 +1,26 @@
 package com.mangolion.epicmangorpg.frames;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 import java.io.File;
 import java.util.LinkedList;
 
@@ -19,8 +28,12 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JList;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -29,13 +42,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.characters.CharacterPlayer;
-import com.mangolion.epicmangorpg.components.Command;
+import com.mangolion.epicmangorpg.commands.Command;
+import com.mangolion.epicmangorpg.commands.CommandHandler;
 import com.mangolion.epicmangorpg.components.LogMsg;
 import com.mangolion.epicmangorpg.components.MenuHelp;
 import com.mangolion.epicmangorpg.components.MenuSetting;
@@ -127,6 +142,7 @@ public class FrameGame extends JFrame {
 	public DefaultListModel<LogMsg> modelLog = new DefaultListModel<LogMsg>();
 	DefaultListModel<Event> modelEvent = new DefaultListModel<Event>();
 	public JTabbedPane tabInfo;
+	JPanel panelAction, paneCommand = new JPanel(new FlowLayout());
 	public void updateCharacterList(){
 		modelAllies.clear();
 		modelEnemies.clear();
@@ -163,17 +179,22 @@ public class FrameGame extends JFrame {
 	public JLabel lblTimePassed;
 	public JProgressBar pbTemp, pbHumid, pbVis, pbWind, pbRugged, pbFloor, pbHP, pbHP2, pbMP, pbMP2, pbSP, pbSP2, pbBal, pbBal2;
 	public JLabel lblWeather, lblTerrain, lblPName, lblPName2, lblStatuses, lblStatuses2, lblBuffs, lblBuffs2;
-	public TextPaneMango tfCommand, tfTime;
+	public TextPaneMango tfTime;
 	JTextPane tfDesc, tfSkill, tfSkill2;
 	
 	public JScrollPane scrollMango, scrollLog;
-
-	public int maxEnemies = 1;
+	JDesktopPane desktopPane = new JDesktopPane();
+//	JLayeredPane layeredPane = new JLayeredPane();
+	JPanel contentPanel  = new JPanel(new BorderLayout());
+	JSplitPane splitMain;
+	public int maxEnemies = 1, mouseX, mouseY;
 	
 	/**
 	 * Create the frame.
 	 */
 	public FrameGame() {
+		setExtendedState(MAXIMIZED_BOTH);
+		setContentPane(contentPanel);
 		instance =this;
 		setTitle("Epic Mango Adventure");
 		JMenuBar menuBar = new JMenuBar();
@@ -183,14 +204,21 @@ public class FrameGame extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		//setBounds(100, 100, 763, 434);
 		setSize(1360, 780);
-		JSplitPane splitPane = new JSplitPane();
-		splitPane.setResizeWeight(0.05);
-		getContentPane().add(splitPane, BorderLayout.CENTER);
+		splitMain = new JSplitPane();
+		splitMain.setResizeWeight(0.05);
+		//getContentPane().add(splitPane, BorderLayout.CENTER);
+		setContentPane(contentPanel);
+		contentPanel.add(desktopPane);
+		desktopPane.add(splitMain, JLayeredPane.DEFAULT_LAYER);
+		
+		/*layeredPane.add(desktopPane);
+		layeredPane.setBorder(BorderFactory.createTitledBorder("Blub"));
+		layeredPane.setSize(100, 100);		*/
 		
 		JSplitPane splitPane_1 = new JSplitPane();
 		splitPane_1.setResizeWeight(0.2);
 		splitPane_1.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		splitPane.setLeftComponent(splitPane_1);
+		splitMain.setLeftComponent(splitPane_1);
 		
 		
 		tabInfo = new JTabbedPane();
@@ -568,7 +596,7 @@ public class FrameGame extends JFrame {
 		JSplitPane splitPane_2 = new JSplitPane();
 		splitPane_2.setResizeWeight(0.9);
 		splitPane_2.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		splitPane.setRightComponent(splitPane_2);
+		splitMain.setRightComponent(splitPane_2);
 		
 		JSplitPane splitPane_3 = new JSplitPane();
 		splitPane_3.setResizeWeight(0.5);
@@ -654,35 +682,26 @@ public class FrameGame extends JFrame {
 		JPanel panelNarration = new JPanel();
 		splitPane_2.setLeftComponent(panelNarration);
 		panelNarration.setLayout(new BorderLayout(0, 0));
-		
-		/*JSplitPane splitPane_4 = new JSplitPane();
-		splitPane_4.setResizeWeight(0.85);
-		splitPane_4.setOrientation(JSplitPane.VERTICAL_SPLIT);*/
 
 		
-		JPanel panelAction = new JPanel();
+		 panelAction = new JPanel(new BorderLayout());
 		panelNarration.add(panelAction, BorderLayout.SOUTH);
-		//splitPane_4.setRightComponent(panelAction);
 		
 		JButton btnNextTick = new JButton("Go");
 		btnNextTick.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//Game.getInstance().nextTick(true);
-				Command.execute(tfCommand.getText());
-				/*Timer timer = new Timer(1000, new ActionListener() {
-					
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Game.getInstance().nextTick(true);
-					}
-				});
-				timer.start();*/
+				
+				//Command.execute(tfCommand.getText());
+				if (command.actionListener != null){
+					command.actionListener.actionPerformed(null);
+					Game.getInstance().timer.start();
+				}
 			}
 		});
 		panelAction.setLayout(new BorderLayout(0, 0));
 		panelAction.add(btnNextTick, BorderLayout.EAST);
-		
-		tfCommand = new TextPaneMango();
+		panelAction.add(paneCommand, BorderLayout.CENTER);
+		/*tfCommand = new TextPaneMango();
 		tfCommand.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		tfCommand.setText("use skill basic kick on Bob");
 		tfCommand.setBorder(BorderFactory.createEtchedBorder());
@@ -704,8 +723,7 @@ public class FrameGame extends JFrame {
 				super.keyTyped(e);
 			}
 		});;
-		panelAction.add(tfCommand, BorderLayout.CENTER);
-		
+		panelAction.add(tfCommand, BorderLayout.CENTER);*/
 		lblTimePassed = new JLabel("Time Passed:");
 		lblTimePassed.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		lblTimePassed.setHorizontalAlignment(SwingConstants.CENTER);
@@ -740,6 +758,24 @@ public class FrameGame extends JFrame {
 				super.windowClosing(e);
 			}
 		});
+		
+		addWindowStateListener(new WindowStateListener() {
+			
+			@Override
+			public void windowStateChanged(WindowEvent e) {
+				revalidate();
+				refreshSize();
+			}
+		});
+		
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				refreshSize();
+				super.componentResized(e);
+			}
+		});
+
 	}
 	
     public class MyCellRenderer extends DefaultListCellRenderer
@@ -870,5 +906,39 @@ public class FrameGame extends JFrame {
 			tfSkill2.setText(str);		
 		}else
 			tfSkill2.setText("Idling");
+	}
+	
+	public void refreshSize(){
+		//desktopPane.setSize(layeredPane.getSize());
+		splitMain.setSize(desktopPane.getSize());
+	}
+	
+	public void addFrame(JInternalFrame frame){
+		desktopPane.add(frame);
+		frame.setLocation(mouseX, mouseY);
+	}
+	
+	public Point getMousePos(){
+		Point pt = MouseInfo.getPointerInfo().getLocation(),
+		pt2 = getLocationOnScreen();
+		return new Point(pt.x - pt2.x, pt.y - pt2.y);
+	}
+	public Command command;
+	public void setCommand(CommandHandler handler){
+		paneCommand.removeAll();
+		CommandHandler last = handler.getSubCommands().getFirst().getNextCommand();;
+		while (last != null){
+			handler = last;
+			last = last.getSubCommands().getFirst().getNextCommand();
+		}
+		command = handler.getSelectedCommand();
+		for (CommandHandler component: handler.getPrevious()){
+			
+			System.out.println(component.getSubCommands().getFirst().text);
+			paneCommand.add((Component) component); 
+		}
+		paneCommand.revalidate();
+		paneCommand.repaint();
+		//paneCommand.add((Component) handler); 
 	}
 }

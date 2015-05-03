@@ -12,6 +12,7 @@ import javax.swing.Timer;
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.characters.CharacterPlayer;
 import com.mangolion.epicmangorpg.characters.GolemEarth;
+import com.mangolion.epicmangorpg.commands.CmdUser;
 import com.mangolion.epicmangorpg.components.ConcurrentDoublyLinkedList;
 import com.mangolion.epicmangorpg.components.Themes;
 import com.mangolion.epicmangorpg.components.Tick;
@@ -192,7 +193,8 @@ public class Game {
 				//Utility.narrate("The battle has started!\n");
 				//nextTick(false);
 				timer.start();
-				frame.tfCommand.setText("use skill slash on " + charsEnemies.getFirst().name.replace(" ", ""));
+				//frame.tfCommand.setText("use skill slash on " + charsEnemies.getFirst().name.replace(" ", ""));
+				frame.setCommand(new CmdUser(null));
 				timer2.stop();
 			}
 		});

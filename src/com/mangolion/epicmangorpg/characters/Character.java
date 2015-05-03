@@ -293,6 +293,14 @@ public class Character implements Cloneable {
 		return result;
 	}
 	
+	public Skill getSkill(String name){
+		for (Skill skill: skills){
+			if (skill.name.equals(name))
+				return skill;
+		}
+		return null;
+	}
+	
 	public LinkedList<Skill> getSkill (ActionType type){
 		LinkedList<Skill> result = new LinkedList<Skill>();
 		for (Skill skill :skills)

@@ -16,6 +16,7 @@ public class SkillReload extends Skill {
 
 	public SkillReload() {
 		super("Reload", "", Weapons.Reloadable, ActionType.RecoverAmmo);
+		hasTarget = false;
 		addSteps(new Step(this, "Reload", "", ActionType.RecoverAmmo, 0f, 0.1f,
 				0f, 0) {
 			public void execute(Character target, float time) {

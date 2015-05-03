@@ -15,6 +15,8 @@ public class SkillBlock extends Skill {
 	
 	public SkillBlock() {
 		super("Block", "Can block and reduce damage from most attacks. Formula is def =  50 + character.maxHP*0.1",Weapons.ALL, ActionType.MeleeBlock);
+		customTime = true;
+		hasTarget = false;
 		addSteps(new Step(this, "Block", "",ActionType.MeleeBlock, 0.4f, -1, 0.4f,0) {
 public void execute(Character target, float time) {
 	super.execute(target, time);

@@ -27,12 +27,18 @@ public class Skill implements StatBuff {
 	public Character character;
 	public String name, desc;
 	public LinkedList<Step> steps = new LinkedList<Step>();
-	public boolean isExecuting, isCooldown, isLoading, isObservable = false, isTwoHanded = true;;
+	public boolean isExecuting, isCooldown, isLoading, isObservable = false, isTwoHanded = true, hasTarget = true, customTime = false, hasArg = false;
 	public int stepCurrent;
 	public LinkedList<Weapons> weapons = new LinkedList<Weapons>();
 	public ActionType type;
 	public float chanceObserve = 0, prof = 0, dmgBoost = 1;
 	public String aug = "";
+	public LinkedList<String>arguments = new LinkedList<String>();
+	
+	public void setArguments(String ... args){
+		hasArg = true;
+		this.arguments.addAll(Arrays.asList(args));
+	}
 	
 	public void setObservable(boolean ob, float chance){
 		isObservable = ob;

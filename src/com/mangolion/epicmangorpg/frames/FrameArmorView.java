@@ -2,10 +2,12 @@ package com.mangolion.epicmangorpg.frames;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Point;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JInternalFrame;
 import javax.swing.JTextPane;
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -17,7 +19,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class FrameArmorView extends JFrame {
+public class FrameArmorView extends JInternalFrame {
 
 	private JPanel contentPane;
 
@@ -28,11 +30,15 @@ public class FrameArmorView extends JFrame {
 	 * Create the frame.
 	 */
 	public FrameArmorView(final	Armor armor, final Character character) {
+		super("", true, true, true, true);
+		FrameGame.getInstance().addFrame(this);
+		
 		this.armor = armor;
 		this.character = character;
 		
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 438, 264);
+		Point pt = FrameGame.getInstance().getMousePos();
+		setLocation(pt.x - getWidth()/2, pt.y - getHeight()/2);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);

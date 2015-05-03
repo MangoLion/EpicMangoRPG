@@ -1,11 +1,13 @@
 package com.mangolion.epicmangorpg.frames;
 
 import java.awt.BorderLayout;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -23,7 +25,7 @@ import javax.swing.ListModel;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-public class FrameInventory extends JFrame {
+public class FrameInventory extends JInternalFrame {
 	Character character;
 	
 	JPanel contentPane = new JPanel(new BorderLayout());
@@ -38,8 +40,12 @@ public class FrameInventory extends JFrame {
 	private final JLabel lblConsumablesmaterials = new JLabel("Consumables/Materials");
 	private final JLabel lblEquipmentsunique = new JLabel("Equipments/Unique");
 	public FrameInventory(final Character character) {
+		super("", true, true, true, true);
+		FrameGame.getInstance().addFrame(this);
 		this.character = character;
 		setSize(250, 400);
+		Point pt = FrameGame.getInstance().getMousePos();
+		setLocation(pt.x - getWidth()/2, pt.y - getHeight()/2);
 		setContentPane(contentPane);
 		splitPane.setResizeWeight(0.8);
 		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);

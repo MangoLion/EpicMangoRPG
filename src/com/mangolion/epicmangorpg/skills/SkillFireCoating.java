@@ -19,6 +19,7 @@ public class SkillFireCoating extends Skill{
 	public SkillFireCoating() {
 		super("Fire Coat", "Coat your body and weapon in fire, you will deal more fire damage, also receive more damages from opposing elements. Last for 10 seconds",Weapons.ALL, ActionType.Magic);
 		addSteps(new StepEle(this, 0.3f, 0.1f, 0.1f).setCost(0, 20, 0, 0));
+		hasTarget = false;
 	}
 
 	public static class StepEle extends Step{

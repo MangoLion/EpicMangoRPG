@@ -1,6 +1,7 @@
 package com.mangolion.epicmangorpg.frames;
 
 import java.awt.EventQueue;
+import java.awt.Point;
 
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -18,7 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 
-public class FrameStepInfo extends JFrame {
+public class FrameStepInfo extends JInternalFrame {
 
 	public Step step;
 	JTextArea lblDesc;
@@ -27,8 +28,12 @@ public class FrameStepInfo extends JFrame {
 	private JLabel lblCp;
 	private JButton button;
 	public FrameStepInfo(final Step step) {
+		super("", true, true, true, true);
+		FrameGame.getInstance().addFrame(this);
 		this.step = step;
 		setBounds(100, 100, 346, 305);
+		Point pt = FrameGame.getInstance().getMousePos();
+		setLocation(pt.x - getWidth()/2, pt.y - getHeight()/2);
 		getContentPane().setLayout(null);
 		
 		lblDesc = new 	JTextArea("Desc:");

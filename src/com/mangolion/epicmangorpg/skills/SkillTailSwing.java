@@ -17,6 +17,7 @@ public class SkillTailSwing extends Skill {
 
 	public SkillTailSwing() {
 		super("Tail Swing", "",Weapons.ALL, ActionType.MeleeSwing);
+		hasTarget = false;
 		addSteps(new StepMeleeSlash(this, "Tail Swing","", 0.8f,
 				0.4f, 0.4f,1f) {
 			

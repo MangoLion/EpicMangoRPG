@@ -19,6 +19,7 @@ public class SkillSummon extends Skill {
 	public SkillSummon(final Class<? extends Character> summon, final float chanceSuccess) {
 		super("Summon", "Summon an ally",Weapons.ALL, ActionType.Summon);
 		setObservable(false, 0);
+		hasTarget = false;
 		this.summon = summon;
 		this.chanceSuccess = chanceSuccess; 
 		addSteps(new Step(this, "Summon", "",ActionType.Summon, 1f, 0.1f, 0.2f, 0 ){

@@ -15,6 +15,8 @@ public class SkillSummonGolem extends Skill{
 
 	public SkillSummonGolem() {
 		super("Summon Golem", "Summons a golem to fight by your side. Available golems are Earth,Metal and Ice.The command is: use skill summongolem with [Golem type]." , Weapons.Cylinder, ActionType.Summon);
+		setArguments("Stone", "Earth", "Ice", "Metal");
+		hasTarget = false;
 		addSteps(new Step(this, name, desc, type, 0.1f, 0.2f, 0, 0) {
 			@Override
 			public boolean checkConndition() {

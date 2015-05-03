@@ -14,6 +14,7 @@ public class SkillSideJump extends Skill{
 
 	public SkillSideJump() {
 		super("Side Jump", "Jumping to the side to dodge, cannot dodge AOE skills. Used as a last ditch effort since its very fast, but the user will loose all balance and has a long cooldown",Weapons.ALL, ActionType.Dodge);
+		hasTarget = false;
 		addSteps(new StepDodge("Side Jump", this, 0.1f, 0.6f, 0.6f){
 			@Override
 			public float getAgiBuff() {

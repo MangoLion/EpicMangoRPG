@@ -2,6 +2,7 @@ package com.mangolion.epicmangorpg.frames;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Point;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
@@ -11,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.DefaultListModel;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JProgressBar;
@@ -35,9 +37,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JTextPane;
+
 import java.awt.Font;
 
-public class FrameCharacterInfo extends JFrame {
+public class FrameCharacterInfo extends JInternalFrame {
 
 	private JPanel contentPane;
 	
@@ -170,11 +173,15 @@ public class FrameCharacterInfo extends JFrame {
 	 * Create the frame.
 	 */
 	public FrameCharacterInfo(final Character character) {
+		super("", true, true, true, true);
+		FrameGame.getInstance().addFrame(this);
 		setResizable(false);
 		this.character = character;
 		setTitle(character.name);
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 688, 516);
+		Point pt = FrameGame.getInstance().getMousePos();
+		setLocation(pt.x - getWidth()/2, pt.y - getHeight());
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
