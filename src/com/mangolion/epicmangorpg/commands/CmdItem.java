@@ -6,11 +6,12 @@ import java.util.LinkedList;
 
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.game.Game;
+import com.mangolion.epicmangorpg.items.Item;
 import com.mangolion.epicmangorpg.skills.Skill;
 
-public class CmdWith extends CommandCombo{
+public class CmdItem extends CommandCombo{
 
-	public CmdWith(LinkedList<CommandHandler> previous) {
+	public CmdItem(LinkedList<CommandHandler> previous) {
 		super(previous);
 		// TODO Auto-generated constructor stub
 	}
@@ -18,7 +19,7 @@ public class CmdWith extends CommandCombo{
 	public LinkedList<Command> getSubCommands() {
 		LinkedList<Command> results = new LinkedList<Command>();
 		final Character character = Game.getInstance().getCharacter(previous.getFirst().getSelectedCommand().text);
-		final Skill skill = character.getSkill(previous.get(3).getSelectedCommand().text);
+		final Skill skill = character.getSkill("Use Item");
 		for (final String str: skill.getArguments())
 			results.add(new Command(str, Command.COMBOBOX, new ActionListener() {
 
@@ -28,9 +29,14 @@ public class CmdWith extends CommandCombo{
 				}
 				
 			}){
-				
+				@Override
+				public CommandHandler getNextCommand() {
+					System.out.println("created next");
+					return new CmdItemOnFor(previous);
+				}
 			});
 		
 		return results;
 	}
+	
 }

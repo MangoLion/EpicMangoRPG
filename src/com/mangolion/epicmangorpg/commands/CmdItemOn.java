@@ -8,27 +8,27 @@ import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.skills.Skill;
 
-public class CmdOn extends CommandCombo{
+public class CmdItemOn extends CommandCombo{
 
-	public CmdOn(LinkedList<CommandHandler> previous) {
+	public CmdItemOn(LinkedList<CommandHandler> previous) {
 		super(previous);
 		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public LinkedList<Command> getSubCommands() {
 		LinkedList<Command> results = new LinkedList<Command>();
-		for (Character character: Game.getInstance().charsEnemies){
-			results.add(new Command(character.name, Command.COMBOBOX, new ActionListener() {
+		for (final Character target: Game.getInstance().getAllChars()){
+			results.add(new Command(target.name, Command.COMBOBOX, new ActionListener() {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					Character character = Game.getInstance().getCharacter(previous.getFirst().getSelectedCommand().text),
-							target = Game.getInstance().getCharacter(previous.get(previous.size()-2).getSelectedCommand().text);;
-					Skill skill = character.getSkill(previous.get(3).getSelectedCommand().text);
-					skill.execute(target);
+					Character character = Game.getInstance().getCharacter(previous.getFirst().getSelectedCommand().text);
+					String item= previous.get(previous.size()-3).getSelectedCommand().text;
+							final Skill skill = character.getSkill("Use Item");
+					skill.execute(target, item);
 				}
 			}) {
-				
+
 			});
 		}
 		

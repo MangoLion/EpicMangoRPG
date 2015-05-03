@@ -92,5 +92,11 @@ public class FrameArmorView extends JInternalFrame {
 		lblDef.setText("Defense Bonus: " + armor.getDefBuff());
 		lblAgi.setText("Agi Bonus/Penalty: " + armor.getAgiBuff());
 		//lblType.setText("Type: " + armor.);
+		super.moveToFront();
 	}
+	
+	@Override
+	public void moveToFront() {
+	}
+	
 }

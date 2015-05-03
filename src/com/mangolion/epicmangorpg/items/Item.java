@@ -17,14 +17,22 @@ public abstract class Item {
 	
 	public String name, desc;
 	public int maxStack;
-	public float size, weight;
-	public boolean consumable = false;
+	public float size, weight, loadTime, executeTime, cooldownTime;
+	public boolean consumable = false, hasTarget = false;
 	
 	public Item(String name, String desc, Type type, int maxStack) {
 		this.name = name;
 		this.desc = desc;
 		this.type = type;
 		this.maxStack = maxStack;
+	}
+	
+	public void setConsumable(float load, float execute, float cd, boolean hastTarget){
+		consumable = true;
+		loadTime = load;
+		executeTime = execute;
+		cooldownTime = cd;
+		this.hasTarget =hastTarget; 
 	}
 	
 	public void onUse(Character character){

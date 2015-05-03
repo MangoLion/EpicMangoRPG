@@ -106,6 +106,11 @@ public class FrameSkillInfo extends JInternalFrame {
 		btnViewStatBuffs.setBounds(160, 138, 160, 23);
 		getContentPane().add(btnViewStatBuffs);
 		refresh();
+		super.moveToFront();
+	}
+	
+	@Override
+	public void moveToFront() {
 	}
 	
 	public void refresh(){

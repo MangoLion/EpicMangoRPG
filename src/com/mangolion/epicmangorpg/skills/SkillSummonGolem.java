@@ -39,14 +39,23 @@ public class SkillSummonGolem extends Skill{
 				else if (aug.toLowerCase().equals("ice"))
 					golem = new GolemIce();
 				else {
-					Utility.narrate("[" +aug + "] is not a golem type!");
+
 					return;
 				}
 				getCharacter().summon = golem;
 				golem.isAllied = getCharacter().isAllied;
 				Game.getInstance().addCharacter(golem);
 			}
+			
+			@Override
+			public boolean checkConndition(String arg) {
+				if (aug.toLowerCase().equals("earth")||aug.toLowerCase().equals("metal")||aug.toLowerCase().equals("ice"))
+					return super.checkConndition(arg);
+				Utility.narrate("[" +aug + "] is not a golem type!");
+				return false;
+			}
 		});
+		
 	}
 
 }

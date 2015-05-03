@@ -350,5 +350,10 @@ public class FrameEquips extends JInternalFrame {
 		if (weapon != null)
 			str += weapon.name;
 		lblWeapon.setText(str);
+		super.moveToFront();
+	}
+	
+	@Override
+	public void moveToFront() {
 	}
 }

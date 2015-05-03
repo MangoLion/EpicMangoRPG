@@ -33,8 +33,11 @@ public class Skill implements StatBuff {
 	public ActionType type;
 	public float chanceObserve = 0, prof = 0, dmgBoost = 1;
 	public String aug = "";
-	public LinkedList<String>arguments = new LinkedList<String>();
+	LinkedList<String>arguments = new LinkedList<String>();
 	
+	public LinkedList<String> getArguments(){
+		return arguments;
+	}
 	public void setArguments(String ... args){
 		hasArg = true;
 		this.arguments.addAll(Arrays.asList(args));
@@ -163,7 +166,12 @@ public class Skill implements StatBuff {
 				return false;
 			}
 			
-			if (!step.checkConndition()){
+			boolean check;
+			if (!hasArg)
+				check = step.checkConndition();
+			else
+				check = step.checkConndition(this.aug);
+			if (!check){
 				if (character == CharacterPlayer.instance)
 					Utility.narrate("You do not have enough sp/mp to use " + name);
 				return false;

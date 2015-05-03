@@ -96,4 +96,8 @@ public class FrameBuffInfo extends JInternalFrame {
 		contentPane.add(lblBalRegen);
 		setVisible(true);
 	}
+	@Override
+	public void toFront() {
+		
+	}
 }

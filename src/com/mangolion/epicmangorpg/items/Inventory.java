@@ -61,7 +61,7 @@ public class Inventory {
 	}
 	public ItemStack getItem(String name){
 		for (ItemStack itemStack : itemStacks)
-			if (itemStack.item.name.toLowerCase().replace(" ", "").equals(name))
+			if (itemStack.item.name.toLowerCase().equals(name.toLowerCase()))
 				return itemStack;
 		return null;
 	}

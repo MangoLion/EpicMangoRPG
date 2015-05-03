@@ -4,7 +4,7 @@ public class ItemPotionSmall extends ItemStat{
 
 	public ItemPotionSmall() {
 		super( "Small Potion", "", Type.Heal, 50, 10);
-		consumable = true;
+		setConsumable(0.2f, 0.1f, 0, true);
 	}
 
 }

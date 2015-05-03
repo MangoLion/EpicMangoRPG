@@ -22,7 +22,7 @@ public class Skills {
 		new SkillArrowShoot(), new SkillSideJump(), new SkillSideStep(), new SkillSidestepSlash(), new SkillSlashBasic(), new SkillSlashHeavy(), new SkillSpitPoison(), new SkillStab(), new SkillSting(), new SkillStomp(), new SkillTailSwing(), new SkillWait(), 
 		new SkillWebFiring(), new SkillRespite(), new SkillMeditate(), new SkillCharge(), new SkillArrowPierce(), new SkillArrowRain(), new SkillArrowRapid(), new SkillArrowShoot(),
 		new SkillArrowFlame(), new SkillArrowJumpBack(), new SkillBowSweep(), new SkillArrowSideStep(), new SkillArrowSwift(), new SkillShotQuick() , new SkillReload(), new SkillJamFix() , new SkillHardAim(), new SkillBulletSpray()
-		, new SkillToggleAutomatic(),  new SkillSniperShot(), new SkillSidestepShoot(), new SkillWaterCannon(), new SkillBlastFlame(), new SkillSummonGolem()}; 
+		, new SkillToggleAutomatic(),  new SkillSniperShot(), new SkillSidestepShoot(), new SkillWaterCannon(), new SkillBlastFlame(), new SkillSummonGolem(), new SkillUseItem()}; 
 	
 	public static Skill getSkill(String name){
 		for (Skill skill: all)

@@ -93,6 +93,11 @@ public class FrameStepInfo extends JInternalFrame {
 		button.setBounds(184, 138, 138, 23);
 		getContentPane().add(button);
 		refresh();
+		super.moveToFront();
+	}
+	
+	@Override
+	public void moveToFront() {
 	}
 	
 	public void refresh(){

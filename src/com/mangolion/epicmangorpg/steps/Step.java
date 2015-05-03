@@ -53,6 +53,10 @@ public abstract class Step implements Cloneable, StatBuff {
 		this.item = item;
 		return this;
 	}
+	
+	public boolean checkConndition(String arg){
+		return checkConndition();
+	}
 	 
 	public boolean checkConndition(){
 		if (isCharged)

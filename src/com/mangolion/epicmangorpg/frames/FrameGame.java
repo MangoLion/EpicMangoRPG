@@ -692,10 +692,13 @@ public class FrameGame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				//Command.execute(tfCommand.getText());
-				if (command.actionListener != null){
-					command.actionListener.actionPerformed(null);
-					Game.getInstance().timer.start();
-				}
+				if (Game.getInstance().timer.isRunning())
+					Utility.narrate("Please wait for your turn!");
+				else
+					if (command.actionListener != null){
+						command.actionListener.actionPerformed(null);
+						Game.getInstance().timer.start();
+					}
 			}
 		});
 		panelAction.setLayout(new BorderLayout(0, 0));
@@ -926,15 +929,17 @@ public class FrameGame extends JFrame {
 	public Command command;
 	public void setCommand(CommandHandler handler){
 		paneCommand.removeAll();
-		CommandHandler last = handler.getSubCommands().getFirst().getNextCommand();;
+		CommandHandler last = null;
+			if (handler.getSubCommands().size() > 0)
+				last = handler.getSubCommands().getFirst().getNextCommand();
 		while (last != null){
 			handler = last;
 			last = last.getSubCommands().getFirst().getNextCommand();
 		}
 		command = handler.getSelectedCommand();
+		if (command == null)
+			command = handler.getPrevious().get(handler.getPrevious().size()-2).getSelectedCommand();
 		for (CommandHandler component: handler.getPrevious()){
-			
-			System.out.println(component.getSubCommands().getFirst().text);
 			paneCommand.add((Component) component); 
 		}
 		paneCommand.revalidate();

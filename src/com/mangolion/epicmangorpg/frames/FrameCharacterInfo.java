@@ -494,6 +494,11 @@ public class FrameCharacterInfo extends JInternalFrame {
 			}
 		});
 		refresh();
+		super.moveToFront();
+	}
+	
+	@Override
+	public void moveToFront() {
 	}
 }
 
