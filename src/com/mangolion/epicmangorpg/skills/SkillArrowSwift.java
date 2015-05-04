@@ -17,6 +17,7 @@ public class SkillArrowSwift extends Skill {
 
 	public SkillArrowSwift() {
 		super("Swift Arrow", "Fires an arrow as swift as the wind itself.",Weapons.Bow, ActionType.RangeNormal) ;
+		setObservable(true, 0.7f);
 		addSteps(new Step(this, "Swift Arrow", "", ActionType.RangeNormal,0.3f, 0.1f, 0.1f, 0.7f){
 			public float getStrBuff() {
 				// TODO Auto-generated method stub

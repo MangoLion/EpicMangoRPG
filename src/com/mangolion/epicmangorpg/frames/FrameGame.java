@@ -183,7 +183,7 @@ public class FrameGame extends JFrame {
 	JTextPane tfDesc, tfSkill, tfSkill2;
 	
 	public JScrollPane scrollMango, scrollLog;
-	JDesktopPane desktopPane = new JDesktopPane();
+	public JDesktopPane desktopPane = new JDesktopPane();
 //	JLayeredPane layeredPane = new JLayeredPane();
 	JPanel contentPanel  = new JPanel(new BorderLayout());
 	JSplitPane splitMain;
@@ -918,6 +918,7 @@ public class FrameGame extends JFrame {
 	
 	public void addFrame(JInternalFrame frame){
 		desktopPane.add(frame);
+		frame.setVisible(true);
 		frame.setLocation(mouseX, mouseY);
 	}
 	

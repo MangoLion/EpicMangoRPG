@@ -16,6 +16,7 @@ public class SkillBasicSwordCombo extends Skill {
 
 	public SkillBasicSwordCombo() {
 		super("Basic Sword Combo", "If successful, this combo deals much more damage than a normal slash, but it can easily interupted..",Weapons.Sword, ActionType.MeleeSwing);
+		setObservable(true, 0.7f);
 		addSteps(new StepMeleeSlash(this, "First Slash", "Weak, like a normal slash but shorter cooldown",0.5f,
 				0.2f, 0.2f,1) {
 			public float getStrBuff() {return prof * 10;};

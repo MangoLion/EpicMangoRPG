@@ -14,7 +14,8 @@ public class SkillMillionSlash extends Skill {
 	Random rand = new Random();
 
 	public SkillMillionSlash() {
-		super("Million Slash", "Despite the cool sounding name, it only executes 6 times, has a very small chance of stunning for each slash.",Weapons.Dagger, ActionType.MeleeStab);
+		super("Million Slash", "Despite the cool sounding name, it only executes 6 times, has a very small chance of stunning for each slash.",Weapons.Bladed, ActionType.MeleeStab);
+		setObservable(true, 0.7f);
 		addSteps(new StepMeleeSlash(this, "First Slash","", 0.2f, 0.1f, 0.4f,0.7f) {
 			@Override
 			public boolean isCancelfromStun() {

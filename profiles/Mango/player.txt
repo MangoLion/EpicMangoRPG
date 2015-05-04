@@ -11,7 +11,7 @@ int = 20.0
 agi = 10.0
 def = 0.0
 prot = 0.0
-skills = Block|Basic Kick|Barrel Roll|Slash|Parry|Stab|Wait|Fire Coat|Side Step|Respite|Charge|Jump Back|Use Item|Combat Mastery|
+skills = Block|Basic Kick|Barrel Roll|Slash|Parry|Stab|Wait|Fire Coat|Side Step|Respite|Charge|Jump Back|Use Item|Combat Mastery|Shoot Arrow|Bow Mastery|
 
 [Inventory]
 Consumables = Small Potion|5|Arrow|100|Arrow|100|Bullet|100|Bullet|100|Earth Crystal|100|Fire Crystal|100|Water Crystal|100|Wind Crystal|100|
@@ -39,7 +39,7 @@ isEquipted = false
 
 [Short Bow]
 durability = 7.0
-isEquipted = false
+isEquipted = true
 
 [Copper Dagger]
 durability = 6.0
@@ -95,7 +95,7 @@ Step 0 = 0.0
 
 [Basic Kick]
 prof = 0.0
-Step 0 = 0.0
+Step 0 = 0.02
 
 [Barrel Roll]
 prof = 0.0
@@ -143,5 +143,12 @@ prof = 0.0
 Step 0 = 0.0
 
 [Combat Mastery]
+prof = 0.01
+
+[Shoot Arrow]
+prof = 0.0
+Step 0 = 0.0
+
+[Bow Mastery]
 prof = 0.0
 

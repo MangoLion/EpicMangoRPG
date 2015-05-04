@@ -1,5 +1,9 @@
 package com.mangolion.epicmangorpg.floors;
 
+import com.mangolion.epicmangorpg.characters.AdventurerNewb;
+import com.mangolion.epicmangorpg.characters.AntLionGiant;
+import com.mangolion.epicmangorpg.characters.BirdGiant;
+import com.mangolion.epicmangorpg.characters.ScropionWolf;
 import com.mangolion.epicmangorpg.characters.SlimeBlue;
 import com.mangolion.epicmangorpg.characters.FoxFang;
 import com.mangolion.epicmangorpg.characters.RabbitFang;
@@ -23,12 +27,17 @@ import com.mangolion.epicmangorpg.game.Terrain;
 public class Floor4 extends Floor {
 
 	public Floor4() {
-		terrains.add(Terrain.Tundra);
-		terrains.add(Terrain.HighMountain);
-		terrains.add(Terrain.Arctic);
+		terrains.add(Terrain.Desert);
+		terrains.add(Terrain.Desert);
 		
-		addSpawn(SpriteIce.class, 0.2f, 1.2f);
-		addSpawn( AntSoldier.class, 0.1f, 1.4f);
-		addSpawn(SlimeHeal.class, 0.2f, 1.5f);
+		addSpawn(LizardKomodus.class, 0.2f);
+		addSpawn(ScropionWolf.class, 0.2f);
+		addSpawn(AntLionGiant.class, 0.2f);
+		addSpawn(SpriteLightning.class, 0.2f);
+		addSpawn(AntSoldier.class, 0.2f, 1.2f);
+		addSpawn(BirdGiant.class, 0.2f);
+		
+		addAlly(AdventurerNewb.class, 1.4f);
+		addAlly(AdventurerNewb.class, 1.4f);
 	}
 }

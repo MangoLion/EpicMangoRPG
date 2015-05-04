@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
+import javax.swing.JInternalFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
@@ -18,6 +19,9 @@ import com.mangolion.epicmangorpg.components.Themes;
 import com.mangolion.epicmangorpg.components.Tick;
 import com.mangolion.epicmangorpg.events.Event;
 import com.mangolion.epicmangorpg.floors.Floor;
+import com.mangolion.epicmangorpg.floors.FloorTrainning;
+import com.mangolion.epicmangorpg.floors.Floor.Spawn;
+import com.mangolion.epicmangorpg.floors.Floor0;
 import com.mangolion.epicmangorpg.frames.FrameCharacterInfo;
 import com.mangolion.epicmangorpg.frames.FrameGame;
 import com.mangolion.epicmangorpg.messages.Msg;
@@ -32,12 +36,13 @@ public class Game {
 	public LinkedList<Character> charsEnemies = new LinkedList<Character>();
 	public ConcurrentDoublyLinkedList<Tick> ticks = new ConcurrentDoublyLinkedList<Tick>();
 	public ConcurrentDoublyLinkedList<Event> events = new ConcurrentDoublyLinkedList<Event>();
-	public LinkedList<Floor>floors = new LinkedList<Floor>();
+	public LinkedList<Floor> floors = new LinkedList<Floor>();
 	public int currentFloor = 0;
 	public Weather weather;
 	public Terrain terrain;
-	public float timePassed = 0, lastWeatherTick = 0, timeSinceTick = 0, floorPercent = 0;
-	public boolean nextFloor = true, lastFloor = false, firstBattle = true; 
+	public float timePassed = 0, lastWeatherTick = 0, timeSinceTick = 0,
+			floorPercent = 0, timeLimit = 0;
+	public boolean nextFloor = true, lastFloor = false, firstBattle = true;
 	LinkedList<Character> toAdd = new LinkedList<Character>();
 	public Timer timer = new Timer(100, new ActionListener() {
 
@@ -45,8 +50,7 @@ public class Game {
 		public void actionPerformed(ActionEvent e) {
 			update();
 		}
-	}),
-	timer2;
+	}), timer2;
 	public int maxEnemies = 2;
 
 	public Game() {
@@ -59,14 +63,16 @@ public class Game {
 		result.addAll(charsEnemies);
 		return result;
 	}
+
 	FrameGame frame = FrameGame.instance;
-	
-	public void saveGame(){
-		Profile profile = new Profile(CharacterPlayer.instance, currentFloor, floorPercent, nextFloor, lastFloor, Themes.getCurrentTheme());
+
+	public void saveGame() {
+		Profile profile = new Profile(CharacterPlayer.instance, currentFloor,
+				floorPercent, nextFloor, lastFloor, Themes.getCurrentTheme());
 		WiniWriter.saveProfile(profile);
 	}
-	
-	public void loadGame(Profile profile){
+
+	public void loadGame(Profile profile) {
 		currentFloor = profile.currentFloor;
 		nextFloor = profile.nextFloor;
 		lastFloor = profile.lastFloor;
@@ -76,124 +82,145 @@ public class Game {
 			profile.theme = "Dust Coffee";
 		Themes.setTheme(profile.theme);
 	}
-	
+
 	public void begin() {
-		if (lastFloor == true){
-			if (currentFloor > 0 && floorPercent <= 0){
-				currentFloor --;
+		timeLimit = 1000;
+		if (lastFloor == true) {
+			if (currentFloor > 0 && floorPercent <= 0) {
+				currentFloor--;
 				floorPercent = 100;
 				Utility.narrate("You have ascended to the last floor");
-				//lastFloor = false;
+				// lastFloor = false;
 			}
-		//	floorPercent -= 20;
+			// floorPercent -= 20;
 		}
-		
-		
-		
-		if (nextFloor == true){
-				if (floorPercent >= 100){
-					currentFloor ++;
-					//nextFloor = false;
-					floorPercent = 0;
-					Utility.narrate("You have descended to the next floor");
-				}
-				//floorPercent += 20;
+
+		if (nextFloor == true) {
+			if (floorPercent >= 100) {
+				currentFloor++;
+				// nextFloor = false;
+				floorPercent = 0;
+				Utility.narrate("You have descended to the next floor");
+			}
+			// floorPercent += 20;
 		}
-		if (!firstBattle){
-		saveGame();
-		}
-		else
+		floors.addAll(Floor.getFloors());
+		begin(floors.get(currentFloor));
+	}
+
+	public void begin(final Floor floor) {
+		
+		if (!firstBattle) {
+			saveGame();
+		} else
 			firstBattle = false;
-		
+
 		if (timer != null)
 			timer.stop();
-		
+
 		timePassed = 0;
 		ticks.clear();
 		charsAllies.clear();
 		charsEnemies.clear();
 		events.clear();
-		
-		floors.addAll(Floor.getFloors());
+
 		weather = Weather.getRandomWeather();
 		if (currentFloor >= floors.size())
 			currentFloor = 0;
-		terrain = floors.get(currentFloor).terrains.get(rand.nextInt(floors.get(currentFloor).terrains.size()));//Terrain.getRandomTerrain();
+		terrain = floor.terrains.get(rand.nextInt(floor.terrains.size()));// Terrain.getRandomTerrain();
 		weather.generateValues();
 		weather.syncTerrain(terrain);
-		
+
 		timer2 = new Timer(10, new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//if (playerName.equals(""))
-					//playerName = JOptionPane.showInputDialog("Enter your name:", "Mango");
-				
-				
 				for (FrameCharacterInfo info : FrameGame.instance.charInfos)
 					info.dispose();
-				 frame = FrameGame.instance;
+				frame = FrameGame.instance;
+				JInternalFrame[] frames = frame.desktopPane.getAllFrames();
+				for (JInternalFrame frame : frames)
+					frame.dispose();
 				frame.tfNarration.setText("");
 				frame.tfTime.setText("");
 				frame.pbFloor.setValue((int) floorPercent);
-				frame.pbFloor.setString("Floor: "+currentFloor  + " (" + floorPercent + "%)");
+				frame.pbFloor.setString("Floor: " + currentFloor + " ("
+						+ floorPercent + "%)");
 				frame.updateWeather(weather);
 				frame.updateTerrain(terrain);
 				frame.modelMonster.clear();
-				for (int i = 0; i < floors.get(currentFloor).spawns.size(); i ++)
-					frame.modelMonster.addElement(floors.get(currentFloor).getSpawn(i));
-				
-				float allyCP = 0, enemyCP = 0, limitCP;
-				if (CharacterPlayer.instance == null)
-					new CharacterPlayer(playerName);
-				CharacterPlayer.instance.reset();
-				
-				charsAllies.add(CharacterPlayer.instance);
-				
-			//	if (rand.nextInt(2) == 0)
-				if (getCurrentFloor().allies.size()>0)
-					for (int i = 0; i < 2; i ++)
-						if (rand.nextInt(6) == 0)
-							charsAllies.add(floors.get(currentFloor).getAlly());
-				
-				for (Character character: charsAllies)
-					allyCP += character.getCP();
-				//maxEnemies = charsAllies.size();
+				for (int i = 0; i < floor.spawns.size(); i++)
+					frame.modelMonster.addElement(floor.getSpawn(i));
 
-				if (currentFloor < 2)
-					limitCP = allyCP * 0.5f;
-				else if (currentFloor < 4)
-					limitCP = allyCP * 0.7f;
-				else
-					limitCP = allyCP;
-				
-				boolean firstAdd = true;
-				while (enemyCP < limitCP ){
-					Character enemy = floors.get(currentFloor).getSpawn();
-					enemyCP += enemy.getCP();
-					if (enemyCP < allyCP * 1.2 || firstAdd){
-					charsEnemies.add(enemy);
-					firstAdd = false;
+				if (!(floor instanceof Floor0) && !(floor instanceof FloorTrainning)) {
+					float allyCP = 0, enemyCP = 0, limitCP;
+					if (CharacterPlayer.instance == null)
+						new CharacterPlayer(playerName);
+					CharacterPlayer.instance.reset();
+
+					charsAllies.add(CharacterPlayer.instance);
+
+					// if (rand.nextInt(2) == 0)
+					if (getCurrentFloor().allies.size() > 0)
+						for (int i = 0; i < 2; i++)
+							if (rand.nextInt(6) == 0)
+								charsAllies.add(floor.getAlly());
+
+					for (Character character : charsAllies)
+						allyCP += character.getCP();
+					// maxEnemies = charsAllies.size();
+
+					if (currentFloor < 2)
+						limitCP = allyCP * 0.5f;
+					else if (currentFloor < 4)
+						limitCP = allyCP * 0.7f;
+					else
+						limitCP = allyCP;
+
+					boolean firstAdd = true;
+					while (enemyCP < limitCP) {
+						Character enemy = floor.getSpawn();
+						enemyCP += enemy.getCP();
+						if (enemyCP < allyCP * 1.2 || firstAdd) {
+							charsEnemies.add(enemy);
+							firstAdd = false;
+						}
+					}
+				}else if (floor instanceof Floor0){
+					charsAllies.add(CharacterPlayer.instance);
+					for (Spawn spawn: floor.allies){
+						charsAllies.add(Utility.getInstance(spawn.character));
+					}
+					for (Spawn spawn: floor.spawns){
+						charsEnemies.add(Utility.getInstance(spawn.character));
+					}
+				}else{
+					timeLimit = 15;
+					charsAllies.add(CharacterPlayer.instance);
+					charsAllies.add(floor.getAlly());
+					for (Spawn spawn: floor.spawns){
+						charsEnemies.add(Utility.getInstance(spawn.character));
 					}
 				}
-				
 				frame.updateInfoTab();
-				
-			LinkedList<Character> allChars = getAllChars();
+
+				LinkedList<Character> allChars = getAllChars();
 				for (Character character : allChars) {
 					addTick(character, rand.nextFloat(), Tick.ACTION);
 				}
 				System.out.println(charsEnemies.size());
-					frame.	updateInfoTab();
-				/*for (Character character : charsEnemies) {
-					addTick(character, rand.nextFloat()*2, Tick.ACTION);
-				}
-				addTick(charsAllies.getFirst(), 0, Tick.ACTION);*/
-				//StylePainter.appendTime(0.0f);
-				//Utility.narrate("The battle has started!\n");
-				//nextTick(false);
+				frame.updateInfoTab();
+				/*
+				 * for (Character character : charsEnemies) { addTick(character,
+				 * rand.nextFloat()*2, Tick.ACTION); }
+				 * addTick(charsAllies.getFirst(), 0, Tick.ACTION);
+				 */
+				// StylePainter.appendTime(0.0f);
+				// Utility.narrate("The battle has started!\n");
+				// nextTick(false);
 				timer.start();
-				//frame.tfCommand.setText("use skill slash on " + charsEnemies.getFirst().name.replace(" ", ""));
+				// frame.tfCommand.setText("use skill slash on " +
+				// charsEnemies.getFirst().name.replace(" ", ""));
 				frame.setCommand(new CmdUser(null));
 				timer2.stop();
 			}
@@ -204,7 +231,7 @@ public class Game {
 	public void update() {
 		timePassed = (float) (Math.round((timePassed + 0.01) * 100d) / 100d);
 		updateAll(0.01f, null, true);
-		for (Tick tick: ticks)
+		for (Tick tick : ticks)
 			if (tick.time < 0)
 				System.out.println("out of sync");
 	}
@@ -229,7 +256,7 @@ public class Game {
 				next = tick;
 		}
 		ticks.remove(next);
-		timePassed = Math.round((timePassed + next.time)*100f)/100;
+		timePassed = Math.round((timePassed + next.time) * 100f) / 100;
 
 		if (update)
 			updateAll(next.time, next.character, false);
@@ -264,18 +291,15 @@ public class Game {
 	}
 
 	public void tick(Tick tick) {
-		if (tick.character.isStunned()){
-			//addTick(tick.character, 0.1f, Tick.ACTION);
+		if (tick.character.isStunned()) {
+			// addTick(tick.character, 0.1f, Tick.ACTION);
 			if (tick.character.skillCurrent != null)
 				tick.character.skillCurrent.reset();
 			return;
 		}
-		
-		if (timeSinceTick != 0)
-		//	StylePainter.nextTime = true;
-		/*StylePainter.append(
-				new Msg("[ $num ] ").getMessage(null, null, timeSinceTick));*/
-		StylePainter.appendTime(timeSinceTick);
+
+		if (timeSinceTick != 0 && (tick.character.ai != null || tick.character == CharacterPlayer.instance))
+			StylePainter.appendTime(timeSinceTick);
 		timeSinceTick = 0;
 		if (!tick.character.isDead)
 			switch (tick.type) {
@@ -291,18 +315,23 @@ public class Game {
 			default:
 				break;
 			}
-		/*if (tick.character == CharacterPlayer.instance
-				&& tick.character.skillCurrent == null)
-			timer.stop();*/
+		/*
+		 * if (tick.character == CharacterPlayer.instance &&
+		 * tick.character.skillCurrent == null) timer.stop();
+		 */
 	}
 
 	public void updateAll(float deltaTime, Character exception,
 			boolean executeTick) {
-		// System.out.println("update");
-		// Utility.narrate(String.valueOf(deltaTime) + " seconds have passed.");
+		if (timePassed > timeLimit){
+			begin();
+			return;
+		}
+		
 		LinkedList<Tick> toExecute = new LinkedList<>();
-		timeSinceTick = Math.round((timeSinceTick + deltaTime)*100f)/100f;
-		FrameGame.instance.lblTimePassed.setText("Time passed: " + timePassed + " seconds");
+		timeSinceTick = Math.round((timeSinceTick + deltaTime) * 100f) / 100f;
+		FrameGame.instance.lblTimePassed.setText("Time passed: " + timePassed
+				+ " seconds");
 		Iterator<Tick> it = ticks.iterator();
 		while (it.hasNext()) {
 			Tick tick = it.next();
@@ -315,12 +344,13 @@ public class Game {
 		for (Tick tick : toExecute) {
 			tick(tick);
 		}
-		
-		if (Game.getInstance().charsAllies.size() == 0 || Game.getInstance().charsEnemies.size() == 0){
+
+		if (Game.getInstance().charsAllies.size() == 0
+				|| Game.getInstance().charsEnemies.size() == 0) {
 			begin();
 			return;
 		}
-		
+
 		LinkedList<Event> evtoExecute = new LinkedList<>();
 		Iterator<Event> it1 = events.iterator();
 		while (it1.hasNext()) {
@@ -331,7 +361,7 @@ public class Game {
 				it1.remove();
 			}
 		}
-		for (Event event: evtoExecute) {
+		for (Event event : evtoExecute) {
 			event.execute();
 		}
 
@@ -341,16 +371,16 @@ public class Game {
 		for (Character character : charsEnemies)
 			if (character != exception)
 				character.tick(deltaTime);
-		for (Character character: toAdd){
+		for (Character character : toAdd) {
 			if (character.isAllied)
 				charsAllies.add(character);
 			else
 				charsEnemies.add(character);
 		}
 		toAdd.clear();
-			
+
 		SwingUtilities.invokeLater(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				FrameGame.instance.updateCharacterList();
@@ -366,48 +396,47 @@ public class Game {
 
 	public Character findEnemy(Character character) {
 
-		
-		if (character.isAllied){
-			if (charsEnemies.size() > 1){
-				for (Character c: charsEnemies)
+		if (character.isAllied) {
+			if (charsEnemies.size() > 1) {
+				for (Character c : charsEnemies)
 					if (c.getTarget() == character)
 						return c;
 				return charsEnemies.get(rand.nextInt(charsEnemies.size()));
-			}else
+			} else
 				return charsEnemies.getFirst();
-			
+
 		}
-		if (!character.isAllied){
-			if (charsAllies.size() > 1){
-				for (Character c: charsAllies)
+		if (!character.isAllied) {
+			if (charsAllies.size() > 1) {
+				for (Character c : charsAllies)
 					if (c.target == character)
 						return c;
 				return charsAllies.get(rand.nextInt(charsAllies.size()));
-			}else
+			} else
 				return charsAllies.getFirst();
 		}
-		
+
 		return null;
 	}
-	
+
 	public Character findAlly(Character character) {
 
-		if (!character.isAllied){
-			if (charsEnemies.size() > 1){
-				for (Character c: charsEnemies)
+		if (!character.isAllied) {
+			if (charsEnemies.size() > 1) {
+				for (Character c : charsEnemies)
 					if (c.target == character && c.getHp() < c.getMaxHP())
 						return c;
 				return charsEnemies.get(rand.nextInt(charsEnemies.size()));
-			}else
+			} else
 				return charsEnemies.getFirst();
 		}
-		if (character.isAllied){
-			if (charsAllies.size() > 1){
-				for (Character c: charsAllies)
+		if (character.isAllied) {
+			if (charsAllies.size() > 1) {
+				for (Character c : charsAllies)
 					if (c.getTarget() == character && c.getHp() < c.getMaxHP())
 						return c;
 				return charsAllies.get(rand.nextInt(charsAllies.size()));
-			}else
+			} else
 				return charsAllies.getFirst();
 		}
 		return null;
@@ -427,58 +456,69 @@ public class Game {
 	public Character getCharacter(String target) {
 		target = target.replace(" ", "");
 		for (Character character : charsAllies)
-			if (character.name.replace(" ", "").toLowerCase().equals(target.toLowerCase()))
+			if (character.name.replace(" ", "").toLowerCase()
+					.equals(target.toLowerCase()))
 				return character;
-		for (Character character : charsEnemies){
-			//System.out.println(character.name.toLowerCase() + " |  " + target.toLowerCase());
-			if (character.name.replace(" ", "").toLowerCase().equals(target.toLowerCase()))
+		for (Character character : charsEnemies) {
+			// System.out.println(character.name.toLowerCase() + " |  " +
+			// target.toLowerCase());
+			if (character.name.replace(" ", "").toLowerCase()
+					.equals(target.toLowerCase()))
 				return character;
 		}
 		return null;
 	}
-	
-	Msg msgLearn = new Msg("$name has learned $targetskill from $targetname after watching $tp2 in action.");
-	public void checkforObservation(Character character){
+
+	Msg msgLearn = new Msg(
+			"$name has learned $targetskill from $targetname after watching $tp2 in action.");
+
+	public void checkforObservation(Character character) {
 		for (Character c : getAllChars())
-			if (c != character){				
+			if (c != character) {
 				boolean learned = false;
 				Skill learn = character.skillCurrent;
-				for (Skill skill: c.skills)
+				for (Skill skill : c.skills)
 					if (skill.name.equals(learn.name))
 						learned = true;
 				if (learned)
 					continue;
-				if (rand.nextFloat() <= learn.chanceObserve && rand.nextFloat() <= c.learnRate){
+				if (rand.nextFloat() <= learn.chanceObserve
+						&& rand.nextFloat() <= c.learnRate) {
 					learn = Utility.getInstance(learn.getClass());
 					learn.character = c;
-					for (Step step: learn.steps)
+					for (Step step : learn.steps)
 						step.prof = -0.1f;
 					c.skills.add(learn);
-					StylePainter.append( new Msg("$name has learned " + learn.name + " from $targetname after watching $tp2 in action.").getMessage(c, character, 0));
+					StylePainter
+							.append(new Msg(
+									"$name has learned "
+											+ learn.name
+											+ " from $targetname after watching $tp2 in action.")
+									.getMessage(c, character, 0));
 				}
 			}
 	}
-	
-	public LinkedList<Character> getEnemies(Character character){
+
+	public LinkedList<Character> getEnemies(Character character) {
 		if (character.isAllied)
 			return charsEnemies;
 		else
 			return charsAllies;
 	}
-	
-	public Floor getCurrentFloor(){
+
+	public Floor getCurrentFloor() {
 		return floors.get(currentFloor);
 	}
 
 	public Character getRandomEnemy(Character character) {
-		if (character.isAllied){
+		if (character.isAllied) {
 			if (charsEnemies.size() > 1)
-			return charsEnemies.get(rand.nextInt(charsEnemies.size()));
-		else
-			return charsEnemies.getFirst();
-	}
-		if (!character.isAllied){
-				if (charsAllies.size() > 1)
+				return charsEnemies.get(rand.nextInt(charsEnemies.size()));
+			else
+				return charsEnemies.getFirst();
+		}
+		if (!character.isAllied) {
+			if (charsAllies.size() > 1)
 				return charsAllies.get(rand.nextInt(charsAllies.size()));
 			else
 				return charsAllies.getFirst();

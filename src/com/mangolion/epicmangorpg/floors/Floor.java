@@ -77,6 +77,7 @@ public class Floor {
 		result.add(new Floor2());
 		result.add(new Floor3());
 		result.add(new Floor4());
+		result.add(new Floor5());
 		return result;
 	}
 }

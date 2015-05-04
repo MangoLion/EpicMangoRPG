@@ -1,11 +1,11 @@
 package com.mangolion.epicmangorpg.floors;
 
 import com.mangolion.epicmangorpg.characters.AdventurerNewb;
-import com.mangolion.epicmangorpg.characters.AlchemistAcademy;
 import com.mangolion.epicmangorpg.characters.RangeArcher;
 import com.mangolion.epicmangorpg.characters.BirdGiant;
+import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.characters.DungeonEntrance;
-import com.mangolion.epicmangorpg.characters.RangeGun;
+import com.mangolion.epicmangorpg.characters.Instructor;
 import com.mangolion.epicmangorpg.characters.RatGiant;
 import com.mangolion.epicmangorpg.characters.SlimeBlue;
 import com.mangolion.epicmangorpg.characters.Dummy;
@@ -20,27 +20,34 @@ import com.mangolion.epicmangorpg.characters.Minotaur;
 import com.mangolion.epicmangorpg.characters.SlimePoison;
 import com.mangolion.epicmangorpg.characters.TurtleRock;
 import com.mangolion.epicmangorpg.characters.AntSoldier;
-import com.mangolion.epicmangorpg.characters.WarriorTrainingHall;
 import com.mangolion.epicmangorpg.characters.WildFox;
 import com.mangolion.epicmangorpg.characters.RabbitWild;
 import com.mangolion.epicmangorpg.characters.SpiderWolf;
 import com.mangolion.epicmangorpg.game.Terrain;
+import com.mangolion.epicmangorpg.items.Item;
+import com.mangolion.epicmangorpg.skills.Skill;
+import com.mangolion.epicmangorpg.weapons.Weapon;
 
-public class Floor0 extends Floor {
-
-	public Floor0() {
+public class FloorTrainning extends Floor {
+	Skill skill;
+	Weapon weapon;
+	Item ammo;
+	public FloorTrainning(Skill skill, Weapon weapon, Item ammo) {
 		terrains.add(Terrain.Plain);
-		terrains.add(Terrain.Taiga);
-		
-		addSpawn(DungeonEntrance.class, 0.2f);
-
-		//addSpawn(RockTurtle.class, 1);
-	//	addSpawn(Dummy.class, 1);
-		
-		addAlly(RangeArcher.class, 1);
-		addAlly(RangeGun.class, 1);
-		addAlly(AlchemistAcademy.class, 1);
-		addAlly(WarriorTrainingHall.class, 1);
-
+		this.skill = skill;
+		this.weapon = weapon;
+		this.ammo = ammo;
+		addSpawn(Dummy.class, 0.2f);
+		addSpawn(Dummy.class, 0.2f);
+		addSpawn(Dummy.class, 0.2f);
+	}
+	@Override
+	public Character getAlly() {
+		Character instructor = new Instructor();
+		instructor.equip(weapon);
+		instructor.skills.clear();
+		instructor.addSkills(skill);
+		instructor.inventory.addItem(ammo, 1000);
+		return instructor;
 	}
 }

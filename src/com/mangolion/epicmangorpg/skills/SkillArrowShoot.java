@@ -14,6 +14,7 @@ public class SkillArrowShoot extends Skill {
 
 	public SkillArrowShoot() {
 		super("Shoot Arrow", "Pulls back the bowstring and let loose an arrow, standard bow attack.",Weapons.Bow, ActionType.RangeNormal);
+		setObservable(true, 1);
 		addSteps(new Step(this, "Shoot Arrow", "",ActionType.RangeNormal, 0.6f, 0.1f, 0.1f,1){
 			
 			@Override

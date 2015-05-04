@@ -14,16 +14,11 @@ import com.mangolion.epicmangorpg.skills.SkillStab;
 import com.mangolion.epicmangorpg.weapons.Barehands;
 import com.mangolion.epicmangorpg.weapons.LongSword;
 
-public class Dummy extends Character{
+public class DungeonEntrance extends Character{
 
-	public Dummy() {
-		super("Dummy", "An indestructable dummy used for testing",10000000, 100, 100, 40, 10, 100, 10, 10,0,0, new Barehands());
-		cpBase = -100000000;
+	public DungeonEntrance() {
+		super("Dungeon Entrance", "Attack or enter it to enter the dungeon",100, 100, 100, 40, 10, 100, 10, 10,0,0, new Barehands());
+		isShop = true;
 	}
 
-	@Override
-	public float getCP() {
-		// TODO Auto-generated method stub
-		return CharacterPlayer.instance.getCP();
-	}
 }

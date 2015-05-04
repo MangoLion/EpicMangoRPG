@@ -24,6 +24,13 @@ public class CmdUse extends CommandCombo {
 				return new CmdSkillItem(previous);
 			}
 		});
+		result.add(new Command("Enter", Command.COMBOBOX, null){
+			@Override
+			public CommandHandler getNextCommand() {
+				// TODO Auto-generated method stub
+				return new CmdEnter(previous);
+			}
+		});
 		return result;
 	}
 

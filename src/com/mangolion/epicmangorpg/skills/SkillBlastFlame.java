@@ -20,6 +20,7 @@ public class SkillBlastFlame extends Skill {
 
 	public SkillBlastFlame() {
 		super("Flame Burst", "",Weapons.Cylinder, ActionType.Alchemy);
+		setObservable(true, 0.7f);
 		addSteps(new StepMeleeSlash(this, "Flame Burst", "", 0.5f, 0.1f, 0.1f,1f){
 			@Override
 			public void init() {

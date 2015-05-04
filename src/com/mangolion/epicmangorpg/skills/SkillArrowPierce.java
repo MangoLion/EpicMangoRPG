@@ -16,6 +16,7 @@ public class SkillArrowPierce extends Skill {
 
 	public SkillArrowPierce() {
 		super("Piercing Arrow", "Fires an arrow assisted with magic that can pierce armor..",Weapons.Bow, ActionType.MeleeStab) ;
+		setObservable(true, 0.7f);
 		addSteps(new StepStab(this, "Piercing Arrow", "", 0.7f, 0.2f, 0.1f, 2f){
 			public float getStrBuff() {
 				// TODO Auto-generated method stub

@@ -19,6 +19,7 @@ public class SkillBlastWind extends Skill {
 
 	public SkillBlastWind() {
 		super("Wind Blast", "",Weapons.Cylinder, ActionType.Alchemy);
+		setObservable(true, 0.7f);
 		addSteps(new Step(this, "Wind Blast", "",ActionType.Alchemy, 0.3f, 0.1f, 0.1f,1f){
 			@Override
 			public void init() {

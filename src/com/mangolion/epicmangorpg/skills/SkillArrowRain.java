@@ -15,6 +15,7 @@ public class SkillArrowRain extends Skill {
 
 	public SkillArrowRain() {
 		super("Arrow Rain", "",Weapons.Bow, ActionType.RangeNormal);
+		setObservable(true, 0.7f);
 		hasTarget = false;
 		addSteps(new Step(this, "Arrow Rain(First)", "",ActionType.RangeNormal, 01f, 0.1f, 0.1f,1){
 			

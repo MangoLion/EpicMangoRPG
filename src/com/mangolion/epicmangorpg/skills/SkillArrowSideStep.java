@@ -19,6 +19,7 @@ public class SkillArrowSideStep extends Skill {
 
 	public SkillArrowSideStep() {
 		super("Sidestep Arrow", "Allows for a sidestep and shoot arrow at the same time.",Weapons.Bow, ActionType.Dodge);
+		setObservable(true, 0.7f);
 		addSteps(new StepShootDodge(this, "Sidestep Arrow", "",0.3f,
 				0.4f, 0.2f, 0.6f) {
 

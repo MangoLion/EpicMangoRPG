@@ -5,12 +5,10 @@ import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.steps.Step;
 import com.mangolion.epicmangorpg.weapons.Weapons;
 
-public class SkillMaterySword  extends Skill{
+public class SkillMasteryBow  extends Skill{
 
-	public SkillMaterySword() {
-		super("Sword Mastery", "", Weapons.Sword, ActionType.WeaponMastery);
-		weapons.add(Weapons.GreatSword);
-		weapons.add(Weapons.Dagger);
+	public SkillMasteryBow() {
+		super("Bow Mastery", "", Weapons.Bow, ActionType.WeaponMastery);
 	}
 	
 	public float getTotalDamagePercent(){

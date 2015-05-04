@@ -3,6 +3,7 @@ package com.mangolion.epicmangorpg.ais;
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.components.ActionType;
 import com.mangolion.epicmangorpg.components.GeneralType;
+import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.skills.Skill;
 
 public class AISimple extends AI {
@@ -27,9 +28,11 @@ public class AISimple extends AI {
 		if (!checkRecovery())
 		if (!checkDefense())
 		if (!executeSkill(GeneralType.Attack))
-			executeSkill(GeneralType.Defend);
-		System.out.println("no skills");
-		super.nextAction();
+		if (!executeSkill(GeneralType.Defend)){
+		
+			Utility.narrate(character.name + " decided to stay idle this turn");
+			super.nextAction();
+		}
 	}
 	
 	public boolean checkRecovery(){
@@ -40,7 +43,6 @@ public class AISimple extends AI {
 			return executeSkill(ActionType.RecoverHP);
 		}
 		if (character.getSp()/character.maxSP < recoverLevel){
-			Skill skill = getRandomSkill(ActionType.RecoverSP);
 			return executeSkill(ActionType.RecoverSP);
 		}
 		if (character.getMp()/character.maxMP < recoverLevel){

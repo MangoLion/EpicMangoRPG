@@ -21,6 +21,7 @@ public class SkillBlastSand extends Skill {
 
 	public SkillBlastSand() {
 		super("Sand Blast", "",Weapons.Cylinder, ActionType.Alchemy);
+		setObservable(true, 0.7f);
 		addSteps(new Step(this, "Sand Blast", "",ActionType.Alchemy, 0.4f, 0.1f, 0f,1f){
 			@Override
 			public void init() {

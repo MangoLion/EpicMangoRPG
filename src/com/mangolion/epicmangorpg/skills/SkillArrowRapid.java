@@ -14,6 +14,7 @@ public class SkillArrowRapid extends Skill {
 
 	public SkillArrowRapid() {
 		super("Rapid Arrow", "Fires 3 arrows consecutively.",Weapons.Bow, ActionType.RangeNormal);
+		setObservable(true, 0.7f);
 		addSteps(new Step(this, "First Arrow", "",ActionType.RangeNormal, 0.6f, 0.1f, 0.1f,0.8f){
 			
 			@Override

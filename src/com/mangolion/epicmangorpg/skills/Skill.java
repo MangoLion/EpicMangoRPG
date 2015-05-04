@@ -31,7 +31,7 @@ public class Skill implements StatBuff {
 	public int stepCurrent;
 	public LinkedList<Weapons> weapons = new LinkedList<Weapons>();
 	public ActionType type;
-	public float chanceObserve = 0, prof = 0, dmgBoost = 1;
+	public float chanceObserve = 0, prof = 0, dmgBoost = 1, shopPrice = 0;
 	public String aug = "";
 	LinkedList<String>arguments = new LinkedList<String>();
 	

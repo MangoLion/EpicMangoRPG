@@ -39,7 +39,8 @@ public class Character implements Cloneable {
 								isAllied = false,
 								isDead = false,
 								isSupporter = false,
-								isBoss = false;
+								isBoss = false,
+								isShop = false;
 	public Armor head, body, legs, feet, robe, hands, accessory;
 	public AI ai;
 	public Inventory inventory = new Inventory();
@@ -760,7 +761,9 @@ public class Character implements Cloneable {
 		return null;
 	}
 	
-
+	public void openShop(){
+		
+	}
 
 
 }

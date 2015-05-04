@@ -18,7 +18,7 @@ public abstract class CommandCombo extends JComboBox<Command> implements Command
 	LinkedList<CommandHandler> previous = new LinkedList<CommandHandler>();
 	int selectedIndex = 0;
 	
-	public CommandCombo(LinkedList<CommandHandler> previous) {
+	public CommandCombo(final LinkedList<CommandHandler> previous) {
 		setModel(model);
 		if (previous != null)
 			this.previous.addAll(previous);
@@ -28,8 +28,10 @@ public abstract class CommandCombo extends JComboBox<Command> implements Command
 			
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				FrameGame.getInstance().setCommand(getSelectedCommand().getNextCommand());
 				selectedIndex = getSelectedIndex();
+				CommandHandler next = getSelectedCommand().getNextCommand();
+				if (next != null)
+					FrameGame.getInstance().setCommand(next);
 			}
 		});
 	}
