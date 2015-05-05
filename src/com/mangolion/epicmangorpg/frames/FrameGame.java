@@ -695,10 +695,8 @@ public class FrameGame extends JFrame {
 				if (Game.getInstance().timer.isRunning())
 					Utility.narrate("Please wait for your turn!");
 				else
-					if (command.actionListener != null){
-						command.actionListener.actionPerformed(null);
+					if (command.execute())
 						Game.getInstance().timer.start();
-					}
 			}
 		});
 		panelAction.setLayout(new BorderLayout(0, 0));
@@ -818,7 +816,7 @@ public class FrameGame extends JFrame {
 	
 	public void updateInfoTab(){
 		Character character = CharacterPlayer.instance;
-		lblPName.setText(character.name);
+		lblPName.setText(character.name + " \t , crystals: " + character.crystals);
 		pbHP.setValue((int) ((int) character.getHp()/character.getMaxHP()*100));
 		pbHP.setString( character.getHp() + "/" +character.getMaxHP());
 		pbMP.setValue((int) ((int) character.getMp()/character.getMaxMP()*100));

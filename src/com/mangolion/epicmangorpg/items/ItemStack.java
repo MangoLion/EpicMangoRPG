@@ -45,6 +45,6 @@ public void use(Character character, Character target, float value){
 	
 	@Override
 	public String toString() {
-			return item.name + "(" + stack + ")";
+			return item.name + " (" + stack + ")";
 	}
 }

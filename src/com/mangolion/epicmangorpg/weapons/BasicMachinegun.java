@@ -9,6 +9,7 @@ public class BasicMachinegun extends Weapon{
 		gunDamage = 7;
 		canToggleAutomatic =false;
 		isAutomatic = true;
+		price = 100;
 	}
 	
 	@Override

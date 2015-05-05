@@ -68,37 +68,23 @@ public class CharacterPlayer extends Character {
 		isPlayer = true;
 		isAllied = true;
 		instance = this;
-
+		changeCrystal(100);
 		learnRate = 0.5f;
+		
 		//addElements(new Element(Elements.Fire, 1));
 	}
 	
 	public void init(){
 		inventory.addItem(Items.potionSmall, 5);
-		inventory.addItem(Items.arrow, 200);
-		inventory.addItem(Items.bullet, 200);
-		inventory.addItem(Items.crystalEarth, 100);
-		inventory.addItem(Items.crystalFire, 100);
-		inventory.addItem(Items.crystalWater, 100);
-		inventory.addItem(Items.crystalWind, 100);
+		inventory.addItem(Items.arrow, 100);
+		inventory.addItem(Items.bullet, 100);
+		inventory.addItem(Items.crystalEarth, 50);
+		inventory.addItem(Items.crystalFire, 50);
+		inventory.addItem(Items.crystalWater, 50);
+		inventory.addItem(Items.crystalWind, 50);
 		inventory.addItem(weapon);
-		inventory.addItem(new CylinderBasic());
-		inventory.addItem(new BasicMachinegun());
-		inventory.addItem(new SniperRifle());
-		inventory.addItem(new BasicRifle());
-		inventory.addItem(new BowShort());
+		inventory.addItem(Items.portalStone, 2);
 		inventory.addItem(new CopperDagger());
-		inventory.addItem(new LeatherGloves());
-		inventory.addItem(new LeatherPants());
-		inventory.addItem(new LeatherJacket());
-		inventory.addItem(new LeatherHat());
-		inventory.addItem(new LeatherShoes());
-		inventory.addItem(new MetalBoots());
-		inventory.addItem(new MetalGuantlet());
-		inventory.addItem(new MetalHelm());
-		inventory.addItem(new PlateArmorLower());
-		inventory.addItem(new PlateArmorUpper());
-		inventory.addItem(new ClothRobe());
 	}
 
 	@Override
@@ -127,6 +113,8 @@ public class CharacterPlayer extends Character {
 	public boolean isEquipted(ItemCustom item) {
 		if (item instanceof Weapon)
 			return isEquipted((Weapon) item);
-		return isEquipted((Armor) item);
+		if (item instanceof Armor)
+			return isEquipted((Armor) item);
+		return false;
 	}
 }

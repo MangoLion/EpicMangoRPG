@@ -73,6 +73,8 @@ public class WiniWriter {
 				str += item.name + "|";
 				wini.put(item.name, "durability", item.durability);
 				wini.put(item.name, "isEquipted", player.isEquipted(item));
+				for (int i = 0; i < item.valueNum; i ++)
+					wini.put(item.name, "value " + i, item.values.get(i));
 			}
 			wini.put("Inventory", "ItemCustoms", str);
 			
@@ -139,19 +141,17 @@ public class WiniWriter {
 			String items = wini.get("Inventory", "Consumables");
 			
 			boolean getStack = false;
-			ItemStack stack = null;
-			
+			Item item = null;
 			for (String str: items.split("\\|")){
 				if (!getStack){
-					Item item = Items.getItem(str);
+					item = Items.getItem(str);
 					if (item != null)
-						stack = new ItemStack(player.inventory, item, 0);
-					getStack = true;
+						getStack = true;
 							
 				}else {
-					stack.stack = Integer.valueOf(str);
+					int stack = Integer.valueOf(str);
 					getStack = false;
-					player.inventory.itemStacks.add(stack);
+					player.inventory.addItem(item,stack);
 				}
 			}
 			
@@ -160,7 +160,6 @@ public class WiniWriter {
 				Skill skill = Skills.getSkill(str);
 				if (skill == null)
 					continue;
-				System.out.println(skill.name);
 				skill.prof = wini.get(skill.name, "prof", Float.class);
 				for (int i = 0; i < skill.steps.size(); i ++){
 					Step step = skill.steps.get(i);
@@ -171,17 +170,19 @@ public class WiniWriter {
 			
 			items = wini.get("Inventory", "ItemCustoms");
 			for (String str: items.split("\\|")){
-				ItemCustom item = Items.getItemCustom(str);
-				if (item != null)
-					item = Utility.getInstance(item.getClass());
+				ItemCustom itemC = Items.getItemCustom(str);
+				if (itemC != null)
+					itemC = Utility.getInstance(itemC.getClass());
 				else
 					continue;
 			//	System.out.println(player.name + " "+ item.name);
-				float dur = wini.get(item.name, "durability", Float.class);
-				item.durability = dur;
-				player.inventory.addItem(item);
-				if (wini.get(item.name, "isEquipted", Boolean.class)){
-					player.equip(item);
+				float dur = wini.get(itemC.name, "durability", Float.class);
+				itemC.durability = dur;
+				player.inventory.addItem(itemC);
+				for (int i = 0; i < itemC.valueNum; i ++)
+					itemC.values.add(wini.get(itemC.name, "value " + i));
+				if (wini.get(itemC.name, "isEquipted", Boolean.class)){
+					player.equip(itemC);
 				}
 			}
 

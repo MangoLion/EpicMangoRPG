@@ -21,6 +21,7 @@ public class SkillHardAim extends Skill {
 
 	public SkillHardAim() {
 		super("Hard Aim", "Focuses intently on the enemy while aiming, in addition to 8% accuracy increase, it also gives a 10% dex bonus for the skill duration. ",Weapons.Gun, ActionType.RangeNormal);
+		shopPrice = 10;
 		addSteps(new Step(this, "Hard Aim", "",ActionType.RangeNormal, 0.8f, 0.1f, 0.15f,1){
 			
 			public void init() {

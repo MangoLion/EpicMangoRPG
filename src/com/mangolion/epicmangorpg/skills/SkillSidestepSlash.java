@@ -15,6 +15,7 @@ public class SkillSidestepSlash extends Skill {
 
 	public SkillSidestepSlash() {
 		super("Sidestep Slash", "Allows for a sidestep and attack at the same time.",Weapons.Bladed, ActionType.Dodge);
+		shopPrice = 30;
 		addSteps(new StepSlashDodge(this, "Sidestep Slash", "",0.3f,
 				0.4f, 0.2f, 0.6f) {
 

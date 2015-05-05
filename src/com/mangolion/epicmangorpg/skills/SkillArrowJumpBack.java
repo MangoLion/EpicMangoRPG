@@ -23,6 +23,7 @@ public class SkillArrowJumpBack extends Skill{
 	public SkillArrowJumpBack() {
 		super("Jump Back Arrow", "Jumping backwards to reduce 25% of the damage taken, while loosing an arrow at point blank.",Weapons.Bow, ActionType.Defend);
 		setObservable(true, 0.7f);
+		shopPrice = 40;
 		addSteps(new Step(this, "Jump Back Arrow", "",  ActionType.Defend, 0.2f, 0.3f, 0.4f, 1.2f){
 			
 			@Override

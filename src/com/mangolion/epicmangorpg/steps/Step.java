@@ -87,8 +87,10 @@ public abstract class Step implements Cloneable, StatBuff {
 				return false;				
 			}
 		}
-		if (getCharacter().getSp() <stamCost*(prof + 1) || getCharacter().getMp() < mpCost*(prof + 1) || getCharacter().getBal() < balCost*(prof + 1) || getCharacter().getHp() < hpCost*(prof + 1) || (getCharacter().weapon.useAmmo && getCharacter().weapon.ammo < ammoUse))
+		if (getCharacter().getSp() <stamCost*(prof + 1) || getCharacter().getMp() < mpCost*(prof + 1) || getCharacter().getBal() < balCost*(prof + 1) || getCharacter().getHp() < hpCost*(prof + 1) || (getCharacter().weapon.useAmmo && getCharacter().weapon.ammo < ammoUse)){
+			Utility.narrate("You do not have enough sp/mp to use " + name);
 			return false;
+		}
 		return true;
 	}
 	
@@ -129,12 +131,16 @@ public abstract class Step implements Cloneable, StatBuff {
 				skilDmg = skill.getTotalDamagePercent()+1;
 		dmgBase -= subtractDamage;
 		subtractDamage = 0;
+		if (strBased){
+		if (getCharacter().weapon.checkType(Weapons.Bow))
+			return (getDmgPercent()*(getCharacter().weapon.bowDamage + dmgBase)*getCharacter().weapon.gunMod)*skilDmg;
 		if (getCharacter().weapon.checkType(Weapons.Gun))
 			return (getDmgPercent()*(getCharacter().weapon.gunDamage + dmgBase)*getCharacter().weapon.gunMod)*skilDmg;
 		if (getCharacter().weapon.checkType(Weapons.Cylinder))
 			return (getDmgPercent()*(getCharacter().weapon.alchemyDamage + dmgBase)*getCharacter().weapon.alchemyMod)*skilDmg;
-		if (strBased)
+		else
 			return ((getCharacter().weapon.baseDamage + dmgBase + getCharacter().getStrDamage())*getDmgPercent()*getCharacter().weapon.meleeDamageModifier)*skilDmg;
+		}
 		else
 			return ((getCharacter().weapon.baseMagicDmg + dmgBase + getCharacter().getIntDamage())*getDmgPercent()*getCharacter().weapon.baseMagicDmgMod)*skilDmg;
 	}

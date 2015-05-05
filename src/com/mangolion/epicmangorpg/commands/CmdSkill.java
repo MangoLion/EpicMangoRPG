@@ -19,13 +19,14 @@ public class CmdSkill extends CommandCombo{
 		LinkedList<Command> results = new LinkedList<Command>();
 		Character character = Game.getInstance().getCharacter(previous.getFirst().getSelectedCommand().text);
 		for (final Skill skill: character.skills){
-			results.add(new Command(skill.name, Command.COMBOBOX, new ActionListener() {
+			results.add(new Command(skill.name, Command.COMBOBOX) {
 				
 				@Override
-				public void actionPerformed(ActionEvent e) {
-					skill.execute();
+				public boolean execute() {
+					// TODO Auto-generated method stub
+					return skill.execute();
 				}
-			}) {
+				
 				@Override
 				public CommandHandler getNextCommand() {
 					// TODO Auto-generated method stub

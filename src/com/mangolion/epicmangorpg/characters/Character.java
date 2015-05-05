@@ -7,6 +7,7 @@ import java.util.Random;
 
 import com.mangolion.epicmangorpg.ais.AI;
 import com.mangolion.epicmangorpg.components.ActionType;
+import com.mangolion.epicmangorpg.components.Drop;
 import com.mangolion.epicmangorpg.components.Element;
 import com.mangolion.epicmangorpg.components.GeneralType;
 import com.mangolion.epicmangorpg.components.LogMsg;
@@ -15,7 +16,9 @@ import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.game.StylePainter;
 import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.items.Inventory;
+import com.mangolion.epicmangorpg.items.Item;
 import com.mangolion.epicmangorpg.items.ItemCustom;
+import com.mangolion.epicmangorpg.items.Items;
 import com.mangolion.epicmangorpg.messages.Msg;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.Skills;
@@ -37,15 +40,16 @@ public class Character implements Cloneable {
 	public Weapon weapon;
 	public boolean isPlayer = false,
 								isAllied = false,
-								isDead = false,
 								isSupporter = false,
 								isBoss = false,
-								isShop = false;
+								isShop = false,
+								isDead = false;
 	public Armor head, body, legs, feet, robe, hands, accessory;
 	public AI ai;
 	public Inventory inventory = new Inventory();
-
-	public float str, agi,  inte, dex, maxHP, maxMP, maxSP, maxBal, prot, def, meleeSpeedMod = 1, magicSpeedMod = 1, hpRegen = 0, mpRegen =0.05f, spRegen = 0.1f, balRegen = 0.1f, cpBase = 0 , learnRate = 0;;
+	public LinkedList<Drop> drops = new LinkedList<Drop>();
+	
+	public float str, agi,  inte, dex, maxHP, maxMP, maxSP, maxBal, prot, def, meleeSpeedMod = 1, magicSpeedMod = 1, hpRegen = 0, mpRegen =0.05f, spRegen = 0.1f, balRegen = 0.1f, cpBase = 0 , learnRate = 0, crystals = 0;;
 	float hp, mp, sp, bal;
 	LinkedList<Element> elements = new LinkedList<Element>();
 	public int chargeNum = 0;
@@ -81,6 +85,8 @@ public class Character implements Cloneable {
 		this.desc = desc;
 		addSkills(skills);
 		equip(weapon);
+		
+		addDrop(Items.arrow, 0.5f);
 	}
 
 	public void addSkills(Skill... skills) {
@@ -324,11 +330,37 @@ public class Character implements Cloneable {
 		if (hp <= 0){
 			Utility.narrate(name + " has been defeated by " + source + "\n");
 			isDead = true;
+			if (!isAllied && source.equals(CharacterPlayer.instance))
+				giveDrop();
 			//if (Game.getInstance().charsAllies.size() == 0 || Game.getInstance().charsEnemies.size() == 0)
 			//	Game.getInstance().;
 		}
 		return cdmg;
 		}
+	
+	public void giveDrop(){
+		for (Drop  drop: drops)
+			if (rand.nextFloat() <= drop.chance){
+				if (drop.item != null){
+					Utility.narrate("You received " + drop.item.name);
+					CharacterPlayer.instance.inventory.addItem(drop.item, 1);
+				}
+				else{
+					Utility.narrate("You received " + drop.itemCustom.name);
+					CharacterPlayer.instance.inventory.addItem(drop.itemCustom);
+				}
+			}
+	}
+	
+	public void addDrop(Item item, float chance){
+		drops.add(new Drop(item, chance));
+		inventory.addItem(item, 1);
+	}
+	
+	public void addDrop(ItemCustom item, float chance){
+		drops.add(new Drop(item, chance));
+		inventory.addItem(item);
+	}
 	
 	public float setDamage(Character source, float damage) {
 		float cdmg = (damage - def)*(100 - prot)/100;
@@ -342,6 +374,8 @@ public class Character implements Cloneable {
 			Utility.narrate(name + " has been defeated by " + source.name + "\n");
 			Game.getInstance().removeChar(this);
 			isDead = true;
+			if (!isAllied && source.equals(CharacterPlayer.instance))
+				giveDrop();
 			//if (Game.getInstance().charsAllies.size() == 0 || Game.getInstance().charsEnemies.size() == 0)
 				//Game.getInstance().begin();
 		}
@@ -457,6 +491,10 @@ public class Character implements Cloneable {
 		prot  *= scale;
 		agi  *= scale;
 		
+	}
+	
+	public void changeCrystal(float num){
+		crystals = Utility.format(crystals + num);//Math.round(num);
 	}
 	
 	public float getAccuracy(Character target){

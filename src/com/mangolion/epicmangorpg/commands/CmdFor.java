@@ -19,13 +19,11 @@ public class CmdFor extends CommandInput{
 	public Command getSelectedCommand() {
 		final Character character = Game.getInstance().getCharacter(previous.getFirst().getSelectedCommand().text);
 		final Skill skill = character.getSkill(previous.get(3).getSelectedCommand().text);
-		return new Command("Input", Command.INPUT, new ActionListener() {
-			
+		return new Command("Input", Command.INPUT) {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				skill.execute(null, Float.valueOf(getText()));
+			public boolean execute() {
+				return skill.execute(null, Float.valueOf(getText()));
 			}
-		}) {
 		};
 	}
 	

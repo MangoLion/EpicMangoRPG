@@ -22,18 +22,16 @@ public class CmdEnter extends CommandCombo{
 		LinkedList<Command> results = new LinkedList<Command>();
 		for (Character character: Game.getInstance().getAllChars()){
 			if (character != CharacterPlayer.instance)
-			results.add(new Command(character.name, Command.COMBOBOX, new ActionListener() {
-				
+			results.add(new Command(character.name, Command.COMBOBOX) {
 				@Override
-				public void actionPerformed(ActionEvent e) {
+				public boolean execute() {
 					Character character = Game.getInstance().getCharacter(previous.get(2).getSelectedCommand().text);
 					if (character.isShop)
 						character.openShop();
 					else
 						Utility.narrate(character.name + " is not a shop!");
+					return true;
 				}
-			}) {
-				
 			});
 		}
 		

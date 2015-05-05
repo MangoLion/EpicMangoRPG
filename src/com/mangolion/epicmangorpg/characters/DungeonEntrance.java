@@ -2,6 +2,7 @@ package com.mangolion.epicmangorpg.characters;
 
 import com.mangolion.epicmangorpg.ais.AIFlight;
 import com.mangolion.epicmangorpg.ais.AISimple;
+import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.SkillFlight;
 import com.mangolion.epicmangorpg.skills.SkillKickBasic;
@@ -19,6 +20,13 @@ public class DungeonEntrance extends Character{
 	public DungeonEntrance() {
 		super("Dungeon Entrance", "Attack or enter it to enter the dungeon",100, 100, 100, 40, 10, 100, 10, 10,0,0, new Barehands());
 		isShop = true;
+	}
+	
+	@Override
+	public void openShop() {
+		Game.getInstance().currentFloor ++;
+		Game.getInstance().begin();
+		super.openShop();
 	}
 
 }

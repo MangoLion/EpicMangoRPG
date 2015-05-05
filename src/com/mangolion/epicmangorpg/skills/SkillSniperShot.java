@@ -17,6 +17,7 @@ public class SkillSniperShot extends Skill {
 
 	public SkillSniperShot() {
 		super("Sniper Shot", "Focus and takes time aiming at target's weakspot, higher crit chance. The weapon's automatic mode is automatically turned off.",Weapons.Gun, ActionType.RangeNormal);
+		shopPrice = 30;
 		addSteps(new Step(this, "Sniper Shot", "",ActionType.RangeNormal, 0.9f, 0.1f, 0.1f,1.5f){
 			
 			public boolean checkConndition() {

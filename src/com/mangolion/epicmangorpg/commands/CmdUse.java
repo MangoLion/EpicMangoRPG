@@ -17,14 +17,15 @@ public class CmdUse extends CommandCombo {
 	@Override
 	public LinkedList<Command> getSubCommands() {
 		LinkedList<Command> result = new LinkedList<Command>();
-		result.add(new Command("Use", Command.COMBOBOX, null){
+		if (Game.getInstance().currentFloor != 0 || Game.getInstance().timeLimit <= 15)
+		result.add(new Command("Use", Command.COMBOBOX){
 			@Override
 			public CommandHandler getNextCommand() {
 				// TODO Auto-generated method stub
 				return new CmdSkillItem(previous);
 			}
 		});
-		result.add(new Command("Enter", Command.COMBOBOX, null){
+		result.add(new Command("Enter", Command.COMBOBOX){
 			@Override
 			public CommandHandler getNextCommand() {
 				// TODO Auto-generated method stub

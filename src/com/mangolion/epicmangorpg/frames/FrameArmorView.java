@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 
 import com.mangolion.epicmangorpg.characters.Character;
+import com.mangolion.epicmangorpg.characters.CharacterPlayer;
 import com.mangolion.epicmangorpg.weapons.Armor;
 
 import java.awt.Font;
@@ -30,12 +31,12 @@ public class FrameArmorView extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public FrameArmorView(final	Armor armor, final Character character) {
-		super("", true, true, true, true);
+		super(armor.name, true, true, true, true);
 		FrameGame.getInstance().addFrame(this);
 		
 		this.armor = armor;
 		this.character = character;
-		
+		boolean isPlayer = (character == CharacterPlayer.instance);
 		setBounds(100, 100, 438, 264);
 		Point pt = FrameGame.getInstance().getMousePos();
 		setLocation(pt.x - getWidth()/2, pt.y - getHeight()/2);
@@ -71,6 +72,7 @@ public class FrameArmorView extends JInternalFrame {
 		JButton btnEquip = new JButton("Equip");
 		btnEquip.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		btnEquip.setBounds(262, 125, 150, 23);
+		btnEquip.setEnabled(isPlayer);
 		btnEquip.addActionListener(new ActionListener() {
 			
 			@Override
@@ -86,7 +88,7 @@ public class FrameArmorView extends JInternalFrame {
 		btnViewStatBuffs.setBounds(262, 166, 150, 23);
 		contentPane.add(btnViewStatBuffs);
 		
-		tfDesc.setText(armor.desc);
+		tfDesc.setText(armor.getDesc());
 		
 		lblDurability.setText("Durability: " + armor.durability);
 		lblDef.setText("Defense Bonus: " + armor.getDefBuff());

@@ -6,7 +6,7 @@ public class LeatherJacket extends Armor{
 
 	public LeatherJacket() {
 		super("Leather Jacket", "", 10, BODY, 6, 3, -5);
-		// TODO Auto-generated constructor stub
+		price = 8;
 	}
 
 }

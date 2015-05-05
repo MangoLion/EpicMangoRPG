@@ -173,7 +173,6 @@ public class Skill implements StatBuff {
 				check = step.checkConndition(this.aug);
 			if (!check){
 				if (character == CharacterPlayer.instance)
-					Utility.narrate("You do not have enough sp/mp to use " + name);
 				return false;
 			}
 			

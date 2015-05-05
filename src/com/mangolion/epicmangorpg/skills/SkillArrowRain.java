@@ -17,6 +17,7 @@ public class SkillArrowRain extends Skill {
 		super("Arrow Rain", "",Weapons.Bow, ActionType.RangeNormal);
 		setObservable(true, 0.7f);
 		hasTarget = false;
+		shopPrice = 80;
 		addSteps(new Step(this, "Arrow Rain(First)", "",ActionType.RangeNormal, 01f, 0.1f, 0.1f,1){
 			
 			@Override

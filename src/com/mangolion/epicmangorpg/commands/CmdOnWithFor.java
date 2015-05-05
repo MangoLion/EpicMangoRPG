@@ -21,7 +21,7 @@ public class CmdOnWithFor extends CommandCombo {
 		Character character = Game.getInstance().getCharacter(previous.getFirst().getSelectedCommand().text);
 		Skill skill = character.getSkill(previous.get(3).getSelectedCommand().text);
 		if (skill.hasTarget)
-		result.add(new Command("On", Command.COMBOBOX, null){
+		result.add(new Command("On", Command.COMBOBOX){
 			@Override
 			public CommandHandler getNextCommand() {
 				// TODO Auto-generated method stub
@@ -29,7 +29,7 @@ public class CmdOnWithFor extends CommandCombo {
 			}
 		});
 		if (skill.hasArg)
-		result.add(new Command("With", Command.COMBOBOX, null){
+		result.add(new Command("With", Command.COMBOBOX){
 			@Override
 			public CommandHandler getNextCommand() {
 				// TODO Auto-generated method stub
@@ -37,7 +37,7 @@ public class CmdOnWithFor extends CommandCombo {
 			}
 		});
 		if (skill.customTime)
-		result.add(new Command("For", Command.COMBOBOX, null){
+		result.add(new Command("For", Command.COMBOBOX){
 			@Override
 			public CommandHandler getNextCommand() {
 				// TODO Auto-generated method stub

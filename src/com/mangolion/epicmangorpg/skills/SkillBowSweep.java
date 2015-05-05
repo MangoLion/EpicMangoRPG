@@ -17,6 +17,7 @@ public class SkillBowSweep extends Skill {
 
 	public SkillBowSweep() {
 		super("Bow Sweep", "Use the bow and sweep the target over its feet, taking away its balance",Weapons.Bow, ActionType.MeleeSwing);
+		shopPrice = 10;
 		addSteps(new StepMeleeSlash(this, "Bow Sweep","", 0.4f,
 				0.2f, 0.2f,0.7f) {
 			public float getStrBuff() {

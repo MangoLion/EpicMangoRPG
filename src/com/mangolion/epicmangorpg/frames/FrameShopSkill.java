@@ -17,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
+import com.mangolion.epicmangorpg.characters.CharacterPlayer;
 import com.mangolion.epicmangorpg.floors.FloorTrainning;
 import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.items.Item;
@@ -32,19 +33,18 @@ public class FrameShopSkill extends JInternalFrame {
 	JList<Step>listSteps;
 	DefaultListModel<Step>modelSteps = new DefaultListModel<Step>();
 	JTextArea lblDesc;
-	JLabel lblTotalTime, lblCost, lblTotalDamage, lblProficiency;
-	private JLabel lblCp;
+	JLabel lblTotalTime, lblCost, lblTotalDamage;
 	private JLabel lblName;
 	private JScrollPane scrollPane;
 	private JList<Skill> listSkills;
 	DefaultListModel<Skill> model = new DefaultListModel<Skill>();
-	private JLabel lblSkills;
+	private JLabel lblSkills, lblAoe, lblPrice;
 	private JButton btnBuySession;
 	public FrameShopSkill(String title, final Weapon weapon, LinkedList<Skill> skills, final Item ammo) {
 		super(title, false, true, true, false);
 		skills.removeLast();
 		FrameGame.getInstance().addFrame(this);
-		setSize(850, 490);
+		setSize(591, 490);
 		Point pt = FrameGame.getInstance().getMousePos();
 		//setLocation(pt.x - getWidth()/2, pt.y - getHeight()/2);
 		getContentPane().setLayout(null);
@@ -58,7 +58,7 @@ public class FrameShopSkill extends JInternalFrame {
 		
 		lblTotalTime = new JLabel("Total Time:");
 		lblTotalTime.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
-		lblTotalTime.setBounds(256, 149, 312, 14);
+		lblTotalTime.setBounds(256, 149, 144, 14);
 		getContentPane().add(lblTotalTime);
 		
 		lblCost = new JLabel("Costs:");
@@ -72,7 +72,7 @@ public class FrameShopSkill extends JInternalFrame {
 		getContentPane().add(lblTotalDamage);
 		
 		JScrollPane scrollSteps = new JScrollPane();
-		scrollSteps.setBounds(256, 249, 312, 158);
+		scrollSteps.setBounds(256, 254, 312, 158);
 		getContentPane().add(scrollSteps);
 		
 		JLabel lblSteps = new JLabel("Steps");
@@ -94,21 +94,11 @@ public class FrameShopSkill extends JInternalFrame {
 		});
 		scrollSteps.setViewportView(listSteps);
 		
-		lblProficiency = new JLabel("Proficiency:");
-		lblProficiency.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
-		lblProficiency.setBounds(256, 224, 312, 14);
-		getContentPane().add(lblProficiency);
-		
-		lblCp = new JLabel("CP:");
-		lblCp.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
-		lblCp.setBounds(406, 224, 160, 14);
-		getContentPane().add(lblCp);
-		
 		JButton btnViewStatBuffs = new JButton("View Stat Buffs");
 		btnViewStatBuffs.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		btnViewStatBuffs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new FrameBuffInfo(skill, skill.getProf());
+				new FrameBuffInfo(skill, 0.01f);
 			}
 		});
 		btnViewStatBuffs.setBounds(406, 195, 160, 23);
@@ -146,10 +136,22 @@ public class FrameShopSkill extends JInternalFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Game.getInstance().begin(new FloorTrainning(listSkills.getSelectedValue(), weapon, ammo));
+				float cost = skill.shopPrice;
+				if (CharacterPlayer.instance.crystals >= cost){
+					CharacterPlayer.instance.changeCrystal(-cost);
+					Game.getInstance().begin(new FloorTrainning(listSkills.getSelectedValue(), weapon, ammo));					
+				}
 			}
 		});
 		getContentPane().add(btnBuySession);
+		
+		 lblAoe = new JLabel("AOE:");
+		lblAoe.setBounds(406, 150, 162, 14);
+		getContentPane().add(lblAoe);
+		
+		lblPrice = new JLabel("Price:");
+		lblPrice.setBounds(256, 224, 310, 14);
+		getContentPane().add(lblPrice);
 		
 		skill = skills.getFirst();
 		for (Skill skill: skills)
@@ -164,12 +166,12 @@ public class FrameShopSkill extends JInternalFrame {
 	
 	public void refresh(){
 		lblName.setText(skill.name);
+		lblAoe.setText("AOE: " + skill.steps.getFirst().isAOE);
+		lblPrice.setText("Price: " + skill.shopPrice +  " crystals");
 		lblDesc.setText( skill.desc);
 		lblTotalTime.setText("Total Time: " + skill.getTotalTime() + " seconds");
 		lblCost.setText("Cost: [hp - " + skill.getTotalHPCost() + "] [mp - " + skill.getTotalMPCost() + "] [sp - "+ skill.getTotalSPCost() + "] [bal - " +skill.getTotalBalCost()+"]");
 		lblTotalDamage.setText("Damage: " + skill.getTotalDamage() + "(" + skill.getTotalDamagePercent()*100 + "%)");
-		lblCp.setText("CP: " + skill.getCP());
-		lblProficiency.setText("Prof: "+ skill.getProf()*100 + "%" );
 		modelSteps.clear();
 		for (Step step: skill.steps)
 			modelSteps.addElement(step);

@@ -19,6 +19,7 @@ public class SkillSidestepShoot extends Skill {
 
 	public SkillSidestepShoot() {
 		super("Sidestep Shoot", "Allows for a sidestep and shoot at the same time.",Weapons.Reloadable, ActionType.Dodge);
+		shopPrice = 30;
 		addSteps(new StepShootDodge(this, "Sidestep Shoot", "",0.3f,
 				0.4f, 0.2f, 1) {
 

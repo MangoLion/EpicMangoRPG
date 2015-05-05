@@ -22,7 +22,7 @@ String item;
 		Character character = Game.getInstance().getCharacter(previous.getFirst().getSelectedCommand().text);
 		Item item = character.inventory.getItem(previous.get(3).getSelectedCommand().text).item;
 		if (item.hasTarget)
-		result.add(new Command("On", Command.COMBOBOX, null){
+		result.add(new Command("On", Command.COMBOBOX){
 			@Override
 			public CommandHandler getNextCommand() {
 				// TODO Auto-generated method stub

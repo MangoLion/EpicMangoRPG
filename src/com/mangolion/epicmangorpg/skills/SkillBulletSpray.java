@@ -18,6 +18,7 @@ public class SkillBulletSpray extends Skill {
 
 	public SkillBulletSpray() {
 		super("Bullet Spray", "Empties the remaining bullets in your clip to all enemies, very rapidly but low accuracy",Weapons.Gun, ActionType.RangeNormal);
+		shopPrice = 80;
 		hasTarget = false;
 		addSteps(new Step(this, "Bullet Spray", "",ActionType.RangeNormal, 0.3f, 0.1f, 0f,1){
 			

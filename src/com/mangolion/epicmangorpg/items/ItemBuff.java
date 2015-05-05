@@ -15,8 +15,8 @@ public class ItemBuff extends Item{
 	
 	public float value;
 	
-	public ItemBuff( String name, String desc, Subtype type, float value, int maxStack) {
-		super(name, desc, Type.ChangeStat, maxStack);
+	public ItemBuff( String name, String desc, Subtype type, float value, int maxStack, float price) {
+		super(name, desc, Type.ChangeStat, maxStack, price);
 		// TODO Auto-generated constructor stub
 	}
 

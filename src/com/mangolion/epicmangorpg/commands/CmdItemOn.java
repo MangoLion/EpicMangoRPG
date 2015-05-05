@@ -18,17 +18,14 @@ public class CmdItemOn extends CommandCombo{
 	public LinkedList<Command> getSubCommands() {
 		LinkedList<Command> results = new LinkedList<Command>();
 		for (final Character target: Game.getInstance().getAllChars()){
-			results.add(new Command(target.name, Command.COMBOBOX, new ActionListener() {
-				
+			results.add(new Command(target.name, Command.COMBOBOX) {
 				@Override
-				public void actionPerformed(ActionEvent e) {
+				public boolean execute() {
 					Character character = Game.getInstance().getCharacter(previous.getFirst().getSelectedCommand().text);
 					String item= previous.get(previous.size()-3).getSelectedCommand().text;
 							final Skill skill = character.getSkill("Use Item");
-					skill.execute(target, item);
+					return  skill.execute(target, item);
 				}
-			}) {
-
 			});
 		}
 		

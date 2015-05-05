@@ -3,6 +3,8 @@ package com.mangolion.epicmangorpg.items;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import com.mangolion.epicmangorpg.characters.CharacterPlayer;
+
 public class Inventory {
 	public LinkedList<ItemStack> itemStacks = new LinkedList<ItemStack>();
 	public LinkedList<ItemCustom> itemCustoms = new LinkedList<ItemCustom>();
@@ -19,6 +21,8 @@ public class Inventory {
 			}
 		}
 		while (left > 0){
+			if (CharacterPlayer.instance != null && this == CharacterPlayer.instance.inventory)
+			System.out.println("No current stack - " + item.name);
 			ItemStack stack = new ItemStack(this, item, 0);
 			while (left > 0 && stack.stack < item.maxStack){
 				stack.stack ++;
@@ -64,6 +68,19 @@ public class Inventory {
 			if (itemStack.item.name.toLowerCase().equals(name.toLowerCase()))
 				return itemStack;
 		return null;
+	}
+
+	public LinkedList<Item> getAllItems() {
+		LinkedList<Item> result = new LinkedList<Item>();
+		for (ItemStack stack: itemStacks){
+			boolean added = false;
+			for (Item item: result)
+				if (item == stack.item)
+					added = true;
+			if (!added)
+				result.add(stack.item);
+		}
+		return result;
 	}
 	
 }

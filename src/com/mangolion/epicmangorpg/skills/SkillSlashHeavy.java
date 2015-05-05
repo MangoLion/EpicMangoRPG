@@ -18,6 +18,7 @@ public class SkillSlashHeavy extends Skill {
 
 	public SkillSlashHeavy() {
 		super("Heavy Slash", "A deadly and crushing slash, will stun, but leaves alot of openings.",Weapons.GreatSword, ActionType.MeleeSwing);
+		shopPrice = 20;
 		addSteps(new StepSlashHeavy(this, "Heavy Slash","",1f,
 				0.8f, 0.7f, 3) {}.setCost(25, 0, 12, 0));
 		setObservable(true, 0.8f);

@@ -63,6 +63,7 @@ public class FrameCharacterInfo extends JInternalFrame {
 		lblAgi.setText("Agi: " + String.valueOf(character.getAgi()));
 		lblDef.setText("Def: " + String.valueOf(character.getDef()));
 		lblProt.setText("Prot: " + String.valueOf(character.getProt()));
+		lblCrystals.setText("Crystals: " + String.valueOf(character.crystals));
 		if (character == CharacterPlayer.instance)
 			lblCp.setText("CP: " + character.getCP());
 		else
@@ -149,7 +150,7 @@ public class FrameCharacterInfo extends JInternalFrame {
 	}
 	
 	JProgressBar pbSP, pbHP, pbMP, pbBal;
-	JLabel lblStr, lblAgi, lblInt, lblDex, lblDef, lblProt, lblCp,
+	JLabel lblStr, lblAgi, lblInt, lblDex, lblDef, lblProt, lblCp, lblCrystals,
 		lblIce, lblWater, lblLightning, lblFire, lblEarth, lblWind, lblLava, lblLight, lblDark, lblElement;
 	JList<Skill>listSkill;
 	JList<Status>listStatus;
@@ -309,7 +310,11 @@ public class FrameCharacterInfo extends JInternalFrame {
 				inventory.setVisible(true);
 			}
 		});
-		btnInventory.setBounds(349, 129, 109, 23);
+		
+		if (character != CharacterPlayer.instance)
+			btnInventory.setText("Drops");
+		
+		btnInventory.setBounds(120, 138, 100, 23);
 		contentPane.add(btnInventory);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
@@ -476,7 +481,7 @@ public class FrameCharacterInfo extends JInternalFrame {
 		
 		JButton btnEquipments = new JButton("Equipments");
 		btnEquipments.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		btnEquipments.setBounds(349, 95, 109, 23);
+		btnEquipments.setBounds(10, 138, 109, 23);
 		btnEquipments.addActionListener(new ActionListener() {
 			
 			@Override
@@ -485,6 +490,11 @@ public class FrameCharacterInfo extends JInternalFrame {
 			}
 		});
 		contentPane.add(btnEquipments);
+		
+		lblCrystals = new JLabel("Crystals");
+		lblCrystals.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
+		lblCrystals.setBounds(249, 111, 209, 23);
+		contentPane.add(lblCrystals);
 		
 		addMouseListener(new MouseAdapter() {
 			@Override

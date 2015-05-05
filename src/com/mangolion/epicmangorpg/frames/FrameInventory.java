@@ -74,6 +74,7 @@ public class FrameInventory extends JInternalFrame {
 							new FrameArmorView((Armor) item, character).setVisible(true);
 						else if (item instanceof Weapon)
 							new FrameWeaponView((Weapon) item, character).setVisible(true);
+						else new FrameViewItemCustom(item);
 				}
 				super.mouseClicked(e);
 			}

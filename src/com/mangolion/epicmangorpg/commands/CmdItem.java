@@ -21,14 +21,13 @@ public class CmdItem extends CommandCombo{
 		final Character character = Game.getInstance().getCharacter(previous.getFirst().getSelectedCommand().text);
 		final Skill skill = character.getSkill("Use Item");
 		for (final String str: skill.getArguments())
-			results.add(new Command(str, Command.COMBOBOX, new ActionListener() {
-
+			results.add(new Command(str, Command.COMBOBOX){
+				
 				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					skill.execute(character, str.toLowerCase());
+				public boolean execute() {
+					return skill.execute(character, str.toLowerCase());
 				}
 				
-			}){
 				@Override
 				public CommandHandler getNextCommand() {
 					System.out.println("created next");

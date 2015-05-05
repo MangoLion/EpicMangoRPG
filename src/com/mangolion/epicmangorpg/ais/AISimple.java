@@ -25,6 +25,12 @@ public class AISimple extends AI {
 	
 	@Override
 	public void nextAction() {
+		if (character.target == null){
+			Utility.narrate(character.name + " decided to stay idle this turn");
+			character.ai = null;
+			return;
+		}
+		
 		if (!checkRecovery())
 		if (!checkDefense())
 		if (!executeSkill(GeneralType.Attack))

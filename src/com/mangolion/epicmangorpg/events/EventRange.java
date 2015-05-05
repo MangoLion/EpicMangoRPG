@@ -40,6 +40,9 @@ public class EventRange extends Event{
 	
 	@Override
 	public void execute() {
+		if (target == null)
+			return;
+		
 		if (!isAOE && !calculateChance(target)){
 			step.damage(target);
 			super.execute();

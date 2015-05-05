@@ -6,7 +6,7 @@ public class LeatherGloves extends Armor{
 
 	public LeatherGloves() {
 		super("Leather Gloves", "", 10, HAND, 3, 1.5f, -2);
-		// TODO Auto-generated constructor stub
+		price = 5;
 	}
 
 }

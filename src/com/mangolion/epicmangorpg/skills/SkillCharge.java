@@ -18,7 +18,8 @@ public class SkillCharge extends Skill {
 	
 	
 	public SkillCharge() {
-		super("Charge", "",Weapons.ALL, ActionType.MeleeBlock);
+		super("Charge", "Raise your weapon defensively and charges towards the target, you will block most attacks while the skill is activated, and slam into the target, stunning them",Weapons.ALL, ActionType.MeleeBlock);
+		shopPrice = 30;
 		addSteps(new Step(this, "Charge Run", "",ActionType.MeleeBlock, 0.5f, 0.5f, 0f,0) {
 public void execute(Character target, float time) {
 	super.execute(target, time);

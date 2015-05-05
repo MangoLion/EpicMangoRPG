@@ -41,7 +41,7 @@ public class Game {
 	public Weather weather;
 	public Terrain terrain;
 	public float timePassed = 0, lastWeatherTick = 0, timeSinceTick = 0,
-			floorPercent = 0, timeLimit = 0;
+			floorPercent = 0, timeLimit = 0, endCounter = 0;
 	public boolean nextFloor = true, lastFloor = false, firstBattle = true;
 	LinkedList<Character> toAdd = new LinkedList<Character>();
 	public Timer timer = new Timer(100, new ActionListener() {
@@ -109,7 +109,7 @@ public class Game {
 	}
 
 	public void begin(final Floor floor) {
-		
+		endCounter = 0;
 		if (!firstBattle) {
 			saveGame();
 		} else
@@ -138,6 +138,7 @@ public class Game {
 				for (FrameCharacterInfo info : FrameGame.instance.charInfos)
 					info.dispose();
 				frame = FrameGame.instance;
+				frame.charInfos.clear();
 				JInternalFrame[] frames = frame.desktopPane.getAllFrames();
 				for (JInternalFrame frame : frames)
 					frame.dispose();
@@ -208,7 +209,6 @@ public class Game {
 				for (Character character : allChars) {
 					addTick(character, rand.nextFloat(), Tick.ACTION);
 				}
-				System.out.println(charsEnemies.size());
 				frame.updateInfoTab();
 				/*
 				 * for (Character character : charsEnemies) { addTick(character,
@@ -289,7 +289,7 @@ public class Game {
 			if (iterator.next().character == character)
 				;
 	}
-
+	
 	public void tick(Tick tick) {
 		if (tick.character.isStunned()) {
 			// addTick(tick.character, 0.1f, Tick.ACTION);
@@ -347,8 +347,13 @@ public class Game {
 
 		if (Game.getInstance().charsAllies.size() == 0
 				|| Game.getInstance().charsEnemies.size() == 0) {
-			begin();
-			return;
+			if (endCounter == 0)
+				Utility.narrate("A new battle will start in 2 seconds");
+			endCounter += 0.01;
+			if (endCounter > 2){
+				begin();
+				return;
+			}
 		}
 
 		LinkedList<Event> evtoExecute = new LinkedList<>();
@@ -402,7 +407,7 @@ public class Game {
 					if (c.getTarget() == character)
 						return c;
 				return charsEnemies.get(rand.nextInt(charsEnemies.size()));
-			} else
+			} else if (charsEnemies.size() > 0)
 				return charsEnemies.getFirst();
 
 		}
@@ -412,7 +417,7 @@ public class Game {
 					if (c.target == character)
 						return c;
 				return charsAllies.get(rand.nextInt(charsAllies.size()));
-			} else
+			} else if (charsAllies.size() > 0)
 				return charsAllies.getFirst();
 		}
 

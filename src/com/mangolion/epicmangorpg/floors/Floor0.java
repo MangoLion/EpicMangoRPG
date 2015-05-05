@@ -2,6 +2,8 @@ package com.mangolion.epicmangorpg.floors;
 
 import com.mangolion.epicmangorpg.characters.AdventurerNewb;
 import com.mangolion.epicmangorpg.characters.AlchemistAcademy;
+import com.mangolion.epicmangorpg.characters.BlacksmithShop;
+import com.mangolion.epicmangorpg.characters.GeneralStore;
 import com.mangolion.epicmangorpg.characters.RangeArcher;
 import com.mangolion.epicmangorpg.characters.BirdGiant;
 import com.mangolion.epicmangorpg.characters.DungeonEntrance;
@@ -37,6 +39,8 @@ public class Floor0 extends Floor {
 		//addSpawn(RockTurtle.class, 1);
 	//	addSpawn(Dummy.class, 1);
 		
+		addAlly(BlacksmithShop.class, 1);
+		addAlly(GeneralStore.class, 1);
 		addAlly(RangeArcher.class, 1);
 		addAlly(RangeGun.class, 1);
 		addAlly(AlchemistAcademy.class, 1);

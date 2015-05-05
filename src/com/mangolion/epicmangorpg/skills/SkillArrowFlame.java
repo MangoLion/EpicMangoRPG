@@ -18,6 +18,7 @@ public class SkillArrowFlame extends Skill {
 	public SkillArrowFlame() {
 		super("Flaming Arrow", "Fires an arrow lit on fire using  magic.",Weapons.Bow, ActionType.RangeNormal) ;
 		setObservable(true, 0.7f);
+		shopPrice = 60;
 		addSteps(new Step(this, "Flaming Arrow", "", ActionType.RangeNormal, 0.6f, 0.1f, 0.1f,  2f){
 			public float getStrBuff() {
 				// TODO Auto-generated method stub

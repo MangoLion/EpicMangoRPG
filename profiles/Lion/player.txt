@@ -1,0 +1,193 @@
+[general info]
+Name = Lion
+Gender = male
+hp = 60.0
+mp = 60.0
+sp = 80.0
+bal = 60.0
+str = 40.0
+dex = 10.0
+int = 20.0
+agi = 10.0
+def = 0.0
+prot = 0.0
+skills = Block|Basic Kick|Barrel Roll|Slash|Parry|Stab|Wait|Fire Coat|Side Step|Respite|Charge|Jump Back|Use Item|Stab|Combat Mastery|Quick Shot|Reload|Toggle Automatic|Jam Fix|Shoot Arrow|Sword Mastery|Basic Sword Combo|Body Slam|Jump Attack|Gun Mastery|
+
+[Inventory]
+Consumables = Arrow|1|Arrow|1|Arrow|3|Arrow|1|Small Potion|5|Arrow|100|Arrow|100|Bullet|90|Bullet|100|Earth Crystal|100|Fire Crystal|100|Water Crystal|100|Wind Crystal|100|Portal Stone|4|
+ItemCustoms = Long Sword|Basic Cylinder|Basic Machinegun|Sniper Rifle|Basic Semi-automatic Rifle|Short Bow|Copper Dagger|Leather Gloves|Leather Pants|Leather Jacket|Leather Hat|Leather Shoes|Metal Boots|Metal Guantlet|Metal Helm|Plate Armor Lower|Plate Armor Upper|Cloth Robe|Saved Portal Stone|Saved Portal Stone|Saved Portal Stone|Saved Portal Stone|
+
+[Long Sword]
+durability = 10.0
+isEquipted = false
+
+[Basic Cylinder]
+durability = 7.0
+isEquipted = false
+
+[Basic Machinegun]
+durability = 7.0
+isEquipted = false
+
+[Sniper Rifle]
+durability = 7.0
+isEquipted = true
+
+[Basic Semi-automatic Rifle]
+durability = 7.0
+isEquipted = false
+
+[Short Bow]
+durability = 7.0
+isEquipted = false
+
+[Copper Dagger]
+durability = 6.0
+isEquipted = false
+
+[Leather Gloves]
+durability = 10.0
+isEquipted = false
+
+[Leather Pants]
+durability = 10.0
+isEquipted = false
+
+[Leather Jacket]
+durability = 10.0
+isEquipted = false
+
+[Leather Hat]
+durability = 10.0
+isEquipted = false
+
+[Leather Shoes]
+durability = 10.0
+isEquipted = false
+
+[Metal Boots]
+durability = 15.0
+isEquipted = false
+
+[Metal Guantlet]
+durability = 15.0
+isEquipted = false
+
+[Metal Helm]
+durability = 15.0
+isEquipted = false
+
+[Plate Armor Lower]
+durability = 15.0
+isEquipted = false
+
+[Plate Armor Upper]
+durability = 15.0
+isEquipted = false
+
+[Cloth Robe]
+durability = 10.0
+isEquipted = false
+
+[Saved Portal Stone]
+durability = 0.0
+isEquipted = false
+value 0 = 1
+value 1 = 70.0
+
+[Block]
+prof = 0.0
+Step 0 = 0.0
+
+[Basic Kick]
+prof = 0.0
+Step 0 = 0.0
+
+[Barrel Roll]
+prof = 0.0
+Step 0 = 0.0
+
+[Slash]
+prof = 0.0
+Step 0 = 0.0
+
+[Parry]
+prof = 0.0
+Step 0 = 0.0
+
+[Stab]
+prof = 0.0
+Step 0 = 0.0
+
+[Wait]
+prof = 0.0
+Step 0 = 0.0
+
+[Fire Coat]
+prof = 0.0
+Step 0 = 0.0
+
+[Side Step]
+prof = 0.0
+Step 0 = 0.0
+
+[Respite]
+prof = 0.0
+Step 0 = 0.02
+
+[Charge]
+prof = 0.0
+Step 0 = 0.0
+Step 1 = 0.0
+
+[Jump Back]
+prof = 0.0
+Step 0 = 0.0
+
+[Use Item]
+prof = 0.0
+Step 0 = 0.0
+
+[Combat Mastery]
+prof = 0.120300725
+
+[Quick Shot]
+prof = 0.0
+Step 0 = 0.20060146
+
+[Reload]
+prof = 0.0
+Step 0 = 0.0
+
+[Toggle Automatic]
+prof = 0.0
+Step 0 = 0.0
+
+[Jam Fix]
+prof = 0.0
+Step 0 = 0.0
+
+[Shoot Arrow]
+prof = 0.0
+Step 0 = 0.0
+
+[Sword Mastery]
+prof = 0.01
+
+[Basic Sword Combo]
+prof = 0.0
+Step 0 = -0.1
+Step 1 = -0.1
+Step 2 = -0.1
+
+[Body Slam]
+prof = 0.0
+Step 0 = -0.1
+
+[Jump Attack]
+prof = 0.0
+Step 0 = -0.1
+
+[Gun Mastery]
+prof = 0.0
+

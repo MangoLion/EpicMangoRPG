@@ -17,14 +17,15 @@ public abstract class Item {
 	
 	public String name, desc;
 	public int maxStack;
-	public float size, weight, loadTime, executeTime, cooldownTime;
+	public float size, weight, loadTime, executeTime, cooldownTime, price;
 	public boolean consumable = false, hasTarget = false;
 	
-	public Item(String name, String desc, Type type, int maxStack) {
+	public Item(String name, String desc, Type type, int maxStack, float price) {
 		this.name = name;
 		this.desc = desc;
 		this.type = type;
 		this.maxStack = maxStack;
+		this.price = price;
 	}
 	
 	public void setConsumable(float load, float execute, float cd, boolean hastTarget){
@@ -40,7 +41,7 @@ public abstract class Item {
 	}
 	
 	public void onUse(Character character, Character target){
-		
+		onUse(character, target, 0);
 	}
 
 	public void onUse(Character character, float value){

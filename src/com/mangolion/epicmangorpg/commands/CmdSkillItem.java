@@ -17,7 +17,7 @@ public class CmdSkillItem extends CommandCombo {
 	@Override
 	public LinkedList<Command> getSubCommands() {
 		LinkedList<Command> result = new LinkedList<Command>();
-		result.add(new Command("Skill", Command.COMBOBOX, null){
+		result.add(new Command("Skill", Command.COMBOBOX){
 			@Override
 			public CommandHandler getNextCommand() {
 				// TODO Auto-generated method stub
@@ -25,7 +25,7 @@ public class CmdSkillItem extends CommandCombo {
 			}
 		});
 		
-		result.add(new Command("Item", Command.COMBOBOX, null){
+		result.add(new Command("Item", Command.COMBOBOX){
 			@Override
 			public CommandHandler getNextCommand() {
 				// TODO Auto-generated method stub
