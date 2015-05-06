@@ -1,5 +1,5 @@
 [game]
-current floor = 0
+current floor = 1
 last floor = false
 next floor = true
 floor percent = 0.0

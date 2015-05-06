@@ -66,7 +66,9 @@ public abstract class StepMeleeSlash extends Step {
 		if (step == null)
 			return false;
 		if (skill.isLoading) {
-			if (rand.nextInt((int) (100 - target.getBal() / target.maxBal / 2*100)) == 0) {
+			int balCal = (int) (100 - target.getBal() / target.maxBal / 2*100)+ 1;
+			System.out.println("bal: " + balCal);
+			if (rand.nextInt(balCal) == 0) {
 				StylePainter.append(new MsgSkillInterrupt().getMessage(
 						getCharacter(), target, 0));
 				step.cancel();

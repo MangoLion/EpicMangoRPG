@@ -16,7 +16,7 @@ public class SkillArrowRapid extends Skill {
 		super("Rapid Arrow", "Fires 3 arrows consecutively.",Weapons.Bow, ActionType.RangeNormal);
 		setObservable(true, 0.7f);
 		shopPrice = 20;
-		addSteps(new Step(this, "First Arrow", "",ActionType.RangeNormal, 0.6f, 0.1f, 0.1f,0.8f){
+		addSteps(new Step(this, "First Arrow", "",ActionType.RangeNormal, 0.4f, 0.1f, 0.1f,1f){
 			
 			@Override
 			public void execute(Character target) {
@@ -39,7 +39,7 @@ public class SkillArrowRapid extends Skill {
 				return prof*10;
 			};
 		}.setCost(10, 0, 0, 0),
-		new Step(this, "Second Arrow", "",ActionType.RangeNormal, 0.3f, 0.1f, 0.1f,1){
+		new Step(this, "Second Arrow", "",ActionType.RangeNormal, 0.3f, 0.1f, 0.1f,1.4f){
 			
 			@Override
 			public void execute(Character target) {
@@ -56,7 +56,7 @@ public class SkillArrowRapid extends Skill {
 				return prof*10;
 			};
 		}.setCost(12, 0, 0, 0),
-		new Step(this, "Second Arrow", "",ActionType.RangeNormal, 0.3f, 0.1f, 0.4f,1.4f){
+		new Step(this, "Second Arrow", "",ActionType.RangeNormal, 0.3f, 0.1f, 0.4f,2f){
 			
 			@Override
 			public void execute(Character target) {

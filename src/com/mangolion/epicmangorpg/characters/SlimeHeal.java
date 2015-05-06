@@ -4,6 +4,7 @@ import com.mangolion.epicmangorpg.ais.AIHealer;
 import com.mangolion.epicmangorpg.ais.AISimple;
 import com.mangolion.epicmangorpg.components.Element;
 import com.mangolion.epicmangorpg.components.Elements;
+import com.mangolion.epicmangorpg.items.Items;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.SkillHealBasic;
 import com.mangolion.epicmangorpg.skills.SkillKickBasic;
@@ -28,6 +29,9 @@ public class SlimeHeal extends Character{
 		addElements(new Element("Plant", 1));
 		isSupporter = true;
 		cpBase = 50;
+		
+		addDrop(Items.slime, 08f, 1);
+		addDrop(Items.mstoneSmall, 0.6f, 1);
 	}
 
 }

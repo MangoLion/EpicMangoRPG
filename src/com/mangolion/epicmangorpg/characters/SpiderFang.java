@@ -3,6 +3,7 @@ package com.mangolion.epicmangorpg.characters;
 import com.mangolion.epicmangorpg.ais.AISimple;
 import com.mangolion.epicmangorpg.components.Element;
 import com.mangolion.epicmangorpg.components.Elements;
+import com.mangolion.epicmangorpg.items.Items;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.SkillHealBasic;
 import com.mangolion.epicmangorpg.skills.SkillKickBasic;
@@ -33,6 +34,8 @@ public class SpiderFang extends Character{
 		bite.steps.getFirst().setStatus(new StatusPoison(null, 1), 1f);
 		addSkills(bite);
 		cpBase = 100;
+		
+		addDrop(Items.mstone, 0.6f, 1);
 	}
 
 }

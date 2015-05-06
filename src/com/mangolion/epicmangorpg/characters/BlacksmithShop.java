@@ -22,6 +22,7 @@ import com.mangolion.epicmangorpg.skills.SkillBlastSand;
 import com.mangolion.epicmangorpg.skills.SkillBlastWind;
 import com.mangolion.epicmangorpg.skills.SkillSummonGolem;
 import com.mangolion.epicmangorpg.skills.SkillWaterCannon;
+import com.mangolion.epicmangorpg.weapons.AssaultRifle;
 import com.mangolion.epicmangorpg.weapons.Barehands;
 import com.mangolion.epicmangorpg.weapons.BasicMachinegun;
 import com.mangolion.epicmangorpg.weapons.BasicRifle;
@@ -59,6 +60,7 @@ public class BlacksmithShop extends Character{
 		items.add(new PlateArmorLower());
 		items.add(new PlateArmorUpper());
 		items.add(new ClothRobe());
+		items.add(new AssaultRifle());
 		items.add(new GreatCopperSword());
 		new FrameShopItemCustoms("Blacksmith", items);
 	}

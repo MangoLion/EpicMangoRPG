@@ -3,6 +3,7 @@ package com.mangolion.epicmangorpg.characters;
 import com.mangolion.epicmangorpg.ais.AISimple;
 import com.mangolion.epicmangorpg.components.Element;
 import com.mangolion.epicmangorpg.components.Elements;
+import com.mangolion.epicmangorpg.items.Items;
 import com.mangolion.epicmangorpg.skills.SkillBarrelRoll;
 import com.mangolion.epicmangorpg.skills.SkillSlashBasic;
 import com.mangolion.epicmangorpg.skills.SkillBlock;
@@ -21,6 +22,9 @@ public class SlimePoison extends Character{
 		ai = new AISimple(this);
 		addSkills(bodySlam);
 		bodySlam.steps.getFirst().setStatus(new StatusPoison(null, 1), 1f);
+		
+		addDrop(Items.slime, 08f, 1);
+		addDrop(Items.mstoneSmall, 0.6f, 1);
 	}
 
 }

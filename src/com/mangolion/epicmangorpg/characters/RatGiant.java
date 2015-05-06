@@ -2,6 +2,7 @@ package com.mangolion.epicmangorpg.characters;
 
 import com.mangolion.epicmangorpg.ais.AISimple;
 import com.mangolion.epicmangorpg.ais.AISummon;
+import com.mangolion.epicmangorpg.items.Items;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.SkillHealBasic;
 import com.mangolion.epicmangorpg.skills.SkillKickBasic;
@@ -27,5 +28,7 @@ public class RatGiant extends Character{
 	public RatGiant() {
 		super("Giant Rat", "A huge rat with a hungry appetite. May call for its friends when injured", 60, 0, 100, 50, 20, 100, 10, 10, 10, 5,new Weapon("Claws", 7, 100, Weapons.Claws, 1, 1, 1.2f),  new SkillBite(), new SkillDodge(), new SkillSummon(RatGiant.class, 0.5f));
 		ai = new AISummon(this);
+		
+		addDrop(Items.mstoneSmall, 0.7f, 1);
 	}
 }

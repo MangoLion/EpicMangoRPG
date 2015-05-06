@@ -12,6 +12,7 @@ import com.mangolion.epicmangorpg.armor.MetalHelm;
 import com.mangolion.epicmangorpg.armor.PlateArmorLower;
 import com.mangolion.epicmangorpg.armor.PlateArmorUpper;
 import com.mangolion.epicmangorpg.items.Item.Type;
+import com.mangolion.epicmangorpg.weapons.AssaultRifle;
 import com.mangolion.epicmangorpg.weapons.BasicMachinegun;
 import com.mangolion.epicmangorpg.weapons.BasicRifle;
 import com.mangolion.epicmangorpg.weapons.BowShort;
@@ -24,15 +25,30 @@ import com.mangolion.epicmangorpg.weapons.SniperRifle;
 public class Items {
 	public static Item potionSmall = new ItemPotionSmall(),
 			arrow = new ItemArrow(),
-			bullet = new Item("Bullet", "", Type.Ammunition, 100, 0.2f){},
+			bullet = new Item("Bullet", "", Type.Ammunition, 100, 0.1f){},
+			grenadeAmmo = new Item("Refile Grenade", "", Type.Ammunition, 100, 0.3f){},
 			crystalWater = new Item("Water Crystal", "", Type.Ammunition, 100, 0.1f){},
 			crystalFire = new Item("Fire Crystal", "", Type.Ammunition, 100, 0.1f){},
 			crystalWind = new Item("Wind Crystal", "", Type.Ammunition, 100, 0.1f){},
 			crystalEarth = new Item("Earth Crystal", "", Type.Ammunition, 100, 0.1f){},
 			portalStone = new ItemPortalStone(),
-			all[] = {potionSmall, arrow, bullet, crystalWater, crystalFire, crystalWind, crystalEarth, portalStone};
+			
+			mstoneSmall = new Item("Small Manastone", "", Type.Craft, 100, 5f){},
+			mstone = new Item("Manastone", "", Type.Craft, 100, 10f){},
+			mstoneLarge = new Item("Large Manastone", "", Type.Craft, 100, 20f){},
+			
+			slime = new Item("Slime", "", Type.Craft, 10, 3f){},
+			feather = new Item("Feather", "A large that came from a very large bird", Type.Craft, 10, 3f){},
+			antShell = new Item("Ant Shell", "A shell from a giant ant", Type.Craft, 10, 3f){},
+			hardScale = new Item("Hard Scale", "Thick Scales from a giant cold blooded animal", Type.Craft, 10,5f){},
+			foxHide =  new Item("Fox Hide", "", Type.Craft, 10, 2f){},
+			rabbitHide =  new Item("Rabbit Hide", "", Type.Craft, 10, 2f){},
+			wolfHide =  new Item("Wolf Hide", "", Type.Craft, 10, 7f){},
+			boarHide =  new Item("Boar Hide", "", Type.Craft, 10, 3f){},
+			
+			all[] = {potionSmall, arrow, bullet, crystalWater, crystalFire, crystalWind, crystalEarth, portalStone, mstoneSmall, mstone, mstoneLarge, grenadeAmmo};
 	public static ItemCustom customs[] = {new CopperDagger(), new GreatCopperSword(), new LongSword(), new LeatherGloves(), new LeatherHat(), new LeatherJacket(), new LeatherPants(), new LeatherShoes(), new MetalBoots(), new MetalHelm(),
-		new MetalGuantlet(), new PlateArmorLower(), new PlateArmorUpper(),  new ClothRobe(), new BowShort(), new BasicRifle(), new SniperRifle(), new BasicMachinegun(), new CylinderBasic(), new ItemPortalStoneSaved()};
+		new MetalGuantlet(), new PlateArmorLower(), new PlateArmorUpper(),  new ClothRobe(), new BowShort(), new BasicRifle(), new SniperRifle(), new BasicMachinegun(), new CylinderBasic(), new ItemPortalStoneSaved(), new AssaultRifle()};
 	
 	public static Item getItem(String name){
 		for (Item item: all){

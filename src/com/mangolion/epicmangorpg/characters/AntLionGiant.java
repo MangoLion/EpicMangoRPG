@@ -3,6 +3,7 @@ package com.mangolion.epicmangorpg.characters;
 import com.mangolion.epicmangorpg.ais.AISimple;
 import com.mangolion.epicmangorpg.ais.AISummon;
 import com.mangolion.epicmangorpg.components.Element;
+import com.mangolion.epicmangorpg.items.Items;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.SkillAvalancheSand;
 import com.mangolion.epicmangorpg.skills.SkillHealBasic;
@@ -31,5 +32,8 @@ public class AntLionGiant extends Character{
 		super("Giant Antlion", "A giant ant lion, hidden in the sand, deep in its steep hole.", 200, 100, 250, 50, 0, 100, 10, 10, 15, 7,new Weapon("Claws", 10, 100, Weapons.Claws, 1, 1, 1f),  new SkillBite(), new SkillParry(), new SkillAvalancheSand(), new SkillStomp());
 		ai = new AISimple(this);
 		addElements(new Element("Tough Scales", 1));
+		
+		addDrop(Items.antShell, 0.7f, 1);
+		addDrop(Items.mstoneLarge, 0.4f, 1);
 	}
 }

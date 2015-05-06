@@ -2,6 +2,7 @@ package com.mangolion.epicmangorpg.characters;
 
 import com.mangolion.epicmangorpg.ais.AISimple;
 import com.mangolion.epicmangorpg.components.Element;
+import com.mangolion.epicmangorpg.items.Items;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.SkillHealBasic;
 import com.mangolion.epicmangorpg.skills.SkillKickBasic;
@@ -27,5 +28,8 @@ public class LizardKomodus extends Character{
 		super("Komodus Lizard", "A big lizard that weights as much as a grown men, with tough scales", 140, 90, 250, 70, 20, 100, 10, 10, 10, 5,new Weapon("Claws", 15, 100, Weapons.Claws, 1, 1, 1f),  new SkillBite(), new SkillSlashBasic(),new SkillSpitPoison());
 		ai = new AISimple(this);
 		addElements(new Element("Tough Scales", 1));
+		
+		addDrop(Items.hardScale, 0.7f, 1);
+		addDrop(Items.mstone, 0.6f, 1);
 	}
 }

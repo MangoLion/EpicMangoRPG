@@ -49,6 +49,7 @@ import javax.swing.Timer;
 
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.characters.CharacterPlayer;
+import com.mangolion.epicmangorpg.commands.CmdUse;
 import com.mangolion.epicmangorpg.commands.Command;
 import com.mangolion.epicmangorpg.commands.CommandHandler;
 import com.mangolion.epicmangorpg.components.LogMsg;
@@ -944,5 +945,9 @@ public class FrameGame extends JFrame {
 		paneCommand.revalidate();
 		paneCommand.repaint();
 		//paneCommand.add((Component) handler); 
+	}
+	
+	public void refreshCommand(){
+		setCommand(new CmdUse(null));
 	}
 }

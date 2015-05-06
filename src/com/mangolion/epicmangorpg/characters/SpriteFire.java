@@ -3,6 +3,7 @@ package com.mangolion.epicmangorpg.characters;
 import com.mangolion.epicmangorpg.ais.AISimple;
 import com.mangolion.epicmangorpg.components.Element;
 import com.mangolion.epicmangorpg.components.Elements;
+import com.mangolion.epicmangorpg.items.Items;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.SkillHealBasic;
 import com.mangolion.epicmangorpg.skills.SkillKickBasic;
@@ -29,5 +30,8 @@ public class SpriteFire extends Character{
 		super("Fire Sprite", "A floating ball of fire with wings, mainly use fire skills.",70, 70, 40, 40, 10, 100, 60, 10, 0, 0,new Weapon("Fire", 0, 100, Weapons.BareHand, 1, 1, 1f),  new SkillBodySlam(), new SkillBlock(), new SkillSlashBasic(), new SkillBoltFire());
 		addElements(new Element("fire", 1));
 		ai = new AISimple(this);
+		
+		addDrop(Items.mstone, 0.8f, 1);
+		addDrop(Items.crystalFire, 1f, 10);
 	}
 }

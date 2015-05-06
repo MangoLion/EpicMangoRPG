@@ -38,7 +38,11 @@ public class SkillShotQuick extends Skill {
 			public float getSPBuff() {
 				return prof*15;
 			};
-		}.setCost(5, 0, 0, 0).setChances(1, 1, 0.15f));
+			
+			public float getAccuracyBuff() {
+				return -0.1f;
+			};
+		}.setCost(5, 0, 0, 0).setChances(1, 1, 0f));
 	}
 
 }

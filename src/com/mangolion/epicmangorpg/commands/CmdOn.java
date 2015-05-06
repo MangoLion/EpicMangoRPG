@@ -22,7 +22,8 @@ public class CmdOn extends CommandCombo{
 				@Override
 				public boolean execute() {
 					Character character = Game.getInstance().getCharacter(previous.getFirst().getSelectedCommand().text),
-							target = Game.getInstance().getCharacter(previous.get(previous.size()-2).getSelectedCommand().text);;
+							target = Game.getInstance().getCharacter(previous.get(previous.size()-1).getSelectedCommand().text);
+							character.setTarget(target);
 					Skill skill = character.getSkill(previous.get(3).getSelectedCommand().text);
 					return skill.execute(target);
 				}

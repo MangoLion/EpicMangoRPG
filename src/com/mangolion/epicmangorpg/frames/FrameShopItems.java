@@ -109,7 +109,7 @@ public class FrameShopItems extends JInternalFrame {
 				}
 				}else{
 					if (amount <= CharacterPlayer.instance.inventory.getItemNumber(item)){
-						CharacterPlayer.instance.changeCrystal(totalCost);
+						CharacterPlayer.instance.changeCrystal(totalCost*0.7f);
 						CharacterPlayer.instance.inventory.removeItem(item, amount);
 					}
 				}
@@ -133,7 +133,10 @@ public class FrameShopItems extends JInternalFrame {
 			public void keyReleased(KeyEvent e) {
 				refresh();
 				if (!lblTotalCost.getText().equals(""))
-					lblTotalCost.setText("Total: "  + item.price * Integer.valueOf(tfAmount.getText()));			
+					if (btnBuy.getText().equals("Buy"))
+						lblTotalCost.setText("Total: "  + item.price * Integer.valueOf(tfAmount.getText()));
+					else
+						lblTotalCost.setText("Total: "  + item.price * Integer.valueOf(tfAmount.getText())*0.7f);
 
 				super.keyReleased(e);
 			}

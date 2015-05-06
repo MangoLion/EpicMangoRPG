@@ -62,6 +62,7 @@ public class WiniWriter {
 			wini.put("general info", "agi", player.agi);
 			wini.put("general info", "def", player.def);
 			wini.put("general info", "prot", player.prot);
+			wini.put("general info", "crystal", player.crystals);
 			
 			String str = "";
 			for (ItemStack stack : player.inventory.itemStacks)
@@ -137,6 +138,7 @@ public class WiniWriter {
 			player.agi = wini.get("general info", "agi", Float.class);
 			player.def = wini.get("general info", "def",Float.class);
 			player.prot = wini.get("general info", "prot", Float.class);
+			player.crystals = wini.get("general info", "crystal", Float.class);
 			
 			String items = wini.get("Inventory", "Consumables");
 			

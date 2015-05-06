@@ -34,7 +34,8 @@ public class Character implements Cloneable {
 	Random rand = new Random();
 	public String name, desc, pronoun = "he", pronoun2 = "him", pronoun3 =  "his", pronoun4 = "himself", gender = " male";
 	public Skill skillCurrent, skillCharged;
-	public LinkedList<Skill> skills = new LinkedList<Skill>();
+	public LinkedList<Skill> skills = new LinkedList<Skill>(),
+			skillsRecent = new LinkedList<Skill>();
 	public LinkedList<Status> statuses = new LinkedList<Status>();
 	public LinkedList<Buff> buffs = new LinkedList<Buff>();
 	public Weapon weapon;
@@ -86,7 +87,6 @@ public class Character implements Cloneable {
 		addSkills(skills);
 		equip(weapon);
 		
-		addDrop(Items.arrow, 0.5f);
 	}
 
 	public void addSkills(Skill... skills) {
@@ -342,8 +342,11 @@ public class Character implements Cloneable {
 		for (Drop  drop: drops)
 			if (rand.nextFloat() <= drop.chance){
 				if (drop.item != null){
-					Utility.narrate("You received " + drop.item.name);
-					CharacterPlayer.instance.inventory.addItem(drop.item, 1);
+					int amount =  rand.nextInt(drop.amount);
+					if (amount <= 0)
+						amount = 1;
+					Utility.narrate("You received " + amount + " " + drop.item.name);
+					CharacterPlayer.instance.inventory.addItem(drop.item,amount);
 				}
 				else{
 					Utility.narrate("You received " + drop.itemCustom.name);
@@ -352,9 +355,9 @@ public class Character implements Cloneable {
 			}
 	}
 	
-	public void addDrop(Item item, float chance){
-		drops.add(new Drop(item, chance));
-		inventory.addItem(item, 1);
+	public void addDrop(Item item, float chance, int num){
+		drops.add(new Drop(item, chance, num));
+		inventory.addItem(item, num);
 	}
 	
 	public void addDrop(ItemCustom item, float chance){
@@ -503,9 +506,9 @@ public class Character implements Cloneable {
 		acc += getAccuracyBuff();
 		if (acc > 0.95f)
 			acc = 0.95f;
-		if (acc < 0.15f)
-			acc = 0.15f;
-			return acc;
+		if (acc < 0.25f)
+			acc = 0.25f;
+			return Utility.format(acc);
 	}
 	
 	public float getCritical(Character target){
@@ -514,6 +517,10 @@ public class Character implements Cloneable {
 		crit += (getDex()-target.getAgi())*0.02;
 		crit += getCriticalBuff();
 		crit -= target.prot*0.02;
+		if (crit < 0.05)
+			crit = 0.05f;
+		if (crit > 0.95)
+			crit = 0.95f;
 		return crit;
 	}
 	
@@ -680,7 +687,7 @@ public class Character implements Cloneable {
 		float result = cpBase;
 		for (Skill skill : skills)
 			result += skill.getCP();
-		result +=/* getMaxHP() + */getMaxMP() + getMaxBal()/2 + getMaxSP()/2 + getAgi() + getDex()/2 + getInt() + getStr();
+		result += getMaxHP() + getMaxMP() + getMaxBal()/2 + getMaxSP()/2 + getAgi() + getDex()/2 + getInt() + getStr();
 		return Utility.format(result);
 	}
 	
@@ -780,6 +787,8 @@ public class Character implements Cloneable {
 	}
 
 	public float getBal() {
+		if (bal < 0)
+			bal = 1;
 		return Utility.format( bal);
 	}
 

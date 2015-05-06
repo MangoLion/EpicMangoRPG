@@ -4,6 +4,7 @@ import com.mangolion.epicmangorpg.ais.AIFlight;
 import com.mangolion.epicmangorpg.ais.AISimple;
 import com.mangolion.epicmangorpg.components.Element;
 import com.mangolion.epicmangorpg.components.Elements;
+import com.mangolion.epicmangorpg.items.Items;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.SkillFlight;
 import com.mangolion.epicmangorpg.skills.SkillHealBasic;
@@ -31,5 +32,8 @@ public class BirdGiant extends Character{
 		addElements(new Element("Feathered", 1));
 		ai = new AIFlight(this);
 		setAirborne(10);
+		
+		addDrop(Items.feather, 0.7f, 1);
+		addDrop(Items.mstone, 0.6f, 1);
 	}
 }

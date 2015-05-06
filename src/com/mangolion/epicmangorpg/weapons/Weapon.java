@@ -6,7 +6,7 @@ import com.mangolion.epicmangorpg.items.ItemCustom;
 
 public class Weapon extends ItemCustom implements StatBuff{
 	public String name;
-	public float baseDamage, speedModifier, sizeModifier, meleeDamageModifier, baseMagicDmg = 0, baseMagicDmgMod = 1, alchemyMod = 1, gunMod = 1, reloadTime = 0, alchemyDamage = 0, gunDamage = 0, chanceJam = 0, bowDamage = 0, magicDamage = 0;
+	public float baseDamage, speedModifier, sizeModifier, meleeDamageModifier, baseMagicDmg = 0, baseMagicDmgMod = 1, alchemyMod = 1, gunMod = 1, reloadTime = 0, alchemyDamage = 0, gunDamage = 0, chanceJam = 0, bowDamage = 0, magicDamage = 0, launcherDamage = 0;
 	public Weapons type[];
 	public boolean useAmmo = false, isJammed = false, isAutomatic = false, canToggleAutomatic = true;
 	public int ammo = 0, maxAmmo = 0, fireRate = 0;

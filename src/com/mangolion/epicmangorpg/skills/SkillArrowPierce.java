@@ -15,10 +15,10 @@ import com.mangolion.epicmangorpg.weapons.Weapons;
 public class SkillArrowPierce extends Skill {
 
 	public SkillArrowPierce() {
-		super("Piercing Arrow", "Fires an arrow assisted with magic that can pierce armor..",Weapons.Bow, ActionType.MeleeStab) ;
+		super("Piercing Arrow", "Fires an arrow assisted with magic that can pierce armor, ignores 20% of target defense",Weapons.Bow, ActionType.MeleeStab) ;
 		setObservable(true, 0.7f);
 		shopPrice = 50;
-		addSteps(new StepStab(this, "Piercing Arrow", "", 0.7f, 0.2f, 0.1f, 2f){
+		addSteps(new StepStab(this, "Piercing Arrow", "", 0.7f, 0.1f, 0f, 2f){
 			public float getStrBuff() {
 				// TODO Auto-generated method stub
 				return prof * 15;
@@ -35,6 +35,13 @@ public class SkillArrowPierce extends Skill {
 				if (getCharacter().inventory.getItemNumber(Items.arrow) > 0)
 					return super.checkConndition();
 				return false;
+			};
+			
+			public float getDamage() {
+				if (getCharacter().target != null)
+					return super.getDamage() + getCharacter().target.getDef()*0.2f;
+				else
+					return super.getDamage();
 			};
 			
 			@Override

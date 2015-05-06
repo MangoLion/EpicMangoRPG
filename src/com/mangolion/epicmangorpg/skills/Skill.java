@@ -176,6 +176,7 @@ public class Skill implements StatBuff {
 				return false;
 			}
 			
+			character.skillsRecent.add(this);
 			isLoading = true;
 			time = step.getLoadTime();
 			Game.getInstance().addTick(character, time, Tick.SKILL);
@@ -396,6 +397,14 @@ public class Skill implements StatBuff {
 		for (Weapons w: weapons)
 			for (Weapons w2:weapon.type)
 				if (w == w2 || w == Weapons.ALL)
+					return true;
+		return false;
+	}
+	
+	public boolean checkWeapon(Weapons weapon) {
+		
+		for (Weapons w: weapons)
+				if (w == weapon || w == Weapons.ALL)
 					return true;
 		return false;
 	}

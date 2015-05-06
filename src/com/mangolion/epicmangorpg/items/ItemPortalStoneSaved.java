@@ -1,5 +1,6 @@
 package com.mangolion.epicmangorpg.items;
 
+import com.mangolion.epicmangorpg.characters.CharacterPlayer;
 import com.mangolion.epicmangorpg.game.Game;
 
 public class ItemPortalStoneSaved extends ItemCustom{
@@ -14,6 +15,8 @@ public class ItemPortalStoneSaved extends ItemCustom{
 		Game.getInstance().currentFloor = Integer.valueOf((String) values.get(0));
 		Game.getInstance().floorPercent = Float.valueOf((String) values.get(1));
 		Game.getInstance().begin();
+		
+		CharacterPlayer.instance.inventory.itemCustoms.remove(this);
 		super.onUse();
 	}
 	

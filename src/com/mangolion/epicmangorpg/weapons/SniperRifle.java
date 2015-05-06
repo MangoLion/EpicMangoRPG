@@ -6,7 +6,7 @@ public class SniperRifle extends Weapon{
 	public SniperRifle() {
 		super("Sniper Rifle", 5, 7, 1.2f, 1, 1, Weapons.Gun, Weapons.Reloadable);
 		setReload(5, 0.6f, 1, 0.08f);
-		gunDamage = 25;
+		gunDamage = 30;
 		price = 40;
 		canToggleAutomatic = false;
 	}

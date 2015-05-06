@@ -125,6 +125,8 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 	
 	public float getDamage(){
+
+		
 		float skilDmg = 0;
 		for (Skill skill: getCharacter().skills)
 			if (skill.type == ActionType.WeaponMastery && skill.checkWeapon(getCharacter().weapon))
@@ -132,6 +134,8 @@ public abstract class Step implements Cloneable, StatBuff {
 		dmgBase -= subtractDamage;
 		subtractDamage = 0;
 		if (strBased){
+		if (getCharacter().weapon.checkType(Weapons.LauncherGrenade) && parent.weapons.contains(Weapons.LauncherGrenade))
+			return (getDmgPercent()*(getCharacter().weapon.launcherDamage + dmgBase)*getCharacter().weapon.gunMod)*skilDmg;
 		if (getCharacter().weapon.checkType(Weapons.Bow))
 			return (getDmgPercent()*(getCharacter().weapon.bowDamage + dmgBase)*getCharacter().weapon.gunMod)*skilDmg;
 		if (getCharacter().weapon.checkType(Weapons.Gun))
@@ -176,11 +180,14 @@ public abstract class Step implements Cloneable, StatBuff {
 		return damage(target, true);
 	}
 	public boolean damage(Character target, boolean checkMiss){
-		
+		if ((type == ActionType.MeleeBlock || type == ActionType.MeleeSpecial||type == ActionType.MeleeStab||type == ActionType.MeleeSwing) && target.isAirborne()){
+			StylePainter.append(new Msg("$name cannot reach $targetname because $p is airborne!").getMessage(getCharacter(), target, 0));
+			return false;
+		}
 		
 		float miss = ( chanceMiss) + (1 - getCharacter().getAccuracy(target));
 		if (getCharacter().weapon.isAutomatic)
-			miss *= 1.3f;
+			miss *= 1.2f;
 		System.out.println("miss: " + miss);
 		if (rand.nextFloat() <= miss && !isAOE && checkMiss) {
 			StylePainter.append(new MsgSlashMiss().getMessage(getCharacter(),
@@ -223,7 +230,7 @@ public abstract class Step implements Cloneable, StatBuff {
 					continue;
 				
 				character.setDamage(getCharacter(), dmg);
-				if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus)
+				if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus && subtractDamage  <= 0)
 					character.addStatus(getStatus());
 			}
 		aoeExceptions.clear();
@@ -356,10 +363,6 @@ public abstract class Step implements Cloneable, StatBuff {
 				getCharacter().skillCharged = parent;
 		}
 		
-		if ((type == ActionType.MeleeBlock || type == ActionType.MeleeSpecial||type == ActionType.MeleeStab||type == ActionType.MeleeSwing) && target.isAirborne()){
-			StylePainter.append(new Msg("$name cannot reach $targetname because $p is airborne!").getMessage(getCharacter(), target, 0));
-			return;
-		}
 		getCharacter().useStamina(stamCost*(prof + 1)/2);
 		getCharacter().useMana(mpCost*(prof + 1)/2);
 		if (useAmmo){

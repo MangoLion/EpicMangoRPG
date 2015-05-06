@@ -3,6 +3,7 @@ package com.mangolion.epicmangorpg.characters;
 import com.mangolion.epicmangorpg.ais.AISimple;
 import com.mangolion.epicmangorpg.components.Element;
 import com.mangolion.epicmangorpg.components.Elements;
+import com.mangolion.epicmangorpg.items.Items;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.SkillHealBasic;
 import com.mangolion.epicmangorpg.skills.SkillKickBasic;
@@ -33,5 +34,8 @@ public class RabbitFang extends Character{
 		bite.steps.getFirst().setStatus(new StatusPoison(null, 0.7f), 1);
 		addSkills(bite);
 		cpBase = 80;
+		
+		addDrop(Items.rabbitHide, 0.7f, 1);
+		addDrop(Items.mstoneSmall, 0.7f, 1);
 	}
 }

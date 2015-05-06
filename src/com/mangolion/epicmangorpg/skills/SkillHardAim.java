@@ -20,8 +20,9 @@ import com.mangolion.epicmangorpg.weapons.Weapons;
 public class SkillHardAim extends Skill {
 
 	public SkillHardAim() {
-		super("Hard Aim", "Focuses intently on the enemy while aiming, in addition to 8% accuracy increase, it also gives a 10% dex bonus for the skill duration. ",Weapons.Gun, ActionType.RangeNormal);
+		super("Hard Aim", "Focuses intently on the enemy while aiming, in addition to 10% accuracy increase, it also gives a 10% dex bonus for the skill duration. ",Weapons.Gun, ActionType.RangeNormal);
 		shopPrice = 10;
+		setObservable(true, 0.7f);
 		addSteps(new Step(this, "Hard Aim", "",ActionType.RangeNormal, 0.8f, 0.1f, 0.15f,1){
 			
 			public void init() {
@@ -48,7 +49,11 @@ public class SkillHardAim extends Skill {
 			public float getSPBuff() {
 				return prof*15;
 			};
-		}.setCost(5, 0, 0, 0).setChances(1, 1, -0.08f));
+			
+			public float getAccuracyBuff() {
+				return 0.10f;
+			};
+		}.setCost(5, 0, 0, 0).setChances(1, 1, 0));
 	}
 
 }

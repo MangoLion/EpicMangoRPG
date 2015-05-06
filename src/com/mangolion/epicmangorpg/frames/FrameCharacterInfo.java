@@ -27,6 +27,7 @@ import com.mangolion.epicmangorpg.components.Elements;
 import com.mangolion.epicmangorpg.components.LogMsg;
 import com.mangolion.epicmangorpg.components.Proficiency;
 import com.mangolion.epicmangorpg.game.Game;
+import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.statuses.Buff;
 import com.mangolion.epicmangorpg.statuses.Status;
@@ -64,6 +65,11 @@ public class FrameCharacterInfo extends JInternalFrame {
 		lblDef.setText("Def: " + String.valueOf(character.getDef()));
 		lblProt.setText("Prot: " + String.valueOf(character.getProt()));
 		lblCrystals.setText("Crystals: " + String.valueOf(character.crystals));
+		
+		//if (character != CharacterPlayer.instance)
+			lblAccuracy.setText("Accuracy: " + Utility.format(CharacterPlayer.instance.getAccuracy(character)*100) + "%");
+			lblCrit.setText("Critical: " + Utility.format(CharacterPlayer.instance.getCritical(character)*100) + "%");
+		
 		if (character == CharacterPlayer.instance)
 			lblCp.setText("CP: " + character.getCP());
 		else
@@ -78,6 +84,7 @@ public class FrameCharacterInfo extends JInternalFrame {
 		for (Status status:character.statuses)
 			modelStatus.addElement(status);
 		modelBuff.clear();
+		
 		for (Buff buff:character.buffs)
 			modelBuff.addElement(buff);
 		
@@ -151,7 +158,7 @@ public class FrameCharacterInfo extends JInternalFrame {
 	
 	JProgressBar pbSP, pbHP, pbMP, pbBal;
 	JLabel lblStr, lblAgi, lblInt, lblDex, lblDef, lblProt, lblCp, lblCrystals,
-		lblIce, lblWater, lblLightning, lblFire, lblEarth, lblWind, lblLava, lblLight, lblDark, lblElement;
+		lblIce, lblWater, lblLightning, lblFire, lblEarth, lblWind, lblLava, lblLight, lblDark, lblElement, lblAccuracy;
 	JList<Skill>listSkill;
 	JList<Status>listStatus;
 	JList<Buff> listBuff;
@@ -170,6 +177,7 @@ public class FrameCharacterInfo extends JInternalFrame {
 	private JLabel label_7;
 	private JLabel label_8;
 	private JLabel label_9;
+	private JLabel lblCrit;
 	/**
 	 * Create the frame.
 	 */
@@ -495,6 +503,16 @@ public class FrameCharacterInfo extends JInternalFrame {
 		lblCrystals.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		lblCrystals.setBounds(249, 111, 209, 23);
 		contentPane.add(lblCrystals);
+		
+		lblAccuracy = new JLabel("Accuracy:");
+		lblAccuracy.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
+		lblAccuracy.setBounds(481, 283, 186, 23);
+		contentPane.add(lblAccuracy);
+		
+		lblCrit = new JLabel("Critical: 0.0%");
+		lblCrit.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
+		lblCrit.setBounds(481, 306, 186, 23);
+		contentPane.add(lblCrit);
 		
 		addMouseListener(new MouseAdapter() {
 			@Override

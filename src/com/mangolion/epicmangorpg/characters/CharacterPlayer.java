@@ -13,6 +13,8 @@ import com.mangolion.epicmangorpg.armor.MetalGuantlet;
 import com.mangolion.epicmangorpg.armor.MetalHelm;
 import com.mangolion.epicmangorpg.armor.PlateArmorLower;
 import com.mangolion.epicmangorpg.armor.PlateArmorUpper;
+import com.mangolion.epicmangorpg.commands.CmdUser;
+import com.mangolion.epicmangorpg.frames.FrameGame;
 import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.items.ItemCustom;
 import com.mangolion.epicmangorpg.items.Items;
@@ -68,13 +70,13 @@ public class CharacterPlayer extends Character {
 		isPlayer = true;
 		isAllied = true;
 		instance = this;
-		changeCrystal(100);
 		learnRate = 0.5f;
 		
 		//addElements(new Element(Elements.Fire, 1));
 	}
 	
 	public void init(){
+		changeCrystal(50);
 		inventory.addItem(Items.potionSmall, 5);
 		inventory.addItem(Items.arrow, 100);
 		inventory.addItem(Items.bullet, 100);
@@ -95,6 +97,14 @@ public class CharacterPlayer extends Character {
 		 */
 		if (!isStunned())
 			Game.getInstance().timer.stop();
+	}
+	
+	@Override
+	public void addSkills(Skill... skills) {
+		FrameGame frame = FrameGame.instance;
+		if (frame != null)
+			frame.setCommand(new CmdUser(null));
+		super.addSkills(skills);
 	}
 
 	public void reset() {

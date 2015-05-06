@@ -16,6 +16,7 @@ public class SkillHealBasic extends Skill {
 
 	public SkillHealBasic() {
 		super("Heal", "Basic healing magic",Weapons.ALL, ActionType.RecoverHP);
+		setObservable(true, 0.7f);
 		addSteps(new Step(this, "Basic Heal", "",ActionType.Magic, 0.7f, 0.5f, 0.2f,0){
 			@Override
 			public float getDamage() {

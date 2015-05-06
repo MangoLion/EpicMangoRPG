@@ -1,6 +1,6 @@
 [general info]
 Name = Lionade
-Gender =  male
+Gender = male
 hp = 60.0
 mp = 60.0
 sp = 80.0
@@ -11,11 +11,24 @@ int = 20.0
 agi = 10.0
 def = 0.0
 prot = 0.0
+crystal = 8.5
 skills = Block|Basic Kick|Barrel Roll|Slash|Parry|Stab|Wait|Fire Coat|Side Step|Respite|Charge|Jump Back|Use Item|Stab|Combat Mastery|
 
 [Inventory]
-Consumables = 
-ItemCustoms = 
+Consumables = Small Potion|5|Arrow|100|Bullet|100|Earth Crystal|50|Fire Crystal|50|Water Crystal|50|Wind Crystal|50|Portal Stone|2|Refile Grenade|5|
+ItemCustoms = Long Sword|Copper Dagger|Assault Rifle|
+
+[Long Sword]
+durability = 10.0
+isEquipted = false
+
+[Copper Dagger]
+durability = 6.0
+isEquipted = false
+
+[Assault Rifle]
+durability = 7.0
+isEquipted = false
 
 [Block]
 prof = 0.0

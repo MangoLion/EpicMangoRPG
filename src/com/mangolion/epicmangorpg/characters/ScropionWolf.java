@@ -2,6 +2,7 @@ package com.mangolion.epicmangorpg.characters;
 
 import com.mangolion.epicmangorpg.ais.AISimple;
 import com.mangolion.epicmangorpg.components.Element;
+import com.mangolion.epicmangorpg.items.Items;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.SkillClawSnap;
 import com.mangolion.epicmangorpg.skills.SkillHealBasic;
@@ -30,5 +31,8 @@ public class ScropionWolf extends Character{
 		super("Wolf Scorpion", "A cow sized scorpion with very tough scales and as agile as a wolf.", 200, 0, 250, 70, 50, 100, 10, 10, 10, 5,new Weapon("Claws", 15, 100, Weapons.Sword, 1, 1, 1f),  new SkillBlock(), new SkillClawSnap(),new SkillTailSwing(), new SkillSting());
 		ai = new AISimple(this);
 		addElements(new Element("Tough Scales", 1));
+		
+		addDrop(Items.hardScale, 0.7f, 2);
+		addDrop(Items.mstone, 1f, 1);
 	}
 }
