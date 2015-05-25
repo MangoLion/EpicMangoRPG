@@ -22,28 +22,32 @@ import javax.swing.event.ListSelectionListener;
 
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.commands.CommandHandler;
+import com.mangolion.epicmangorpg.components.ActionType;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.weapons.Weapons;
+
+import javax.swing.ListModel;
 
 public class FrameSkills extends JDialog {
 
 	Character character;
 	CommandHandler handler;
 	String result = "";
-	JList<Skill> listCombat, listRecent, listAlchemy, listBow, listGun, listSword;
+	JList<Skill> listCombat, listRecent, listAlchemy, listBow, listGun, listSword, listMagic;
 	DefaultListModel<Skill>mCombat = new DefaultListModel<Skill>()
 			, mRecent = new DefaultListModel<Skill>()
 			, mAlchemy = new DefaultListModel<Skill>()
 			, mBow = new DefaultListModel<Skill>()
 			, mGun = new DefaultListModel<Skill>()
-			, mSword = new DefaultListModel<Skill>();
+			, mSword = new DefaultListModel<Skill>()
+			, mMagic = new DefaultListModel<Skill>();
 	/**
 	 * Create the frame.
 	 */
 	public FrameSkills(Character character) {
 		setModal(true);
 		this.character = character;
-		setBounds(100, 100, 652, 448);
+		setBounds(100, 100, 857, 448);
 		
 		Point pt = MouseInfo.getPointerInfo().getLocation();
 		setLocation(pt.x - getWidth()/2, pt.y - getHeight()/2);
@@ -187,6 +191,28 @@ public class FrameSkills extends JDialog {
 			}
 		});
 		scrollPane_5.setViewportView(listGun);
+		
+		JScrollPane scrollPane_6 = new JScrollPane();
+		scrollPane_6.setBounds(640, 10, 200, 192);
+		getContentPane().add(scrollPane_6);
+		
+		JLabel lblMagic = new JLabel("Magic");
+		lblMagic.setHorizontalAlignment(SwingConstants.CENTER);
+		scrollPane_6.setColumnHeaderView(lblMagic);
+		
+		listMagic = new JList<Skill>(mMagic);
+		listMagic.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2){
+					result = listMagic.getSelectedValue().name;
+					setVisible(false);
+					dispose();
+				}
+				super.mouseClicked(e);
+			}
+		});
+		scrollPane_6.setViewportView(listMagic);
 		refresh();
 	}
 	
@@ -202,10 +228,12 @@ public class FrameSkills extends JDialog {
 				mSword.addElement(skill);
 			if (skill.checkWeapon(Weapons.Bow))
 				mBow.addElement(skill);
-			if (skill.checkWeapon(Weapons.Gun) || skill.checkWeapon(Weapons.LauncherGrenade))
+			if (skill.checkWeapon(Weapons.Gun) || skill.checkWeapon(Weapons.LauncherGrenade)||skill.checkWeapon(Weapons.Reloadable) )
 				mGun.addElement(skill);
 			if (skill.checkWeapon(Weapons.Cylinder))
 				mAlchemy.addElement(skill);
+			if (skill.type == ActionType.Magic)
+				mMagic.addElement(skill);
 		}
 	}
 	

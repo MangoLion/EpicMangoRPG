@@ -26,4 +26,10 @@ public class Dummy extends Character{
 		// TODO Auto-generated method stub
 		return CharacterPlayer.instance.getCP();
 	}
+	
+	@Override
+	public void nextAction() {
+		summon = null;
+		super.nextAction();
+	}
 }

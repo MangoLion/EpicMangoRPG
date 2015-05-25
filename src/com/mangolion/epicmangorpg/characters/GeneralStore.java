@@ -13,7 +13,7 @@ import com.mangolion.epicmangorpg.skills.SkillBlastWind;
 import com.mangolion.epicmangorpg.skills.SkillSummonGolem;
 import com.mangolion.epicmangorpg.skills.SkillWaterCannon;
 import com.mangolion.epicmangorpg.weapons.Barehands;
-import com.mangolion.epicmangorpg.weapons.BasicRifle;
+import com.mangolion.epicmangorpg.weapons.RifleBasic;
 import com.mangolion.epicmangorpg.weapons.CylinderBasic;
 
 public class GeneralStore extends Character{

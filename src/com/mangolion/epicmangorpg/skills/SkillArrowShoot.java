@@ -22,7 +22,11 @@ public class SkillArrowShoot extends Skill {
 				Event.addEvent(new EventArrow(0.5f, getCharacter(), target, 30, this));
 				getCharacter().inventory.removeItem(Items.arrow, 1);
 				super.execute(target);
-			}			
+			}	
+			
+			public float getDexBuff() {
+				return prof*15;
+			};
 			
 			public boolean checkConndition() {
 				if (getCharacter().inventory.getItemNumber(Items.arrow) > 0)

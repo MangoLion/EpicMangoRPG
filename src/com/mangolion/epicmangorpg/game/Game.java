@@ -43,8 +43,9 @@ public class Game {
 	public float timePassed = 0, lastWeatherTick = 0, timeSinceTick = 0,
 			floorPercent = 0, timeLimit = 0, endCounter = 0;
 	public boolean nextFloor = true, lastFloor = false, firstBattle = true;
-	LinkedList<Character> toAdd = new LinkedList<Character>();
-	public Timer timer = new Timer(100, new ActionListener() {
+	LinkedList<Character> toAdd = new LinkedList<Character>(),
+			toRemove= new LinkedList<Character>();
+	public MangoTimer timer = new MangoTimer(100, new ActionListener() {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -105,6 +106,7 @@ public class Game {
 			// floorPercent += 20;
 		}
 		floors.addAll(Floor.getFloors());
+		currentFloor %= floors.size();
 		begin(floors.get(currentFloor));
 	}
 
@@ -131,7 +133,7 @@ public class Game {
 		weather.generateValues();
 		weather.syncTerrain(terrain);
 
-		timer2 = new Timer(10, new ActionListener() {
+		timer2 = new MangoTimer(10, new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -323,6 +325,12 @@ public class Game {
 
 	public void updateAll(float deltaTime, Character exception,
 			boolean executeTick) {
+		for (Character c: toRemove){
+			charsAllies.remove(c);
+			charsEnemies.remove(c);
+		}
+		toRemove.clear();
+		
 		if (timePassed > timeLimit){
 			begin();
 			return;
@@ -444,6 +452,8 @@ public class Game {
 			} else
 				return charsAllies.getFirst();
 		}
+		
+
 		return null;
 	}
 
@@ -454,8 +464,7 @@ public class Game {
 	}
 
 	public void removeChar(Character character) {
-		charsAllies.remove(character);
-		charsEnemies.remove(character);
+		toRemove.add(character);
 	}
 
 	public Character getCharacter(String target) {
@@ -506,6 +515,13 @@ public class Game {
 
 	public LinkedList<Character> getEnemies(Character character) {
 		if (character.isAllied)
+			return charsEnemies;
+		else
+			return charsAllies;
+	}
+	
+	public LinkedList<Character> getAllies(Character character) {
+		if (!character.isAllied)
 			return charsEnemies;
 		else
 			return charsAllies;

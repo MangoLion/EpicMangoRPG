@@ -33,6 +33,9 @@ public class SkillArrowRain extends Skill {
 				return false;
 			};
 			
+			public float getDexBuff() {
+				return prof*10;
+			};
 			public float getStrBuff() {
 				// TODO Auto-generated method stub
 				return prof * 15;

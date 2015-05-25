@@ -25,6 +25,13 @@ public class Msg {
 		if (msgs != null)
 			this.msgs.addAll(Arrays.asList(msgs));
 	}
+	
+	public LinkedList<StyleSegment>getMessage(boolean nextLine, Character character,
+			Character target, float damage){
+		nextline = nextLine;
+		return getMessage(character, target, damage);
+	}
+	
 
 	public LinkedList<StyleSegment>getMessage(Character character,
 			Character target, float damage){
@@ -47,7 +54,7 @@ public class Msg {
 					if (token == Token.targetName)
 						inStr = target.name;
 					if (token == Token.skill)
-						inStr = character.getCurrentStep().name;
+						inStr = (character.getCurrentStep()!= null)?character.getCurrentStep().name:"none";
 					if (token == Token.targetSkill)
 						inStr = target.getCurrentStep().name;
 					if (token == Token.weapon)

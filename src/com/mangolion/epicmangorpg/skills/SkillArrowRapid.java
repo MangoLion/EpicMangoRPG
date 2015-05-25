@@ -23,7 +23,10 @@ public class SkillArrowRapid extends Skill {
 				Event.addEvent(new EventArrow(0.5f, getCharacter(), target, 20, this));
 				getCharacter().inventory.removeItem(Items.arrow, 1);
 				super.execute(target);
-			}			
+			}	
+			public float getDexBuff() {
+				return prof*10;
+			};
 			
 			public boolean checkConndition() {
 				if (getCharacter().inventory.getItemNumber(Items.arrow) > 0)
@@ -53,6 +56,9 @@ public class SkillArrowRapid extends Skill {
 				return prof * 10;
 			}
 			public float getSPBuff() {
+				return prof*10;
+			};
+			public float getDexBuff() {
 				return prof*10;
 			};
 		}.setCost(12, 0, 0, 0),

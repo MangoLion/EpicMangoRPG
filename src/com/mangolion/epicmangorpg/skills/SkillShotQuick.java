@@ -39,6 +39,10 @@ public class SkillShotQuick extends Skill {
 				return prof*15;
 			};
 			
+			public float getDexBuff() {
+				return prof*10;
+			};
+			
 			public float getAccuracyBuff() {
 				return -0.1f;
 			};

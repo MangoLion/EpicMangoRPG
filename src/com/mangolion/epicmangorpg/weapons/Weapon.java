@@ -1,15 +1,17 @@
 package com.mangolion.epicmangorpg.weapons;
 
+import com.mangolion.epicmangorpg.components.Element;
 import com.mangolion.epicmangorpg.components.StatBuff;
 import com.mangolion.epicmangorpg.items.Item;
 import com.mangolion.epicmangorpg.items.ItemCustom;
 
 public class Weapon extends ItemCustom implements StatBuff{
 	public String name;
-	public float baseDamage, speedModifier, sizeModifier, meleeDamageModifier, baseMagicDmg = 0, baseMagicDmgMod = 1, alchemyMod = 1, gunMod = 1, reloadTime = 0, alchemyDamage = 0, gunDamage = 0, chanceJam = 0, bowDamage = 0, magicDamage = 0, launcherDamage = 0;
+	public float baseDamage, speedModifier, sizeModifier, meleeDamageModifier, magicSpeedMod = 0, baseMagicDmgMod = 1, alchemyMod = 1, gunMod = 1, reloadTime = 0, alchemyDamage = 0, gunDamage = 0, chanceJam = 0, bowDamage = 0, magicDamage = 0, launcherDamage = 0;
 	public Weapons type[];
 	public boolean useAmmo = false, isJammed = false, isAutomatic = false, canToggleAutomatic = true;
 	public int ammo = 0, maxAmmo = 0, fireRate = 0;
+	public Element elements[] = new Element[0];
 	
 	public Weapon(String name, float baseDamage, float maxDurability, float meleespeedModifier, float sizeModifier, float meleeDmgMod, Weapons... type) {
 		super(name, "", ItemCustom.Type.Weapon);
@@ -36,6 +38,10 @@ public class Weapon extends ItemCustom implements StatBuff{
 		this.sizeModifier = sizeModifier;
 		this.speedModifier = meleespeedModifier;
 		meleeDamageModifier = meleeDmgMod;
+	}
+	
+	public void setElements(Element ... elements){
+		this.elements = elements;
 	}
 	
 	public void setReload(int maxAmmo, float reloadTime, int fireRate, float jam){
@@ -146,6 +152,72 @@ public class Weapon extends ItemCustom implements StatBuff{
 
 	@Override
 	public float getCriticalBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getHPCostBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getMPCostBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getSPCostBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getBalCostBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getMeleeDmgBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getGunDmgBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getCylinderDmgBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getBowDmgBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getMagicDmgBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getMeleeSpeedBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getMagicSpeedBuff() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

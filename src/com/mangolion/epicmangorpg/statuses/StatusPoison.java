@@ -13,7 +13,7 @@ public class StatusPoison extends Status{
 	
 	@Override
 	public void tick(float deltaTime) {
-		character.setDamage(name, deltaTime*dps, true);
+		character.setDamage(name, deltaTime*character.getMaxHP()*0.05f, true);
 		super.tick(deltaTime);
 	}
 	

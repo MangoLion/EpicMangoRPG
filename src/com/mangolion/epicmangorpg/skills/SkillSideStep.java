@@ -2,10 +2,13 @@ package com.mangolion.epicmangorpg.skills;
 
 import java.util.LinkedList;
 
+import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.components.ActionType;
 import com.mangolion.epicmangorpg.messages.MsgBasicCD;
 import com.mangolion.epicmangorpg.messages.MsgDodgeExecute;
 import com.mangolion.epicmangorpg.messages.MsgDodgeLoad;
+import com.mangolion.epicmangorpg.statuses.Buff;
+import com.mangolion.epicmangorpg.statuses.Buff.GenType;
 import com.mangolion.epicmangorpg.steps.Step;
 import com.mangolion.epicmangorpg.steps.StepDodge;
 import com.mangolion.epicmangorpg.weapons.Weapons;
@@ -28,6 +31,11 @@ public class SkillSideStep extends Skill{
 				// TODO Auto-generated method stub
 				return prof*10;
 			}
+			
+			public void execute(Character target, float time, String aug) {
+				getCharacter().applyBuff(new Buff("Evasion", getCharacter().getAgi()*1.5f, getExecutionTime(), GenType.positive, Buff.Type.agi));
+				super.execute(target, time, aug);
+			};
 		}.setCost(15, 0, 8, 0));
 	}
 }

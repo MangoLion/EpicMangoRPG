@@ -137,7 +137,7 @@ public class FrameShopSkill extends JInternalFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				float cost = skill.shopPrice;
-				if (CharacterPlayer.instance.crystals >= cost){
+				if (CharacterPlayer.instance.getCrystals() >= cost){
 					CharacterPlayer.instance.changeCrystal(-cost);
 					Game.getInstance().begin(new FloorTrainning(listSkills.getSelectedValue(), weapon, ammo));					
 				}

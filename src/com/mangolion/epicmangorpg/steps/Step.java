@@ -13,6 +13,7 @@ import com.mangolion.epicmangorpg.components.Elements;
 import com.mangolion.epicmangorpg.components.LogMsg;
 import com.mangolion.epicmangorpg.components.Proficiency;
 import com.mangolion.epicmangorpg.components.StatBuff;
+import com.mangolion.epicmangorpg.components.Style;
 import com.mangolion.epicmangorpg.components.Tick;
 import com.mangolion.epicmangorpg.frames.FrameGame;
 import com.mangolion.epicmangorpg.game.Game;
@@ -23,9 +24,13 @@ import com.mangolion.epicmangorpg.items.Inventory;
 import com.mangolion.epicmangorpg.items.Item;
 import com.mangolion.epicmangorpg.messages.Msg;
 import com.mangolion.epicmangorpg.messages.MsgParrySuccess;
+import com.mangolion.epicmangorpg.messages.MsgSkillInterrupt;
+import com.mangolion.epicmangorpg.messages.MsgSkillInterruptFail;
 import com.mangolion.epicmangorpg.messages.MsgSlashMiss;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.SkillDodge;
+import com.mangolion.epicmangorpg.skills.SkillParry.StepParry;
+import com.mangolion.epicmangorpg.statuses.Buff;
 import com.mangolion.epicmangorpg.statuses.Status;
 import com.mangolion.epicmangorpg.weapons.Weapon;
 import com.mangolion.epicmangorpg.weapons.Weapons;
@@ -41,7 +46,7 @@ public abstract class Step implements Cloneable, StatBuff {
 	protected float  dmgPercent = 0;
 	public Element element;
 	public Status status;
-	public boolean isAOE = false;
+	public boolean isAOE = false, doDamage = false;
 	public LinkedList<Character> aoeExceptions = new LinkedList<Character>();
 	public boolean useAmmo = false, useItem = false, isCharged = false;
 	public int ammoUse = 0, itemUse = 0, maxChage = 1;
@@ -87,7 +92,7 @@ public abstract class Step implements Cloneable, StatBuff {
 				return false;				
 			}
 		}
-		if (getCharacter().getSp() <stamCost*(prof + 1) || getCharacter().getMp() < mpCost*(prof + 1) || getCharacter().getBal() < balCost*(prof + 1) || getCharacter().getHp() < hpCost*(prof + 1) || (getCharacter().weapon.useAmmo && getCharacter().weapon.ammo < ammoUse)){
+		if (getCharacter().getSp() <getStamCost()*(prof + 1) || getCharacter().getMp() < getMpCost()*(prof + 1) || getCharacter().getBal() < getBalCost()*(prof + 1) || getCharacter().getHp() < getHpCost()*(prof + 1) || (getCharacter().weapon.useAmmo && getCharacter().weapon.ammo < ammoUse)){
 			Utility.narrate("You do not have enough sp/mp to use " + name);
 			return false;
 		}
@@ -125,28 +130,27 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 	
 	public float getDamage(){
-
-		
 		float skilDmg = 0;
 		for (Skill skill: getCharacter().skills)
 			if (skill.type == ActionType.WeaponMastery && skill.checkWeapon(getCharacter().weapon))
 				skilDmg = skill.getTotalDamagePercent()+1;
-		dmgBase -= subtractDamage;
+		float dmgbaseTemp = this.dmgBase;
+		dmgbaseTemp -= subtractDamage;
 		subtractDamage = 0;
 		if (strBased){
 		if (getCharacter().weapon.checkType(Weapons.LauncherGrenade) && parent.weapons.contains(Weapons.LauncherGrenade))
-			return (getDmgPercent()*(getCharacter().weapon.launcherDamage + dmgBase)*getCharacter().weapon.gunMod)*skilDmg;
+			return (getDmgPercent()*(getCharacter().weapon.launcherDamage + dmgbaseTemp)*getCharacter().weapon.gunMod)*skilDmg;
 		if (getCharacter().weapon.checkType(Weapons.Bow))
-			return (getDmgPercent()*(getCharacter().weapon.bowDamage + dmgBase)*getCharacter().weapon.gunMod)*skilDmg;
+			return (getDmgPercent()*(getCharacter().weapon.bowDamage + dmgbaseTemp)*getCharacter().weapon.gunMod)*skilDmg;
 		if (getCharacter().weapon.checkType(Weapons.Gun))
-			return (getDmgPercent()*(getCharacter().weapon.gunDamage + dmgBase)*getCharacter().weapon.gunMod)*skilDmg;
+			return (getDmgPercent()*(getCharacter().weapon.gunDamage + dmgbaseTemp)*getCharacter().weapon.gunMod)*skilDmg;
 		if (getCharacter().weapon.checkType(Weapons.Cylinder))
-			return (getDmgPercent()*(getCharacter().weapon.alchemyDamage + dmgBase)*getCharacter().weapon.alchemyMod)*skilDmg;
+			return (getDmgPercent()*(getCharacter().weapon.alchemyDamage + dmgbaseTemp)*getCharacter().weapon.alchemyMod)*skilDmg;
 		else
-			return ((getCharacter().weapon.baseDamage + dmgBase + getCharacter().getStrDamage())*getDmgPercent()*getCharacter().weapon.meleeDamageModifier)*skilDmg;
+			return ((getCharacter().weapon.baseDamage + dmgbaseTemp + getCharacter().getStrDamage())*getDmgPercent()*getCharacter().weapon.meleeDamageModifier)*skilDmg;
 		}
 		else
-			return ((getCharacter().weapon.baseMagicDmg + dmgBase + getCharacter().getIntDamage())*getDmgPercent()*getCharacter().weapon.baseMagicDmgMod)*skilDmg;
+			return ((getCharacter().weapon.magicDamage + dmgbaseTemp + getCharacter().getIntDamage())*getDmgPercent()*getCharacter().weapon.baseMagicDmgMod)*skilDmg;
 	}
 	
 	public void addProf(Proficiency p){
@@ -185,28 +189,51 @@ public abstract class Step implements Cloneable, StatBuff {
 			return false;
 		}
 		
-		float miss = ( chanceMiss) + (1 - getCharacter().getAccuracy(target));
-		if (getCharacter().weapon.isAutomatic)
-			miss *= 1.2f;
-		System.out.println("miss: " + miss);
-		if (rand.nextFloat() <= miss && !isAOE && checkMiss) {
-			StylePainter.append(new MsgSlashMiss().getMessage(getCharacter(),
-					target, 0));
-			return false;
-		}
+
+
 		
 		float eleMult = -2;
+		boolean firstCalc = true;
+		for (Element element: getCharacter().weapon.elements)
+			Elements.getElement(element.type).calculate(element.type);
 		for (Element element: target.getElements()){
 			if (this.element != null)
 				eleMult = (eleMult == -2)? Elements.getElement(element.type).calculate(this.element.type): (eleMult +  Elements.getElement(element.type).calculate(this.element.type))/2;
 				else if (getCharacter().getElements().size() > 0)
 					eleMult = (eleMult == -2)?  Elements.getElement(element.type).calculate(getCharacter().getElements().getFirst().type): (eleMult +  Elements.getElement(element.type).calculate(getCharacter().getElements().getFirst().type))/2;
+			if (firstCalc)
+				firstCalc = false;
 		}
-		//System.out.println(getCharacter().name + " " + eleMult);
 		if (eleMult == -2)
 			eleMult = 1;
-		float dmg = getDamage()*eleMult;
+		float dmg;
+		if (!isAOE){
+			//used for showing the miss message, style is calculated based on the damage of the missed skill, thats why the msg needs to be shown only after the damage is calculated
+			boolean hasMissed = false;
+			float miss = ( chanceMiss) + (1 - getCharacter().getAccuracy(target));
+			if (getCharacter().weapon.isAutomatic)
+				miss *= 1.2f;
+			System.out.println("miss: " + miss);
+			if (rand.nextFloat() <= miss && checkMiss) {
+				hasMissed = true;
+				
+				if (target.skillCurrent != null && target.skillCurrent.type == ActionType.Dodge){
+					
+					target.skillCurrent.steps.get(target.skillCurrent.stepCurrent).addProf(new Proficiency(target, getCharacter()));
+				}
+
+			}	
+
+		dmg= getDamage()*eleMult;
 		
+		if (hasMissed){
+			float change = Style.positive(getCharacter(), target ,Style.miss, 1 - miss, dmg);
+			StylePainter.append(new MsgSlashMiss().getMessage(false, getCharacter(),
+					target, 0), Style.getSegments(change, getCharacter()));
+			return false;
+		}
+		if (calculateChanceMelee(target))
+			return false;
 		float crit = getCharacter().getCritical(target) + critBase;
 		System.out.println("crit: " + crit);
 		if (rand.nextFloat() <= crit) {
@@ -214,27 +241,60 @@ public abstract class Step implements Cloneable, StatBuff {
 			dmg *= 1.5;
 		}
 		
-		if (!isAOE){
 			target.setDamage(getCharacter(), dmg);
-		if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus)
+		if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus && rand.nextFloat() <= eleMult ){
 			target.addStatus(getStatus());
+			
+		}
 		}else
 			for (Character character: Game.getInstance().getEnemies(getCharacter())){
+				boolean hasMissed = false;
+				float miss = ( chanceMiss) + (1 - getCharacter().getAccuracy(character));
+				if (getCharacter().weapon.isAutomatic)
+					miss *= 1.2f;
+				System.out.println("miss: " + miss);
+				if (rand.nextFloat() <= miss && checkMiss) {
+					hasMissed = true;
+					if (target.skillCurrent != null && target.skillCurrent.type == ActionType.Dodge){
+						
+						target.skillCurrent.steps.get(target.skillCurrent.stepCurrent).addProf(new Proficiency(target, getCharacter()));
+					}
+				}
+				
 				boolean excepted = false;
+
 				for (Character character2 : aoeExceptions){
-					System.out.println(character.name + " " + character2.name); 
 				if (character == character2)
 					excepted = true;
 				}
 				if (excepted)
 					continue;
 				
-				character.setDamage(getCharacter(), dmg);
-				if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus && subtractDamage  <= 0)
+				dmg = getDamage()*eleMult;
+				if (hasMissed){
+					float change = Style.positive(getCharacter(), character ,Style.miss, 1 - miss, dmg);
+					StylePainter.append(new MsgSlashMiss().getMessage(false, getCharacter(),
+							character, 0), Style.getSegments(change, getCharacter()));
+					continue;
+				}
+				
+				if (calculateChanceMelee(character))
+					continue;
+				
+				if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus && rand.nextFloat() <= eleMult && subtractDamage  <= 0)
 					character.addStatus(getStatus());
+				
+				float crit = getCharacter().getCritical(target) + critBase;
+				System.out.println("crit: " + crit);
+				if (rand.nextFloat() <= crit) {
+					StylePainter.append(new Msg("$name has landed a critical!").getMessage(getCharacter(), null, 0));
+					dmg *= 1.5;
+				}
+				character.setDamage(getCharacter(), dmg);
 			}
 		aoeExceptions.clear();
 			addProf(new Proficiency(getCharacter(), target));
+			subtractDamage = 0;
 			return true;
 	}
 	
@@ -267,7 +327,7 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 
 	public Msg msgLoad, msgExecute, msgCooldown, msgMiss = new MsgSlashMiss()
-		, msgParry = new MsgParrySuccess();
+		, msgParry = new MsgParrySuccess(), msgSuccess = new Msg("$name has successfully executed $skill");
 	public float customExecutionTime = -1;
 
 	public Character getCharacter() {
@@ -286,25 +346,6 @@ public abstract class Step implements Cloneable, StatBuff {
 		this.dmgPercent = dmgPercent;
 		init();
 	}
-
-/*	public Step(Skill parent, String name, String desc,  ActionType type, float timeLoad,
-			float timeExecute, float timeCooldown, float hpCost, float mpCost, float balCost,
-			float stamCost, float dmgPercent) {
-		this.parent = parent;
-		this.name = name;
-		this.timeLoad = timeLoad;
-		this.timeExecute = timeExecute;
-		this.timeCooldown = timeCooldown;
-		this.hpCost = hpCost;
-		this.mpCost = mpCost;
-		this.stamCost = stamCost;
-		this.balCost  = balCost;
-		this.type = type;
-		this.dmgPercent = dmgPercent;
-		this.desc = desc;
-		init();
-	}*/
-
 	public void load() {
 		
 		if (useItem&& (!isCharged || (isCharged && getCharacter().skillCharged == null)))
@@ -316,10 +357,7 @@ public abstract class Step implements Cloneable, StatBuff {
 			cancel();
 			return;
 		}
-		
-		
-		// Utility.narrate(character.name + " is loading " + step.name
-		// + ",  execution in " + time + " seconds");
+	
 		LogMsg.addLog(new LogMsg(getCharacter().name + " is loading " + name
 				 + ": " + getLoadTime() + " sec", Game.getInstance().timePassed));
 		if (msgLoad == null)
@@ -333,8 +371,8 @@ public abstract class Step implements Cloneable, StatBuff {
 		else
 			StylePainter.append(msgLoad.getMessage(parent.character,
 					parent.character.getTarget(), getLoadTime()));
-		getCharacter().useStamina(stamCost*(prof + 1)/2);
-		getCharacter().useMana(mpCost*(prof + 1)/2);
+		getCharacter().useStamina(getStamCost()*(prof + 1)/2);
+		getCharacter().useMana(getMpCost()*(prof + 1)/2);
 	}
 
 	public void execute() {
@@ -363,8 +401,13 @@ public abstract class Step implements Cloneable, StatBuff {
 				getCharacter().skillCharged = parent;
 		}
 		
-		getCharacter().useStamina(stamCost*(prof + 1)/2);
-		getCharacter().useMana(mpCost*(prof + 1)/2);
+		if (isCharged&& getCharacter().skillCharged != parent){
+			getCharacter().skillCharged = parent;
+			return;
+	}
+		
+		getCharacter().useStamina(getStamCost()*(prof + 1)/2);
+		getCharacter().useMana(getMpCost()*(prof + 1)/2);
 		if (useAmmo){
 		getCharacter().weapon.ammo -= ammoUse;
 		Weapon weapon = getCharacter().weapon;
@@ -378,6 +421,12 @@ public abstract class Step implements Cloneable, StatBuff {
 		else
 			StylePainter.append(msgExecute.getMessage(parent.character,
 					target, getExecutionTime()));
+		
+		if ((doDamage && damage(target)) || !doDamage){
+			if (msgSuccess != null)
+				StylePainter.append(msgSuccess.getMessage(parent.character,
+						target, getExecutionTime()));
+		}
 	}
 
 	public void cooldown() {
@@ -444,11 +493,16 @@ public abstract class Step implements Cloneable, StatBuff {
 		parent.isExecuting = true;
 		Game.getInstance().updateTick(parent.character, 0, Tick.SKILL);
 	}
-
+	
 	public Step setMessages(Msg load, Msg execute, Msg cooldown) {
+		return setMessages(load, execute, cooldown, null);
+	}
+
+	public Step setMessages(Msg load, Msg execute, Msg cooldown, Msg success) {
 		msgLoad = load;
 		msgExecute = execute;
 		msgCooldown = cooldown;
+		msgSuccess = success;
 		return this;
 	}
 
@@ -471,6 +525,7 @@ public abstract class Step implements Cloneable, StatBuff {
 	public void setDmgPercent(float dmgPercent) {
 		this.dmgPercent = dmgPercent;
 	}
+	
 	
 	public float getHPBuff(){
 		return 0;
@@ -530,7 +585,7 @@ public abstract class Step implements Cloneable, StatBuff {
 	public float getHpCost() {
 		if (isCharged && getCharacter().skillCharged == parent)
 			return 0;
-		return hpCost*(prof + 1);
+		return hpCost*(prof + 1)*getCharacter().getHpCost();
 	}
 
 	public void setHpCost(float hpCost) {
@@ -540,7 +595,7 @@ public abstract class Step implements Cloneable, StatBuff {
 	public float getBalCost() {
 		if (isCharged && getCharacter().skillCharged == parent)
 			return 0;
-		return balCost*(prof + 1);
+		return balCost*(prof + 1)*getCharacter().getBalCost();
 	}
 
 	public void setBalCost(float balCost) {
@@ -550,7 +605,7 @@ public abstract class Step implements Cloneable, StatBuff {
 	public float getMpCost() {
 		if (isCharged && getCharacter().skillCharged == parent)
 			return 0;
-		return mpCost*(prof + 1);
+		return mpCost*(prof + 1)*getCharacter().getMpCost();
 	}
 
 	public void setMpCost(float mpCost) {		
@@ -560,11 +615,68 @@ public abstract class Step implements Cloneable, StatBuff {
 	public float getStamCost() {
 		if (isCharged && getCharacter().skillCharged == parent)
 			return 0;
-		return stamCost*(prof + 1);
+		return stamCost*(prof + 1)*getCharacter().getSpCost();
 	}
 
 	public void setStamCost(float stamCost) {
 		this.stamCost = stamCost;
+	}
+	
+	@Override
+	public float getHPCostBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getMPCostBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getSPCostBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getBalCostBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	@Override
+	public float getMeleeDmgBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getGunDmgBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getCylinderDmgBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getBowDmgBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getMagicDmgBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getMeleeSpeedBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getMagicSpeedBuff() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 
@@ -573,4 +685,79 @@ public abstract class Step implements Cloneable, StatBuff {
 		// TODO Auto-generated method stub
 		return name + " [load - " + getLoadTime() + "] [execute - " + getExecutionTime() + "] [Cooldown - " + getCooldownTime() + "] [dmg - " + getDamage()+ "]"; 
 	}
+	
+	public boolean calculateChanceMelee(Character target) {
+		if (target == null)
+			return false;
+		
+
+
+		Skill skill = target.skillCurrent;
+		Step step = target.getCurrentStep();
+		if (step == null)
+			return false;
+		if (skill.isLoading) {
+			int balCal = (int) (100 - target.getBal() / target.getMaxBal() / 2*100)+ 1;
+			System.out.println("bal: " + balCal);
+			if (balCal > 0 && rand.nextInt(balCal) == 0) {
+				float change = Style.positive(getCharacter(), target, Style.interrupt, (100f-balCal)/100f);
+				StylePainter.append(new MsgSkillInterrupt().getMessage(
+						false, getCharacter(), target, 0), Style.getSegments(change, getCharacter()));
+				step.cancel();
+			} else {
+				StylePainter.append(new MsgSkillInterruptFail().getMessage(
+						getCharacter(), target, 0));
+			}
+		}
+
+		/*if (!isAOE && step.type == ActionType.Dodge && skill.isExecuting
+				&& rand.nextFloat() <= (step.chanceDodge) /  getCharacter().weapon.sizeModifier) {
+			StylePainter.append(msgMiss.getMessage(getCharacter(), target, 0));
+			step.addProf(new Proficiency(target, getCharacter()));
+			aoeExceptions.add(target);
+			cancel();
+			return true;
+		}*/
+		if (step.type == ActionType.MeleeParry
+				&& skill.isExecuting
+				&& rand.nextFloat() <= ((StepParry) step).chanceParry*chanceParry
+						/ getCharacter().weapon.sizeModifier) {
+			step.addProf(new Proficiency(target, getCharacter()));
+			float change = Style.positive(getCharacter(), target, Style.parry,1-((StepParry) step).chanceParry*chanceParry
+					/ getCharacter().weapon.sizeModifier);
+			StylePainter.append(msgParry.getMessage(false, target, getCharacter(), 0), Style.getSegments(change, target));
+			aoeExceptions.add(target);
+			cancel();
+			return true;
+		}
+		if (step.type == ActionType.MeleeBlock && skill.isExecuting && chanceBlock > 0) {
+			StylePainter.append(new Msg("$name's $skill is blocked by $targetname's $targetskill").getMessage(getCharacter(), target, 0));
+			subtractDamage = step.value;
+			System.out.println(target.name+ " defense value: " + subtractDamage);
+			//aoeExceptions.add(target);
+			step.addProf(new Proficiency(target, getCharacter()));
+			return false;
+		}
+		if ((step.type == ActionType.MeleeSwing || step.type == ActionType.MeleeStab)
+				&& skill.isExecuting) {
+			if (rand.nextFloat() <= chanceBlock /  getCharacter().weapon.sizeModifier) {
+				StylePainter.append(new Msg("$name's $skill is blocked by $targetname's $targetskill").getMessage(getCharacter(), target, 0));
+				subtractDamage = Math.abs(step.getDamage()/2); 
+				return false;
+			} else if ((step.parent.isLoading || step.parent.isCooldown)
+					&& rand.nextFloat() <= chanceParry /  getCharacter().weapon.sizeModifier) {
+				StylePainter.append(new Msg("$name's $skill is parried by $targetname's $targetskill").getMessage(getCharacter(), target, 0));
+				step.addProf(new Proficiency(target, getCharacter()));
+				//aoeExceptions.add(target);
+				step.cancel();
+				cancel();
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	
+
 }

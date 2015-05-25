@@ -22,10 +22,10 @@ import com.mangolion.epicmangorpg.skills.SkillBlastSand;
 import com.mangolion.epicmangorpg.skills.SkillBlastWind;
 import com.mangolion.epicmangorpg.skills.SkillSummonGolem;
 import com.mangolion.epicmangorpg.skills.SkillWaterCannon;
-import com.mangolion.epicmangorpg.weapons.AssaultRifle;
+import com.mangolion.epicmangorpg.weapons.RifleAssault;
 import com.mangolion.epicmangorpg.weapons.Barehands;
 import com.mangolion.epicmangorpg.weapons.BasicMachinegun;
-import com.mangolion.epicmangorpg.weapons.BasicRifle;
+import com.mangolion.epicmangorpg.weapons.RifleBasic;
 import com.mangolion.epicmangorpg.weapons.BowShort;
 import com.mangolion.epicmangorpg.weapons.CopperDagger;
 import com.mangolion.epicmangorpg.weapons.CylinderBasic;
@@ -42,27 +42,12 @@ public class BlacksmithShop extends Character{
 	
 	@Override
 	public void openShop() {
-		LinkedList<ItemCustom> items = new LinkedList<ItemCustom>();
-		items.add(new CylinderBasic());
-		items.add(new BasicMachinegun());
-		items.add(new SniperRifle());
-		items.add(new BasicRifle());
-		items.add(new BowShort());
-		items.add(new CopperDagger());
-		items.add(new LeatherGloves());
-		items.add(new LeatherPants());
-		items.add(new LeatherJacket());
-		items.add(new LeatherHat());
-		items.add(new LeatherShoes());
-		items.add(new MetalBoots());
-		items.add(new MetalGuantlet());
-		items.add(new MetalHelm());
-		items.add(new PlateArmorLower());
-		items.add(new PlateArmorUpper());
-		items.add(new ClothRobe());
-		items.add(new AssaultRifle());
-		items.add(new GreatCopperSword());
-		new FrameShopItemCustoms("Blacksmith", items);
+		FrameShopItemCustoms frame = new FrameShopItemCustoms("Blacksmith");
+		frame.addTab("Swords", new CopperDagger(), new GreatCopperSword(), new LongSword());
+		frame.addTab("Guns", new BasicMachinegun(), new BasicMachinegun(), new SniperRifle(), new RifleAssault());
+		frame.addTab("Cylinders", new CylinderBasic());
+		frame.addTab("Bows", new BowShort());
+		frame.addTab("Armors", new LeatherGloves(), new LeatherHat(), new LeatherPants(), new LeatherJacket(),new LeatherShoes(), new MetalBoots(), new MetalGuantlet(), new MetalHelm(), new PlateArmorLower(), new PlateArmorUpper());
 	}
 
 }

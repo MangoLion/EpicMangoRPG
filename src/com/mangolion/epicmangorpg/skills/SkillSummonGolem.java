@@ -16,6 +16,7 @@ public class SkillSummonGolem extends Skill{
 	public SkillSummonGolem() {
 		super("Summon Golem", "Summons a golem to fight by your side. Available golems are Earth,Metal and Ice.The command is: use skill summongolem with [Golem type]." , Weapons.Cylinder, ActionType.Summon);
 		shopPrice = 70;
+		setObservable(true, 1);
 		setArguments("Stone", "Earth", "Ice", "Metal");
 		hasTarget = false;
 		addSteps(new Step(this, name, desc, type, 0.1f, 0.2f, 0, 0) {
@@ -32,6 +33,8 @@ public class SkillSummonGolem extends Skill{
 			@Override
 			public void execute(Character target, float time, String aug) {
 				System.out.println("executed");
+				if (!getCharacter().isPlayer)
+					aug = parent.arguments.get(rand.nextInt(parent.arguments.size()));
 				Character golem = null;
 				if (aug.toLowerCase().equals("earth"))
 					golem = new GolemEarth();
@@ -50,8 +53,13 @@ public class SkillSummonGolem extends Skill{
 			
 			@Override
 			public boolean checkConndition(String arg) {
-				if (aug.toLowerCase().equals("earth")||aug.toLowerCase().equals("metal")||aug.toLowerCase().equals("ice"))
-					return super.checkConndition(arg);
+				if (getCharacter().isPlayer)
+					if (aug.toLowerCase().equals("earth")||aug.toLowerCase().equals("metal")||aug.toLowerCase().equals("ice"))
+						return super.checkConndition(arg);
+					else {}
+				else
+					return true;
+				
 				Utility.narrate("[" +aug + "] is not a golem type!");
 				return false;
 			}

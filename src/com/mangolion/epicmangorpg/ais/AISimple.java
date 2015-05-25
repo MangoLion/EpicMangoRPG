@@ -45,13 +45,13 @@ public class AISimple extends AI {
 		if (rand.nextFloat() > chanceRecover)
 			return false;
 		
-		if (character.getHp()/character.maxHP < recoverLevel){
+		if (character.getHp()/character.getMaxHP() < recoverLevel){
 			return executeSkill(ActionType.RecoverHP);
 		}
-		if (character.getSp()/character.maxSP < recoverLevel){
+		if (character.getSp()/character.getMaxSP() < recoverLevel){
 			return executeSkill(ActionType.RecoverSP);
 		}
-		if (character.getMp()/character.maxMP < recoverLevel){
+		if (character.getMp()/character.getMaxMP() < recoverLevel){
 			return executeSkill(ActionType.RecoverMP);
 		}
 		return false;

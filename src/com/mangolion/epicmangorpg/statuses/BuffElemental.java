@@ -6,7 +6,7 @@ import com.mangolion.epicmangorpg.components.Element;
 public class BuffElemental extends Buff {
 
 	public BuffElemental(String name,float time, Element element) {
-		super(name, 0, time, Type.elemental, GenType.positive);
+		super(name, 0, time, GenType.positive, Type.elemental);
 		this.element = element;
 	}
 

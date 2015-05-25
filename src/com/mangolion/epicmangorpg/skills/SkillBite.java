@@ -22,7 +22,7 @@ public class SkillBite extends Skill {
 			
 		}.setChances(0.9f, 0, 0.1f)
 		.setCost(20, 0, 10, 0)
-		.setMessages(new Msg("$name lunges at $targetname, showing $p3 sharp teeth."), new Msg("Blood is seen everywhere as $name's teeth sunk into $targetname's body."), null));
+		.setMessages(new Msg("$name lunges at $targetname, showing $p3 sharp teeth."), null, null, new Msg("Blood is seen everywhere as $name's teeth sunk into $targetname's body.")));
 	}
 	
 }

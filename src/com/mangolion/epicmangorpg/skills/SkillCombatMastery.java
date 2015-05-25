@@ -42,6 +42,12 @@ public class SkillCombatMastery  extends Skill{
 	}
 	
 	@Override
+	public float getDexBuff() {
+		// TODO Auto-generated method stub
+		return Utility.format4(prof*5f);
+	}
+	
+	@Override
 	public float getBalBuff() {
 		// TODO Auto-generated method stub
 		return Utility.format4(prof*50f);

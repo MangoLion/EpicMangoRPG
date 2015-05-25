@@ -53,7 +53,7 @@ public class FrameWeaponView extends JInternalFrame {
 		lblBaseDamage.setBounds(10, 150, 271, 14);
 		contentPane.add(lblBaseDamage);
 		
-		JLabel lblBaseMagicDamage = new JLabel("Base Magic Damage: " + weapon.baseMagicDmg);
+		JLabel lblBaseMagicDamage = new JLabel("Base Magic Damage: " + weapon.magicDamage);
 		lblBaseMagicDamage.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		lblBaseMagicDamage.setBounds(10, 175, 271, 14);
 		contentPane.add(lblBaseMagicDamage);

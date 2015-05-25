@@ -37,7 +37,7 @@ public class SkillSummon extends Skill {
 					StylePainter.append(new Msg("There are no reinforcement around to respond to $name's call.").getMessage(getCharacter(), null, 0));
 					
 			}			
-		}.setMessages(new Msg("Seeing the situation turning for the worst, $name called for backup"), new Msg("$name had successfully called for backup."), null)
+		}.setMessages(new Msg("Seeing the situation turning for the worst, $name called for backup"), null, null, new Msg("$name had successfully called for backup."))
 		.setCost(20, 20, 0, 0));
 	}
 

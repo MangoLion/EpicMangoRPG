@@ -19,14 +19,15 @@ public class SkillBoltLightning extends Skill {
 
 	public SkillBoltLightning() {
 		super("LightningBolt", "Gathering the electric charge from the air and release them as lightning",Weapons.ALL, ActionType.Magic);
-		addSteps(new Step(this, "LightningBolt", "",ActionType.Magic, 0.8f, 0.1f, 0.1f,1f){
+		addSteps(new Step(this, "LightningBolt", "",ActionType.Magic, 0.5f, 0.1f, 0.1f,1f){
 			@Override
 			public void init() {
 			strBased = false;
 			intBased = true;
-			dmgBase = 10;
+			dmgBase = 5;
 			mpCost = 10;
 			setElement(new Element("Lightning", 1));
+			setStatus(new StatusStun(null, 0.6f), 1);
 				super.init();
 			}
 			@Override
@@ -48,7 +49,6 @@ public class SkillBoltLightning extends Skill {
 		public EventIceBolt(float time, Character source, Character target, float dmgbase, Step step) {
 			super("Lightningbolt", "", time, source, target, dmgbase, step);
 			setMessages(null, null, null, new Msg("$name had parried $targetname's $targetskill"));
-			setStatus(new StatusStun(null, 0.6f), 1);
 		}
 
 }

@@ -7,7 +7,7 @@ import com.mangolion.epicmangorpg.skills.SkillHardAim;
 import com.mangolion.epicmangorpg.skills.SkillSidestepShoot;
 import com.mangolion.epicmangorpg.skills.SkillSniperShot;
 import com.mangolion.epicmangorpg.weapons.Barehands;
-import com.mangolion.epicmangorpg.weapons.BasicRifle;
+import com.mangolion.epicmangorpg.weapons.RifleBasic;
 import com.mangolion.epicmangorpg.weapons.BowShort;
 
 public class RangeGun extends Character{
@@ -20,7 +20,7 @@ public class RangeGun extends Character{
 	@Override
 	public void openShop() {
 		// TODO Auto-generated method stub
-		new FrameShopSkill("Shooting Range",new BasicRifle(), skills, Items.bullet);
+		new FrameShopSkill("Shooting Range",new RifleBasic(), skills, Items.bullet);
 	}
 
 }

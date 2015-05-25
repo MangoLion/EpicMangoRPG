@@ -38,8 +38,12 @@ public class SkillHardAim extends Skill {
 			}			
 			
 			public void load() {
-				getCharacter().applyBuff(new Buff("Focus", getCharacter().getDex()*0.1f, getLoadTime() + getExecutionTime() + getCooldownTime(), Buff.Type.dex, GenType.positive));
+				getCharacter().applyBuff(new Buff("Focus", getCharacter().getDex()*0.1f, getLoadTime() + getExecutionTime() + getCooldownTime()+0.5f, GenType.positive,Buff.Type.dex));
 				super.load();
+			};
+			
+			public float getDexBuff() {
+				return prof*20;
 			};
 			
 			public float getStrBuff() {

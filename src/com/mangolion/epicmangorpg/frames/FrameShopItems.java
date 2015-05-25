@@ -103,7 +103,7 @@ public class FrameShopItems extends JInternalFrame {
 				int amount =  Integer.valueOf(tfAmount.getText());
 				float totalCost = amount* item.price;
 				if (btnBuy.getText().equals("Buy")){
-				if (CharacterPlayer.instance.crystals >= totalCost){
+				if (CharacterPlayer.instance.getCrystals() >= totalCost){
 					CharacterPlayer.instance.changeCrystal(-totalCost);
 					CharacterPlayer.instance.inventory.addItem(item, amount);			
 				}
@@ -200,7 +200,7 @@ public class FrameShopItems extends JInternalFrame {
 		lblTotalCost.setText("Total: ");
 		if (btnBuy.getText().equals("Buy")){
 			lblPrice.setText("Price: " + item.price + " crystals");;
-			lblHave.setText("You have " + CharacterPlayer.instance.crystals + " crystals") ;
+			lblHave.setText("You have " + CharacterPlayer.instance.getCrystals() + " crystals") ;
 		}else{
 			lblPrice.setText("Price: " + item.price * 0.7f + " crystals");;
 			lblHave.setText("You have " + CharacterPlayer.instance.inventory.getItemNumber(item) + " " + item.name) ;

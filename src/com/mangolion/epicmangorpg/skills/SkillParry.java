@@ -26,7 +26,7 @@ public class SkillParry extends Skill{
 		public StepParry(Skill parent,
 				float timeLoad, float timeExecute, float timeCooldown) {
 			super(parent, "Parry", "",ActionType.MeleeParry, timeLoad, timeExecute, timeCooldown, 0);
-			setMessages(new MsgParryLoad(), null, new MsgBasicCD());
+			setMessages(new MsgParryLoad(), null, new MsgBasicCD(), null);
 			chanceParry= 1;
 		}
 		public float getStrBuff() {

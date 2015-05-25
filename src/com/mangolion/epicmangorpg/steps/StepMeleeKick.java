@@ -23,7 +23,7 @@ public abstract class StepMeleeKick extends StepMeleeSlash {
 			float timeExecute, float timeCooldown, float baseDamage_, float dmgPercent) {
 		super(parent, name, desc, timeLoad, timeExecute,
 				timeCooldown, dmgPercent);
-		setMessages(new MsgKickLoad(), new MsgKickExecute(), new MsgBasicCD());
+		setMessages(new MsgKickLoad(), null, new MsgBasicCD(), new MsgKickExecute());
 		chanceBlock = 0.5f;
 		chanceParry = 0;
 		chanceMiss = 0.2f;

@@ -23,7 +23,7 @@ public abstract class StepStab extends StepMeleeSlash {
 			float timeExecute, float timeCooldown, float dmgPercent) {
 		super(parent, name,desc,  timeLoad, timeExecute,
 				timeCooldown,dmgPercent);
-		setMessages(null, null, null);
+		setMessages(null, null, null, null);
 		chanceBlock = 0f;
 		chanceParry = 0.7f;
 		chanceMiss = 0.1f;

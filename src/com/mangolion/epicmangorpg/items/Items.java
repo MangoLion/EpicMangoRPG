@@ -12,15 +12,16 @@ import com.mangolion.epicmangorpg.armor.MetalHelm;
 import com.mangolion.epicmangorpg.armor.PlateArmorLower;
 import com.mangolion.epicmangorpg.armor.PlateArmorUpper;
 import com.mangolion.epicmangorpg.items.Item.Type;
-import com.mangolion.epicmangorpg.weapons.AssaultRifle;
+import com.mangolion.epicmangorpg.weapons.RifleAssault;
 import com.mangolion.epicmangorpg.weapons.BasicMachinegun;
-import com.mangolion.epicmangorpg.weapons.BasicRifle;
+import com.mangolion.epicmangorpg.weapons.RifleBasic;
 import com.mangolion.epicmangorpg.weapons.BowShort;
 import com.mangolion.epicmangorpg.weapons.CopperDagger;
 import com.mangolion.epicmangorpg.weapons.CylinderBasic;
 import com.mangolion.epicmangorpg.weapons.GreatCopperSword;
 import com.mangolion.epicmangorpg.weapons.LongSword;
 import com.mangolion.epicmangorpg.weapons.SniperRifle;
+import com.mangolion.epicmangorpg.weapons.WandPine;
 
 public class Items {
 	public static Item potionSmall = new ItemPotionSmall(),
@@ -46,9 +47,10 @@ public class Items {
 			wolfHide =  new Item("Wolf Hide", "", Type.Craft, 10, 7f){},
 			boarHide =  new Item("Boar Hide", "", Type.Craft, 10, 3f){},
 			
-			all[] = {potionSmall, arrow, bullet, crystalWater, crystalFire, crystalWind, crystalEarth, portalStone, mstoneSmall, mstone, mstoneLarge, grenadeAmmo};
+			all[] = {potionSmall, arrow, bullet, crystalWater, crystalFire, crystalWind, crystalEarth, portalStone, mstoneSmall, mstone, mstoneLarge, grenadeAmmo, slime, feather,antShell, hardScale, foxHide, rabbitHide, wolfHide, boarHide};
 	public static ItemCustom customs[] = {new CopperDagger(), new GreatCopperSword(), new LongSword(), new LeatherGloves(), new LeatherHat(), new LeatherJacket(), new LeatherPants(), new LeatherShoes(), new MetalBoots(), new MetalHelm(),
-		new MetalGuantlet(), new PlateArmorLower(), new PlateArmorUpper(),  new ClothRobe(), new BowShort(), new BasicRifle(), new SniperRifle(), new BasicMachinegun(), new CylinderBasic(), new ItemPortalStoneSaved(), new AssaultRifle()};
+		new MetalGuantlet(), new PlateArmorLower(), new PlateArmorUpper(),  new ClothRobe(), new BowShort(), new RifleBasic(), new SniperRifle(), new BasicMachinegun(), new CylinderBasic(), new ItemPortalStoneSaved(), new RifleAssault(),
+		new WandPine()};
 	
 	public static Item getItem(String name){
 		for (Item item: all){

@@ -27,7 +27,7 @@ public class Skill implements StatBuff {
 	public Character character;
 	public String name, desc;
 	public LinkedList<Step> steps = new LinkedList<Step>();
-	public boolean isExecuting, isCooldown, isLoading, isObservable = false, isTwoHanded = true, hasTarget = true, customTime = false, hasArg = false;
+	public boolean isExecuting, isCooldown, isLoading, isObservable = false, isTwoHanded = true, hasTarget = true, customTime = false, hasArg = false, requireAllType = false;;
 	public int stepCurrent;
 	public LinkedList<Weapons> weapons = new LinkedList<Weapons>();
 	public ActionType type;
@@ -286,8 +286,8 @@ public class Skill implements StatBuff {
 	
 	public float getCP(){
 		float result = 0;
-		for (Step step : steps)
-			result += step.getCP();
+		//for (Step step : steps)
+		//	result += step.getCP();
 		return result;
 	}
 	
@@ -417,6 +417,61 @@ public class Skill implements StatBuff {
 
 	@Override
 	public float getCriticalBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getHPCostBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getMPCostBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getSPCostBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getBalCostBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getMeleeDmgBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getGunDmgBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getCylinderDmgBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getBowDmgBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getMagicDmgBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getMeleeSpeedBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getMagicSpeedBuff() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

@@ -31,7 +31,7 @@ public class SkillMeditate extends Skill{
 		public StepMeditate(Skill parent,
 				float timeLoad, float timeExecute, float timeCooldown) {
 			super(parent, "Meditate", "",ActionType.RecoverMP, timeLoad, timeExecute, timeCooldown, 0);
-			setMessages(new Msg("$name relaxes $p3 body and recover $p3 energy"), null, new MsgBasicCD());
+			setMessages(new Msg("$name relaxes $p3 body and recover $p3 energy"), null, new MsgBasicCD(), null);
 		}
 		public float getMPBuff() {
 			// TODO Auto-generated method stub
@@ -63,8 +63,8 @@ public class SkillMeditate extends Skill{
 		public void execute(Character target, float time) {
 			//System.out.println("" + -getCharacter().str*0.7f);
 			addProf(new Proficiency(getCharacter(), getCharacter()));
-			getCharacter().applyBuff(new Buff("Meditate", getCharacter().getMpRegen()*3*(prof + 1), customTime, Buff.Type.mpRegen, GenType.neutral));
-			getCharacter().applyBuff(new Buff("Meditate Debuff", -getCharacter().getInt()*0.7f*(1 - prof ) , customTime, Buff.Type.inte, GenType.negative));
+			getCharacter().applyBuff(new Buff("Meditate", getCharacter().getMpRegen()*3*(prof + 1), customTime, GenType.neutral, Buff.Type.mpRegen));
+			getCharacter().applyBuff(new Buff("Meditate Debuff", -getCharacter().getInt()*0.7f*(1 - prof ) , customTime, GenType.negative, Buff.Type.inte));
 			super.execute(target, time);
 		}
 

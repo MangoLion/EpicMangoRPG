@@ -1,7 +1,7 @@
 [game]
-current floor = 2
+current floor = 4
 last floor = false
-next floor = true
-floor percent = 80.0
+next floor = false
+floor percent = 0.0
 theme = Dust Coffee
 

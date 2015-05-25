@@ -64,7 +64,7 @@ public class FrameCharacterInfo extends JInternalFrame {
 		lblAgi.setText("Agi: " + String.valueOf(character.getAgi()));
 		lblDef.setText("Def: " + String.valueOf(character.getDef()));
 		lblProt.setText("Prot: " + String.valueOf(character.getProt()));
-		lblCrystals.setText("Crystals: " + String.valueOf(character.crystals));
+		lblCrystals.setText("Crystals: " + String.valueOf(character.getCrystals()));
 		
 		//if (character != CharacterPlayer.instance)
 			lblAccuracy.setText("Accuracy: " + Utility.format(CharacterPlayer.instance.getAccuracy(character)*100) + "%");

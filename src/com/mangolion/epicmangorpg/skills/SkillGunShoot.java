@@ -38,6 +38,10 @@ public class SkillGunShoot extends Skill {
 			public float getSPBuff() {
 				return prof*15;
 			};
+			
+			public float getDexBuff() {
+				return prof*10;
+			};
 		}.setCost(5, 0, 0, 0).setChances(1, 1, 0f));
 	}
 

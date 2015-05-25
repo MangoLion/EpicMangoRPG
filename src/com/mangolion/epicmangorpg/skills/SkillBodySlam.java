@@ -26,7 +26,7 @@ public class SkillBodySlam extends Skill {
 				chanceParry = 0;
 				chanceBlock = 0;
 				setStatus(new StatusStun(null, 1.1f), 1);
-				setMessages(null, null, null);
+				setMessages(null, null, null, null);
 				setObservable(true, 1f);
 			}
 			

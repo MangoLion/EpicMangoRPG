@@ -1,5 +1,6 @@
 package com.mangolion.epicmangorpg.components;
 
+import java.awt.event.ActionListener;
 import java.util.LinkedList;
 
 public enum Elements {
@@ -13,18 +14,35 @@ public enum Elements {
 	Wind("Wind", new Element("Lava", 1.5f),new Element("Fire", 1.5f),  new Element("Earth", 0.5f)),
 	Plant(false, "Plant", new Element("Fire", 2f),new Element("Lava", 2f) ,new Element("Water", 0.5f),new Element("Lightning", 2f),new Element("Light", -1f)),
 	Furry(false, "Furry", new Element("Fire", 2f),new Element("Lava", 2f) ,new Element("Lightning", 2f)),
+	Poison(false, "Poison", new Element("Fire", 2f),new Element("Lava", 2f) ,new Element("Lightning", 2f),new Element("Ice", 0.5f),new Element("Earth", 0.5f),new Element("Water", 0.5f)),
+	Death("Death", 0.7f, new Element("Light", 2), new Element("Dark", 0.2f), new Element("Poison", 0.2f)),
 	ToughHide(false, "Tough Hide",new Element("Lightning", 2f),new Element("Fire", 0.5f),  new Element("Wind", 0.5f), new Element("Ice", 0.5f)),
 	Metal(false, "Metal",new Element("Water", 1.5f),new Element("Lightning", 2f),new Element("Fire", 0.5f),  new Element("Wind", 0.5f), new Element("Ice", 0.5f)),
 	ToughScales(false, "Tough Scales",new Element("Lightning", 2f) ,new Element("Fire", 0.5f),  new Element("Wind", 0.5f), new Element("Ice", 2f)),
 	Feathered(false, "Feathered",new Element("Lightning", 2f) ,new Element("Fire", 1.5f),  new Element("Wind", 1.5f),  new Element("Earth", 0.5f)),
-	Light("Light", new Element("Dark", 2f)),
-	Dark("Dark", new Element("Light", 2f));
+	Light("Light", new Element("Dark", 2f), new Element("Death", 0.5f)),
+	Dark("Dark", new Element("Light", 2f), new Element("Dark", 0f));
 	
 	public String name;
 	boolean againstSelf = true;
+	float allValues = 1;
+	public ActionListener action;
 	public Element[] elements;
 	private Elements(String name, Element ... elements) {
 		this.name = name;
+		this.elements = elements;
+	}
+	
+	private Elements(String name, float allvalues, Element ... elements) {
+		this.name = name;
+		this.allValues = allvalues;
+		this.elements = elements;
+	}
+	
+	private Elements(String name, float allvalues, ActionListener action, Element ... elements) {
+		this.name = name;
+		this.allValues = allvalues;
+		this.action = action;
 		this.elements = elements;
 	}
 	
@@ -49,7 +67,7 @@ public enum Elements {
 				return e.value;
 			if (element.equals(this.name) && againstSelf)
 				return 0;
-		return 1;
+		return allValues;
 	}
 	
 	public static  Elements getElement(String ele){
@@ -86,6 +104,10 @@ public enum Elements {
 			return Stone;
 		else if (ele.equals("metal"))
 			return Metal;
+		else if (ele.equals("poison"))
+			return Poison;
+		else if (ele.equals("death"))
+			return Death;
 		return null;
 	}
 	
@@ -122,3 +144,4 @@ public enum Elements {
 		return Dark;
 	}
 }
+

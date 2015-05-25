@@ -21,6 +21,7 @@ public class SkillSpitPoison extends Skill {
 			@Override
 			public void execute(Character target) {
 				Event.addEvent(new EventSpitPoison(0.5f, getCharacter(), target, 20, this));
+				setStatus(new StatusPoison(null, 1), 1);
 				super.execute(character);
 			}			
 		}.setCost(15, 15, 5, 0));
@@ -30,7 +31,6 @@ public class SkillSpitPoison extends Skill {
 		public EventSpitPoison(float time, Character source, Character target, float dmgbase, Step step) {
 			super("Poison Spit", "", time, source, target, dmgbase, step);
 			setMessages(null, null, null, new Msg("$name had parried $targetname's $targetskill"));
-			setStatus(new StatusPoison(null, 1), 1);
 		}
 
 	}

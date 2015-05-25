@@ -25,14 +25,14 @@ public class SkillBoltFire extends Skill {
 			public void init() {
 			strBased = false;
 			intBased = true;
-			dmgBase = 10;
+			dmgBase = 5;
 			mpCost = 10;
 			setElement(new Element("Fire", 1));
 				super.init();
 			}
 			@Override
 			public void execute(Character target) {
-				Event.addEvent(new EventFireBolt(0.5f, getCharacter(), target, 20, this));
+				Event.addEvent(new EventFireBolt(0.3f, getCharacter(), target, 20, this));
 				super.execute(character);
 			}			
 			

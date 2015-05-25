@@ -105,7 +105,7 @@ public class FrameStepInfo extends JInternalFrame {
 		lblDesc.setText(step.desc);
 		lblTime.setText("Time: [Load - " + step.getLoadTime() + "] [Execute - " + step.getExecutionTime() + "] [Cooldown - " + step.getCooldownTime() + "]");
 		lblCost.setText("Cost: hp - " + step.getHpCost() + " mp - " + step.getMpCost() + " sp - "+ step.getStamCost() + " bal - " + step.getBalCost());
-		lblDamage.setText("Damage: " + step.getDamage() + "(" + step.getDmgPercent() + "%)");
+		lblDamage.setText("Damage: " + step.getDamage() + "(" + step.getDmgPercent()*100 + "%)");
 		lblParryChance.setText("Parry Chance: " + step.chanceParry*100 + "%");
 		lblBlockChance.setText("Block Chance: " + step.chanceBlock*100 + "%");
 		lblDodgeChance.setText("Dodge Chance: " + step.chanceDodge*100 + "%");

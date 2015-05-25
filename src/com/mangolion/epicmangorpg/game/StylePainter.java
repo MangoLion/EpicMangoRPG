@@ -99,6 +99,15 @@ public class StylePainter {
 		}
 	}
 
+	public static void append(LinkedList<StyleSegment> ... message){
+		LinkedList<StyleSegment> result = new LinkedList<StyleSegment>();
+		for (int i = 0; i < message.length; i ++){
+			LinkedList<StyleSegment> s =  message[i];
+			result.addAll(s);
+		}
+		append(result);
+	}
+	
 	public static void append(LinkedList<StyleSegment> message) {
 		 paneMango = FrameGame.instance.tfNarration;
 			paneTime = FrameGame.instance.tfTime;

@@ -21,13 +21,11 @@ public class Status implements Cloneable{
 		
 		public void tick (float deltaTime){
 			time = Utility.format(time - deltaTime);
-			if (time < 0)
-				remove();
 		}
 		
 		public void remove() {
-			StylePainter.append(new Msg("$name is no longer " + name).getMessage(character, null, 0));
-			character.statuses.remove(this);
+			StylePainter.append(new Msg("$"
+					+ "name is no longer " + name).getMessage(character, null, 0));
 		}
 
 		public void onUpdate(){

@@ -39,7 +39,11 @@ public class SkillSniperShot extends Skill {
 				for (int i = 0; i < ammoUse; i ++)
 					Event.addEvent(new EventRange("Bullet", "", 0.2f, getCharacter(), target, 0, this));
 				super.execute(target);
-			}			
+			}	
+			
+			public float getDexBuff() {
+				return prof*15;
+			};
 			
 			public float getStrBuff() {
 				// TODO Auto-generated method stub
@@ -49,6 +53,7 @@ public class SkillSniperShot extends Skill {
 				return prof*15;
 			};
 		}.setCost(5, 0, 0, 0).setChances(1, 1, -0.15f));
+		setObservable(true, 0.7f);
 	}
 
 }

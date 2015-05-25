@@ -20,12 +20,11 @@ public class SkillStomp extends Skill {
 		hasTarget = false;
 		addSteps(new StepMeleeSlash(this, "Stomp","", 0.6f,
 				0.3f, 0.2f, 1f) {
-			
-		}.setAOE(true).setCost(30, 0, 15, 0),
+		}.setAOE(true).setCost(30, 0, 15, 0).setChances(1, 0, -1),
 		new StepMeleeSlash(this, "Stomp","", 0.4f,
 				0.3f, 0.6f, 1f) {
 			
-		}.setAOE(true).setCost(15, 0, 15, 0));
+		}.setAOE(true).setCost(15, 0, 15, 0).setChances(1, 0, -1));
 	}
 	
 }

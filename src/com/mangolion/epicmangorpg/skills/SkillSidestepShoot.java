@@ -9,6 +9,8 @@ import com.mangolion.epicmangorpg.events.EventArrow;
 import com.mangolion.epicmangorpg.frames.FrameGame;
 import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.items.Items;
+import com.mangolion.epicmangorpg.statuses.Buff;
+import com.mangolion.epicmangorpg.statuses.Buff.GenType;
 import com.mangolion.epicmangorpg.steps.Step;
 import com.mangolion.epicmangorpg.steps.StepMeleeSlash;
 import com.mangolion.epicmangorpg.weapons.Weapons;
@@ -43,6 +45,7 @@ public class SkillSidestepShoot extends Skill {
 		@Override
 		public void execute(Character target) {
 			Event.addEvent(new EventArrow(0.3f, getCharacter(), target, 20, this));
+			getCharacter().applyBuff(new Buff("Evasion", getCharacter().getDex()*1.5f, getExecutionTime(), GenType.positive, Buff.Type.dex));
 			getCharacter().inventory.removeItem(Items.bullet, 1);
 			super.execute(target);
 		}		

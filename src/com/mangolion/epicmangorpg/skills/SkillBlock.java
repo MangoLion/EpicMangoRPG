@@ -45,7 +45,7 @@ public void execute(Character target, float time) {
 			public boolean isCustomTime() {
 				return true;
 			};
-	}.setMessages(new MsgMeleeBlockLoad(), new MsgMeleeBlockExecute(), new MsgBasicCD())
+	}.setMessages(new MsgMeleeBlockLoad(), new MsgMeleeBlockExecute(), new MsgBasicCD(), null)
 	.setCost(15, 0, 0, 0));
 	}
 }

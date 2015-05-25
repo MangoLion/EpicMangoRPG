@@ -30,6 +30,14 @@ public class SkillArrowFlame extends Skill {
 					return super.checkConndition();
 				return false;
 			};
+			
+			public float getDexBuff() {
+				return prof*10;
+			};
+			
+			public float getIntBuff() {
+				return prof*10;
+			};
 
 			public float getSPBuff() {
 				return prof*15;

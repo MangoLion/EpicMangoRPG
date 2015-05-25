@@ -53,6 +53,10 @@ public class SkillArrowSideStep extends Skill {
 			return prof*10;
 		}
 		
+		public float getDexBuff() {
+			return prof*10;
+		};
+		
 		@Override
 		public float getStrBuff() {
 			// TODO Auto-generated method stub

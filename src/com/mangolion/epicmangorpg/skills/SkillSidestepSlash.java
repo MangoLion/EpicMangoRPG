@@ -2,9 +2,12 @@ package com.mangolion.epicmangorpg.skills;
 
 import java.util.Random;
 
+import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.components.ActionType;
 import com.mangolion.epicmangorpg.frames.FrameGame;
 import com.mangolion.epicmangorpg.game.Utility;
+import com.mangolion.epicmangorpg.statuses.Buff;
+import com.mangolion.epicmangorpg.statuses.Buff.GenType;
 import com.mangolion.epicmangorpg.steps.Step;
 import com.mangolion.epicmangorpg.steps.StepMeleeSlash;
 import com.mangolion.epicmangorpg.weapons.Weapons;
@@ -30,6 +33,12 @@ public class SkillSidestepSlash extends Skill {
 			chanceDodge = 0.6f;
 			type =ActionType.Dodge;
 		}
+		
+		public void execute(Character target, float time, String aug) {
+			getCharacter().applyBuff(new Buff("Evasion", getCharacter().getDex()*1.5f, getExecutionTime(), GenType.positive, Buff.Type.dex));
+			super.execute(target, time, aug);
+		};
+		
 		@Override
 		public float getAgiBuff() {
 			// TODO Auto-generated method stub

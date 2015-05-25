@@ -42,19 +42,8 @@ public class EventRange extends Event{
 	public void execute() {
 		if (target == null)
 			return;
-		
-		if (!isAOE && !calculateChance(target)){
-			step.damage(target);
-			super.execute();
-		}else  if (isAOE)
-		{
-			LinkedList<Character> enemies = Game.getInstance().getEnemies(step.getCharacter());
-			for (Character character:enemies ){
-				if (!calculateChance(character))
-					step.damage(character);
-			}
-			super.execute();
-		}
+			if(step.damage(target))
+				super.execute();
 	}
 	
 	public float getDamage(){
@@ -76,114 +65,4 @@ public class EventRange extends Event{
 		msgParry = parry;
 		return this;
 	}
-	
-	public Event setStatus(Status status, float chance){
-		this.status = status;
-		chanceStatus = chance;
-		return this;
-	}
-	
-	public void damage(Character target, float subtract){
-		float dmg = getDamage() - subtract;
-		if (dmg <= 0)
-			dmg = 1;
-			target.setDamage(source, dmg);
-		if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus)
-			target.addStatus(getStatus());
-	}
-	
-	private Status getStatus() {
-		Status newStatus =status.copy();
-		newStatus.character = source.getTarget();
-		return newStatus;
-	}
-
-	public void damage(Character target){
-		float dmg = getDamage();
-			target.setDamage(source, dmg);
-			if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus)
-				target.addStatus(getStatus());
-	}
-	
-	public boolean calculateChance(Character target) {
-		if (target == null)
-			return false;
-		
-		Skill skill = target.skillCurrent;
-		Step step = target.getCurrentStep();
-		if (step == null)
-			return false;
-		if (skill.isLoading) {
-			if (rand.nextInt((int) (100 - target.getBal() / target.maxBal / 2)) == 0) {
-				StylePainter.append(new MsgSkillInterrupt().getMessage(
-						source, target, 0));
-				return false;
-			} else {
-				StylePainter.append(new MsgSkillInterruptFail().getMessage(
-						source, target, 0));
-			}
-		}
-
-		if (step.type == ActionType.Dodge && skill.isExecuting
-				&& rand.nextFloat() <= (step.chanceDodge) /  source.weapon.sizeModifier) {
-			StylePainter.append(msgMiss.getMessage(source, target, 0));
-			;
-			return true;
-		}
-		if (step.type == ActionType.MeleeParry
-				&& skill.isExecuting
-				&& rand.nextFloat() <= ((StepParry) step).chanceParry
-						/ source.weapon.sizeModifier) {
-			StylePainter.append(msgParry.getMessage(target, source, 0));
-			return true;
-		}
-
-		if (step.type == ActionType.MeleeBlock && skill.isExecuting && chanceBlock > 0) {
-			StylePainter.append(new StyleSegment(StylePainter.NAME,
-					source.name), new StyleSegment(null, "'s "),
-					new StyleSegment(StylePainter.SKILL, name),
-					new StyleSegment(StylePainter.BOLD, " is blocked by "),
-					new StyleSegment(StylePainter.NAME, target.name),
-					new StyleSegment(null, "'s "), new StyleSegment(
-							StylePainter.SKILL, step.name, true));
-			float finalDamage = getDamage() - step.value;
-			if (finalDamage <= 0)
-				finalDamage = 1;
-			target.setDamage(source, finalDamage);
-			return true;
-		}
-		if ((step.type == ActionType.MeleeSwing || step.type == ActionType.MeleeStab)
-				&& skill.isExecuting) {
-			// Utility.narrate("Chance of Interaction!!!");
-			if (rand.nextFloat() <= chanceBlock /  source.weapon.sizeModifier) {
-				StylePainter.append(new StyleSegment(StylePainter.NAME,
-						source.name), new StyleSegment(null, "'s "),
-						new StyleSegment(StylePainter.SKILL, name),
-						new StyleSegment(StylePainter.BOLD, " is blocked by "),
-						new StyleSegment(StylePainter.NAME, target.name),
-						new StyleSegment(null, "'s "), new StyleSegment(
-								StylePainter.SKILL, step.name, true));
-				damage(target, step.value);
-				return true;
-			} else if ((step.parent.isLoading || step.parent.isCooldown)
-					&& rand.nextFloat() <= chanceParry /  source.weapon.sizeModifier) {
-				/*
-				 * Utility.narrate(source.name + "'s " +
-				 * source.getCurrentStep().name + " is parried by " +
-				 * target.name + "'s " + step.name);
-				 */
-				StylePainter.append(new StyleSegment(StylePainter.NAME,
-						source.name), new StyleSegment(null, "'s "),
-						new StyleSegment(StylePainter.SKILL, name),
-						new StyleSegment(StylePainter.BOLD, " is parried by "),
-						new StyleSegment(StylePainter.NAME, target.name),
-						new StyleSegment(null, "'s "), new StyleSegment(
-								StylePainter.SKILL, step.name, true));
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 }

@@ -27,6 +27,10 @@ public class SkillArrowPierce extends Skill {
 				return prof*15;
 			};
 			
+			public float getDexBuff() {
+				return prof*15;
+			};
+			
 			public float getIntBuff() {
 				return prof*10;
 			};

@@ -14,8 +14,12 @@ public class Proficiency {
 	public Character source, target;
 	
 	public Proficiency(Character source, Character target) {
-		this.source = source;
-		this.target = target;
+		calculate(source, target);
+	}
+
+	private void calculate(Character source2, Character target2) {
+		this.source = source2;
+		this.target = target2;
 		float cpS = source.getCP(),
 				cpT = target.getCP();
 		if (cpT < cpS*0.2){
@@ -38,6 +42,10 @@ public class Proficiency {
 			type = BOSS;
 			str =" Boss";
 		}
+	}
+
+	public void invert() {
+		calculate(target, source);
 	}
 	
 }

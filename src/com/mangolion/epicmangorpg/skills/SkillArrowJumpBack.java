@@ -47,7 +47,7 @@ public class SkillArrowJumpBack extends Skill{
 			@Override
 			public void execute(Character target, float time) {
 				addProf(new Proficiency(getCharacter(), getCharacter()));
-				getCharacter().applyBuff(new Buff("Jump Back Boost", 25, 0.3f, Buff.Type.prot, GenType.positive));
+				getCharacter().applyBuff(new Buff("Jump Back Boost", 25, 0.3f, GenType.positive, Buff.Type.prot));
 				Event.addEvent(new EventArrow(0.3f, getCharacter(), target, 20, this));
 				getCharacter().inventory.removeItem(Items.arrow, 1);
 				super.execute(target, time);

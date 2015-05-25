@@ -11,7 +11,7 @@ public abstract class StepDodge extends Step{
 	public StepDodge(String name, Skill parent,
 			float timeLoad, float timeExecute, float timeCooldown) {
 		super(parent, name,"", ActionType.Dodge, timeLoad, timeExecute, timeCooldown, 0);
-		setMessages(new MsgDodgeLoad(), new MsgDodgeExecute(), new MsgBasicCD());
+		setMessages(new MsgDodgeLoad(), new MsgDodgeExecute(), new MsgBasicCD(), null);
 		
 	}
 

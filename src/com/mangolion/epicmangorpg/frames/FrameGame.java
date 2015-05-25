@@ -1,6 +1,7 @@
 package com.mangolion.epicmangorpg.frames;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -64,6 +65,7 @@ import com.mangolion.epicmangorpg.game.StylePainter;
 import com.mangolion.epicmangorpg.game.Terrain;
 import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.game.Weather;
+import com.mangolion.epicmangorpg.messages.Msg;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.statuses.Buff;
 import com.mangolion.epicmangorpg.statuses.Status;
@@ -143,7 +145,7 @@ public class FrameGame extends JFrame {
 	public DefaultListModel<LogMsg> modelLog = new DefaultListModel<LogMsg>();
 	DefaultListModel<Event> modelEvent = new DefaultListModel<Event>();
 	public JTabbedPane tabInfo;
-	JPanel panelAction, paneCommand = new JPanel(new FlowLayout());
+	public JPanel panelAction, paneCommand = new JPanel(new FlowLayout());
 	public void updateCharacterList(){
 		modelAllies.clear();
 		modelEnemies.clear();
@@ -189,6 +191,7 @@ public class FrameGame extends JFrame {
 	JPanel contentPanel  = new JPanel(new BorderLayout());
 	JSplitPane splitMain;
 	public int maxEnemies = 1, mouseX, mouseY;
+	public JButton btnNextTick;
 	
 	/**
 	 * Create the frame.
@@ -688,16 +691,23 @@ public class FrameGame extends JFrame {
 		 panelAction = new JPanel(new BorderLayout());
 		panelNarration.add(panelAction, BorderLayout.SOUTH);
 		
-		JButton btnNextTick = new JButton("Go");
+		btnNextTick = new JButton("Go");
 		btnNextTick.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				//Command.execute(tfCommand.getText());
+				if (btnNextTick.getText().equals("Go")){
 				if (Game.getInstance().timer.isRunning())
 					Utility.narrate("Please wait for your turn!");
 				else
 					if (command.execute())
 						Game.getInstance().timer.start();
+				}else{
+					Skill skill = CharacterPlayer.instance.skillCurrent;
+					if (skill != null){
+						StylePainter.append(new Msg("$name's $skill is cancelled").getMessage(CharacterPlayer.instance, null, 0));
+						skill.cancel();
+					}
+				}
 			}
 		});
 		panelAction.setLayout(new BorderLayout(0, 0));
@@ -817,7 +827,7 @@ public class FrameGame extends JFrame {
 	
 	public void updateInfoTab(){
 		Character character = CharacterPlayer.instance;
-		lblPName.setText(character.name + " \t , crystals: " + character.crystals);
+		lblPName.setText(character.name + " \t , crystals: " + character.getCrystals());
 		pbHP.setValue((int) ((int) character.getHp()/character.getMaxHP()*100));
 		pbHP.setString( character.getHp() + "/" +character.getMaxHP());
 		pbMP.setValue((int) ((int) character.getMp()/character.getMaxMP()*100));

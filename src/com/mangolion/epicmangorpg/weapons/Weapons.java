@@ -16,5 +16,6 @@ public enum Weapons {
 	Bladed,
 	Cylinder,
 	LauncherGrenade,
+	Blunt,
 	ALL
 }

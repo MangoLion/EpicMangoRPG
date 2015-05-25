@@ -8,26 +8,44 @@ import com.mangolion.epicmangorpg.messages.Msg;
 
 public class Buff {
 	public String name;
-	public float value, time;
-	public Type types[];
+	public float time, value[] = new float[1];
+	public Type types[] = new Type[1];
+	
 	public GenType genType;
 	public Element element;
 	
-	public Buff(String name, float value, float time, Type type, GenType genType) {
-		this.name = name;
-		this.value = value;
-		Type temp[] = {type};
-		this.types = temp;
+	public Buff(String name, float value, float time, GenType genType, Type type) {
+		this.name = name; 
+		this.value[0] = value;
+		this.types[0] = type;
 		this.time = time;
 		this.genType = genType;
 	}
 	
-	public Buff(String name, float value, float time, GenType genType, Type ... type) {
+	public Buff(String name, float time, GenType genType, Type ... type) {
 		this.name = name;
-		this.value = value;
 		this.types = type;
 		this.time = time;
 		this.genType = genType;
+	}
+	
+	public Buff setValues (float ... values){
+		value = values;
+		return this;
+	}
+	
+	public Buff setElement(Element element){
+		this.element = element;
+		return this;
+	}
+	
+	public float getValue(Type type){
+		for (int i = 0; i < types.length; i ++){
+			Type t = types[i];
+			if (t == type)
+				return value[i];
+		}
+		return -1;
 	}
 	
 	public boolean checkType(Type type){
@@ -52,13 +70,14 @@ public class Buff {
 		mpRegen,
 		spRegen,
 		balRegen,
-		intRegen,
-		dexRegen,
-		strRegen,
 		elemental,
 		crit,
 		airborne,
-		accuracy
+		accuracy,
+		hpCost,
+		spCost,
+		mpCost,
+		balCost
 	}
 	
 	public static enum GenType{

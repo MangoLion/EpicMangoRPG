@@ -31,7 +31,7 @@ public class SkillRespite extends Skill{
 		public StepRespite(Skill parent,
 				float timeLoad, float timeExecute, float timeCooldown) {
 			super(parent, "Respite", "",ActionType.RecoverSP, timeLoad, timeExecute, timeCooldown, 0);
-			setMessages(new Msg("$name relaxes $p3 body and recover $p3 energy"), null, new MsgBasicCD());
+			setMessages(new Msg("$name relaxes $p3 body and recover $p3 energy"), null, new MsgBasicCD(), null);
 		}
 		public float getSPBuff() {
 			// TODO Auto-generated method stub
@@ -57,8 +57,7 @@ public class SkillRespite extends Skill{
 		public void execute(Character target, float time) {
 			//System.out.println("" + -getCharacter().str*0.7f);
 			addProf(new Proficiency(getCharacter(), getCharacter()));
-			getCharacter().applyBuff(new Buff("Respite", getCharacter().getSpRegen()*3*(prof + 1), customTime, Buff.Type.spRegen, GenType.neutral));
-			getCharacter().applyBuff(new Buff("Respite Debuff", -getCharacter().getStr()*0.7f*(1 - prof ) , customTime, Buff.Type.str, GenType.negative));
+			getCharacter().applyBuff(new Buff("Respite", customTime, GenType.neutral, Buff.Type.spRegen, Buff.Type.str).setValues( getCharacter().getSpRegen()*3*(prof + 1), -getCharacter().getStr()*0.7f*(1 - prof )));
 			super.execute(target, time);
 		}
 

@@ -11,6 +11,7 @@ import com.mangolion.epicmangorpg.components.Drop;
 import com.mangolion.epicmangorpg.components.Element;
 import com.mangolion.epicmangorpg.components.GeneralType;
 import com.mangolion.epicmangorpg.components.LogMsg;
+import com.mangolion.epicmangorpg.components.Style;
 import com.mangolion.epicmangorpg.frames.FrameGame;
 import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.game.StylePainter;
@@ -50,7 +51,9 @@ public class Character implements Cloneable {
 	public Inventory inventory = new Inventory();
 	public LinkedList<Drop> drops = new LinkedList<Drop>();
 	
-	public float str, agi,  inte, dex, maxHP, maxMP, maxSP, maxBal, prot, def, meleeSpeedMod = 1, magicSpeedMod = 1, hpRegen = 0, mpRegen =0.05f, spRegen = 0.1f, balRegen = 0.1f, cpBase = 0 , learnRate = 0, crystals = 0;;
+	float str, agi,  inte, dex, maxHP, maxMP, maxSP, maxBal, prot, def, meleeSpeedMod = 1, magicSpeedMod = 1, hpRegen = 0, mpRegen =0.05f, spRegen = 0.1f, balRegen = 0.1f, cpBase = 0, crystals = 0;
+	public float style = 10;
+	public float  learnRate = 0;
 	float hp, mp, sp, bal;
 	LinkedList<Element> elements = new LinkedList<Element>();
 	public int chargeNum = 0;
@@ -58,8 +61,9 @@ public class Character implements Cloneable {
 	public LinkedList<Element> getElements(){
 		LinkedList<Element> results = new LinkedList<Element>();
 		results.addAll(elements);
-		for (Buff buff : getBuff(Buff.Type.elemental))
-			results.add(buff.element);
+		for (Buff buff : buffs)	
+			if (buff.element != null)
+				results.add(buff.element);
 		return results;
 	}
 
@@ -108,6 +112,16 @@ public class Character implements Cloneable {
 			equip ((Weapon) item);
 			else if (item instanceof Armor)
 				equip ((Armor) item);
+	}
+	
+	public void changeStyle(float change){
+		style += change;
+		if (style < 0)
+			style = 0;
+		if (style > 20)
+			style = 20;
+		
+		System.out.println(name + " style change by " + change );
 	}
 	
 	public void equip (Weapon weapon){
@@ -240,8 +254,14 @@ public class Character implements Cloneable {
 	}
 
 	public void tick(float deltaTime) {
-		for (Status status : statuses){
+		Iterator<Status>i = statuses.iterator();
+		while (i.hasNext()){
+			Status status = i.next();
 			status.tick(deltaTime);
+			if (status.time <= 0){
+				status.remove();
+				i.remove();
+			}
 		}
 		Iterator<Buff> it = buffs.iterator();
 		while (it.hasNext()){
@@ -269,6 +289,8 @@ public class Character implements Cloneable {
 		if (mp < getMaxMP())
 			mp += Math.round(deltaTime*getMaxMP()*getMpRegen()*100f)/100f;
 	}
+	
+	
 	
 	public void applyBuff(Buff buff){
 		for (Buff b: buffs)
@@ -319,16 +341,24 @@ public class Character implements Cloneable {
 	public float setDamage(String source, float damage, boolean noLog) {
 		float cdmg = (damage - def)*(100 - prot)/100;
 		cdmg = (cdmg <=0 )? 1:cdmg;
-		if (!noLog)
-		Utility.narrate(source + " dealt " + String.valueOf(cdmg) + " damage to " + name);
-		if (!noLog)
+		if (!noLog){
+			String style = "";
+			Character c = Game.getInstance().getCharacter(source);
+			if (c != null){
+				Style.positive(c, this, Style.dmg, damage);
+				style = "[" + Style.getMsg(c.style) + "]";
+			}
+			Utility.narrate(source + " dealt " + String.valueOf(cdmg) + " damage to " + name + " " + style);
+			
 			LogMsg.addLog(source + " dealt " + String.valueOf(cdmg) + " damage to " + name);
+		}
 
 		hp -= cdmg;
 		if (bal > 0 && cdmg > 1)
 			bal -= rand.nextInt(Math.abs((int) (cdmg/2))) + cdmg/2;
 		if (hp <= 0){
 			Utility.narrate(name + " has been defeated by " + source + "\n");
+			Game.getInstance().removeChar(this);
 			isDead = true;
 			if (!isAllied && source.equals(CharacterPlayer.instance))
 				giveDrop();
@@ -368,8 +398,15 @@ public class Character implements Cloneable {
 	public float setDamage(Character source, float damage) {
 		float cdmg = (damage - def)*(100 - prot)/100;
 		cdmg = (cdmg <=0 )? 1:cdmg;
-		Utility.narrate(source.name + " dealt " + String.valueOf(cdmg) + " damage to " + name);
-		LogMsg.addLog(source.name + " dealt " + String.valueOf(cdmg) + " damage to " + name);
+		String style = "";
+		/*if (source != null){
+			
+			style = "[" + Style.getMsg(source.style) + "]";
+		}
+		Utility.narrate(source + " dealt " + String.valueOf(cdmg) + " damage to " + name + " " + style);*/
+		float change = Style.positive(source, this, Style.dmg, damage, 1 - source.getAccuracy(this));
+		StylePainter.append(new Msg(false, "$name dealt $num damage to $targetname").getMessage(source, this, damage), Style.getSegments(change, source));
+		LogMsg.addLog(source + " dealt " + String.valueOf(cdmg) + " damage to " + name);
 		hp -= cdmg;
 		if (bal > 0 && cdmg > 1)
 			bal -=cdmg/2;//rand.nextInt(Math.abs((int) (cdmg/2))) + cdmg/2;
@@ -562,7 +599,7 @@ public class Character implements Cloneable {
 	public float getMaxHP(){
 		float result = maxHP;
 		for (Buff buff: getBuff(Buff.Type.hp))
-			result += buff.value;
+			result += buff.getValue(Buff.Type.hp);
 		for (Skill skill: skills)
 			result += skill.getHPBuff();
 		for (Armor  armor: getArmors())
@@ -574,7 +611,7 @@ public class Character implements Cloneable {
 	public float getMaxMP(){
 		float result = maxMP;
 		for (Buff buff: getBuff(Buff.Type.mp))
-			result += buff.value;
+			result += buff.getValue(Buff.Type.mp);
 		for (Skill skill: skills)
 			result += skill.getMPBuff();
 		for (Armor  armor: getArmors())
@@ -586,7 +623,7 @@ public class Character implements Cloneable {
 	public float getMaxSP(){
 		float result = maxSP;
 		for (Buff buff: getBuff(Buff.Type.sp))
-			result += buff.value;
+			result += buff.getValue(Buff.Type.sp);
 		for (Skill skill: skills)
 			result += skill.getSPBuff();
 		for (Armor  armor: getArmors())
@@ -598,7 +635,7 @@ public class Character implements Cloneable {
 	public float getMaxBal(){
 		float result = maxBal;
 		for (Buff buff: getBuff(Buff.Type.bal))
-			result += buff.value;
+			result += buff.getValue(Buff.Type.bal);
 		for (Skill skill: skills)
 			result += skill.getBalBuff();
 		for (Armor  armor: getArmors())
@@ -610,7 +647,7 @@ public class Character implements Cloneable {
 	public float getInt(){
 		float result = inte;
 		for (Buff buff: getBuff(Buff.Type.inte))
-			result += buff.value;
+			result += buff.getValue(Buff.Type.inte);
 		for (Skill skill: skills)
 			result += skill.getIntBuff();
 		for (Armor  armor: getArmors())
@@ -622,7 +659,7 @@ public class Character implements Cloneable {
 	public float getDex(){
 		float result = dex;
 		for (Buff buff: getBuff(Buff.Type.dex))
-			result += buff.value;
+			result += buff.getValue(Buff.Type.dex);
 		for (Skill skill: skills)
 			result += skill.getDexBuff();
 		for (Armor  armor: getArmors())
@@ -634,7 +671,7 @@ public class Character implements Cloneable {
 	public float getStr(){
 		float result = str;
 		for (Buff buff: getBuff(Buff.Type.str)){
-			result += buff.value;
+			result += buff.getValue(Buff.Type.str);
 		//	System.out.println(buff.name + " " + buff.value);
 		}
 		for (Skill skill: skills)
@@ -648,7 +685,7 @@ public class Character implements Cloneable {
 	public float getAgi(){
 		float result = agi;
 		for (Buff buff: getBuff(Buff.Type.agi))
-			result += buff.value;
+			result += buff.getValue(Buff.Type.agi);
 		for (Skill skill: skills)
 			result += skill.getAgiBuff();
 		for (Armor  armor: getArmors())
@@ -660,7 +697,7 @@ public class Character implements Cloneable {
 	public float getDef(){
 		float result = def;
 		for (Buff buff: getBuff(Buff.Type.def))
-			result += buff.value;
+			result += buff.getValue(Buff.Type.def);
 		for (Skill skill: skills)
 			result += skill.getDefBuff();
 		for (Armor  armor: getArmors())
@@ -672,7 +709,7 @@ public class Character implements Cloneable {
 	public float getProt(){
 		float result = prot;
 		for (Buff buff: getBuff(Buff.Type.prot))
-			result += buff.value;
+			result += buff.getValue(Buff.Type.prot);
 		for (Skill skill: skills)
 			result += skill.getProtBuff();
 		for (Armor  armor: getArmors())
@@ -687,14 +724,14 @@ public class Character implements Cloneable {
 		float result = cpBase;
 		for (Skill skill : skills)
 			result += skill.getCP();
-		result += getMaxHP() + getMaxMP() + getMaxBal()/2 + getMaxSP()/2 + getAgi() + getDex()/2 + getInt() + getStr();
+		result += getMaxHP() + getMaxMP() + getMaxBal()/2 + getMaxSP()/2 + getAgi()*2 + getDex()/2 + getInt()*1.5f + getStr()*1.5f;
 		return Utility.format(result);
 	}
 	
 	public float getHpRegen() {
 		float result = hpRegen;
 		for (Buff buff: getBuff(Buff.Type.hpRegen))
-			result += buff.value;
+			result += buff.getValue(Buff.Type.hpRegen);
 		for (Skill skill: skills)
 			result += skill.getHPRegenBuff();
 		for (Armor  armor: getArmors())
@@ -706,7 +743,7 @@ public class Character implements Cloneable {
 	public float getSpRegen() {
 		float result = spRegen;
 		for (Buff buff: getBuff(Buff.Type.spRegen))
-			result += buff.value;
+			result += buff.getValue(Buff.Type.spRegen);
 		for (Skill skill: skills)
 			result += skill.getSPRegenBuff();
 		for (Armor  armor: getArmors())
@@ -718,7 +755,7 @@ public class Character implements Cloneable {
 	public float getBalRegen() {
 		float result = balRegen;
 		for (Buff buff: getBuff(Buff.Type.balRegen))
-			result += buff.value;
+			result += buff.getValue(Buff.Type.balRegen);
 		for (Skill skill: skills)
 			result += skill.getBalRegenBuff();
 		for (Armor  armor: getArmors())
@@ -730,7 +767,7 @@ public class Character implements Cloneable {
 	public float getMpRegen() {
 		float result =mpRegen;
 		for (Buff buff: getBuff(Buff.Type.mpRegen))
-			result += buff.value;
+			result += buff.getValue(Buff.Type.mpRegen);
 		for (Skill skill: skills)
 			result += skill.getMPRegenBuff();
 		for (Armor  armor: getArmors())
@@ -745,7 +782,7 @@ public class Character implements Cloneable {
 			if (armor != null)
 			acc += armor.getAccuracyBuff();
 		for (Buff buff: getBuff(Buff.Type.accuracy))
-			acc += buff.value;
+			acc += buff.getValue(Buff.Type.accuracy);
 		acc += weapon.getAccuracyBuff();
 		return acc;
 	}
@@ -756,11 +793,54 @@ public class Character implements Cloneable {
 			if (armor != null)
 				crit += armor.getCriticalBuff();
 		for (Buff buff: getBuff(Buff.Type.crit))
-			crit += buff.value;
+			crit += buff.getValue(Buff.Type.crit);
 		crit += weapon.getCriticalBuff();
 		return crit;
 	}
 	
+	public float getHpCost(){
+		float cost = 1;
+		for (Armor armor: getArmors())
+			if (armor != null)
+				cost += armor.getHPCostBuff();
+		for (Buff buff: getBuff(Buff.Type.hpCost))
+			cost += buff.getValue(Buff.Type.hpCost);
+		cost += weapon.getHPCostBuff();
+		return cost;
+	}
+	
+	public float getMpCost(){
+		float cost = 1;
+		for (Armor armor: getArmors())
+			if (armor != null)
+				cost += armor.getMPCostBuff();
+		for (Buff buff: getBuff(Buff.Type.mpCost))
+			cost += buff.getValue(Buff.Type.mpCost);
+		cost += weapon.getMPCostBuff();
+		return cost;
+	}
+	
+	public float getSpCost(){
+		float cost = 1;
+		for (Armor armor: getArmors())
+			if (armor != null)
+				cost += armor.getSPCostBuff();
+		for (Buff buff: getBuff(Buff.Type.spCost))
+			cost += buff.getValue(Buff.Type.spCost);
+		cost += weapon.getSPCostBuff();
+		return cost;
+	}
+	
+	public float getBalCost(){
+		float cost = 1;
+		for (Armor armor: getArmors())
+			if (armor != null)
+				cost += armor.getBalCostBuff();
+		for (Buff buff: getBuff(Buff.Type.balCost))
+			cost += buff.getValue(Buff.Type.balCost);
+		cost += weapon.getBalCostBuff();
+		return cost;
+	}
 	
 	public float getHp() {
 		return Utility.format( hp);
@@ -796,6 +876,7 @@ public class Character implements Cloneable {
 		this.bal = bal;
 	}
 
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
@@ -811,6 +892,13 @@ public class Character implements Cloneable {
 	public void openShop(){
 		
 	}
+
+
+	public float getCrystals() {
+		// TODO Auto-generated method stub
+		return crystals;
+	}
+
 
 
 }

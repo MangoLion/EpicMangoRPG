@@ -34,6 +34,10 @@ public class SkillArrowSwift extends Skill {
 			public float getSPBuff() {
 				return prof*15;
 			};
+			public float getDexBuff() {
+				return prof*10;
+			};
+			
 			@Override
 			public void execute(Character target) {
 				EventRange event = new EventArrow(0.3f, character, target, 10, this);

@@ -10,7 +10,7 @@ import com.mangolion.epicmangorpg.weapons.Weapons;
 public class SkillStab extends Skill {
 
 	public SkillStab() {
-		super("Stab", "Leaves lots of openings, but used to bypass the block skill, can be easily(higher chance) parried and dodged.",Weapons.Sword, ActionType.MeleeStab) ;
+		super("Stab", "Leaves lots of openings, but used to bypass the block skill, can be easily(higher chance) parried and dodged.",Weapons.Bladed, ActionType.MeleeStab) ;
 		isTwoHanded = false;
 		addSteps(new StepStab(this, "Stab", "", 0.6f, 0.3f, 0.4f, 2f){
 			public float getStrBuff() {
@@ -21,7 +21,6 @@ public class SkillStab extends Skill {
 				return prof*5;
 			};
 		}.setCost(25, 0, 10, 0));
-		weapons.add(Weapons.Dagger);
 	}
 	
 }
