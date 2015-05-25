@@ -138,7 +138,7 @@ public class FrameGame extends JFrame {
 		instance.updateTerrain(game.terrain);
 
 	}
-	
+	public boolean viewMode = false;
 	DefaultListModel<String> modelAllies = new DefaultListModel<String>();
 	DefaultListModel<String> modelEnemies = new DefaultListModel<String>();
 	public DefaultListModel<Character> modelMonster = new DefaultListModel<Character>();
@@ -787,9 +787,20 @@ public class FrameGame extends JFrame {
 				super.componentResized(e);
 			}
 		});
+		
+		
+		/*timer= new Timer(110, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				addFrame(new FrameBattleCreate());
+				timer.stop();
+			}
+		});
+		timer.start();*/
 
 	}
-	
+	Timer timer;
     public class MyCellRenderer extends DefaultListCellRenderer
     {
         final JPanel p = new JPanel(new BorderLayout());
@@ -929,6 +940,10 @@ public class FrameGame extends JFrame {
 		desktopPane.add(frame);
 		frame.setVisible(true);
 		frame.setLocation(mouseX, mouseY);
+		if (frame.getX() < 0)
+			frame.setLocation(0, frame.getY());
+		if (frame.getY() < 0)
+			frame.setLocation(frame.getX(), 0);
 	}
 	
 	public Point getMousePos(){
@@ -937,7 +952,12 @@ public class FrameGame extends JFrame {
 		return new Point(pt.x - pt2.x, pt.y - pt2.y);
 	}
 	public Command command;
+	public CommandHandler cmdHandler;
+	
 	public void setCommand(CommandHandler handler){
+		if (viewMode)
+			return;
+		cmdHandler = handler;
 		paneCommand.removeAll();
 		CommandHandler last = null;
 			if (handler.getSubCommands().size() > 0)
@@ -947,7 +967,7 @@ public class FrameGame extends JFrame {
 			last = last.getSubCommands().getFirst().getNextCommand();
 		}
 		command = handler.getSelectedCommand();
-		if (command == null)
+		if (command == null && handler.getPrevious().size() > 1)
 			command = handler.getPrevious().get(handler.getPrevious().size()-2).getSelectedCommand();
 		for (CommandHandler component: handler.getPrevious()){
 			paneCommand.add((Component) component); 

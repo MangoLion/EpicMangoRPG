@@ -29,7 +29,7 @@ public class Buff {
 		this.genType = genType;
 	}
 	
-	public Buff setValues (float ... values){
+	public Buff setValue (float ... values){
 		value = values;
 		return this;
 	}

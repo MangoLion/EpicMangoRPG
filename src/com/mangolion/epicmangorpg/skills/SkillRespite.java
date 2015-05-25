@@ -57,7 +57,7 @@ public class SkillRespite extends Skill{
 		public void execute(Character target, float time) {
 			//System.out.println("" + -getCharacter().str*0.7f);
 			addProf(new Proficiency(getCharacter(), getCharacter()));
-			getCharacter().applyBuff(new Buff("Respite", customTime, GenType.neutral, Buff.Type.spRegen, Buff.Type.str).setValues( getCharacter().getSpRegen()*3*(prof + 1), -getCharacter().getStr()*0.7f*(1 - prof )));
+			getCharacter().applyBuff(new Buff("Respite", customTime, GenType.neutral, Buff.Type.spRegen, Buff.Type.str).setValue(3*(prof + 1), -(1 - prof )));
 			super.execute(target, time);
 		}
 

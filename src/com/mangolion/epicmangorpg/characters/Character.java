@@ -1,14 +1,22 @@
 package com.mangolion.epicmangorpg.characters;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
+import org.ini4j.InvalidFileFormatException;
+import org.ini4j.Wini;
+
 import com.mangolion.epicmangorpg.ais.AI;
 import com.mangolion.epicmangorpg.components.ActionType;
+import com.mangolion.epicmangorpg.components.Barrier;
+import com.mangolion.epicmangorpg.components.Damage;
 import com.mangolion.epicmangorpg.components.Drop;
 import com.mangolion.epicmangorpg.components.Element;
+import com.mangolion.epicmangorpg.components.Elements;
 import com.mangolion.epicmangorpg.components.GeneralType;
 import com.mangolion.epicmangorpg.components.LogMsg;
 import com.mangolion.epicmangorpg.components.Style;
@@ -19,6 +27,7 @@ import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.items.Inventory;
 import com.mangolion.epicmangorpg.items.Item;
 import com.mangolion.epicmangorpg.items.ItemCustom;
+import com.mangolion.epicmangorpg.items.ItemStack;
 import com.mangolion.epicmangorpg.items.Items;
 import com.mangolion.epicmangorpg.messages.Msg;
 import com.mangolion.epicmangorpg.skills.Skill;
@@ -30,7 +39,7 @@ import com.mangolion.epicmangorpg.steps.Step;
 import com.mangolion.epicmangorpg.weapons.Armor;
 import com.mangolion.epicmangorpg.weapons.Weapon;
 
-public class Character implements Cloneable {
+public class Character implements Cloneable{
 	public Character target, summon;
 	Random rand = new Random();
 	public String name, desc, pronoun = "he", pronoun2 = "him", pronoun3 =  "his", pronoun4 = "himself", gender = " male";
@@ -50,7 +59,7 @@ public class Character implements Cloneable {
 	public AI ai;
 	public Inventory inventory = new Inventory();
 	public LinkedList<Drop> drops = new LinkedList<Drop>();
-	
+	public LinkedList<Barrier> barriers = new LinkedList<Barrier>();
 	float str, agi,  inte, dex, maxHP, maxMP, maxSP, maxBal, prot, def, meleeSpeedMod = 1, magicSpeedMod = 1, hpRegen = 0, mpRegen =0.05f, spRegen = 0.1f, balRegen = 0.1f, cpBase = 0, crystals = 0;
 	public float style = 10;
 	public float  learnRate = 0;
@@ -65,6 +74,21 @@ public class Character implements Cloneable {
 			if (buff.element != null)
 				results.add(buff.element);
 		return results;
+	}
+	
+	public void reset() {
+		this.hp = getMaxHP();
+		this.mp = getMaxMP();
+		this.sp  = getMaxSP();
+		this.bal = getMaxBal();
+		statuses = new LinkedList<Status>();
+		style = 10;
+		summon = null;
+		buffs.clear();
+		skillCharged = null;
+		buffs.clear();
+		for (Skill skill :skills)
+			skill.reset();
 	}
 
 
@@ -90,7 +114,11 @@ public class Character implements Cloneable {
 		this.desc = desc;
 		addSkills(skills);
 		equip(weapon);
-		
+		//barriers.add(new Barrier(this, "Fire Barrier", 100, 0, 0, 100, 0.7f, new Element("Fire", 1)));
+	}
+	
+	public void addBarrier(Barrier barrier){
+		barriers.add(barrier);
 	}
 
 	public void addSkills(Skill... skills) {
@@ -239,8 +267,15 @@ public class Character implements Cloneable {
 			}
 		statuses.add(stat);
 	}
+	
+
 
 	public void nextAction() {
+		if (isPlayer){
+			if (!isStunned())
+				Game.getInstance().timer.stop();
+			return;
+		}
 		if (target == null || (target != null && target.isDead))
 			if (!isSupporter)
 				target = Game.getInstance().findEnemy(this);
@@ -254,6 +289,15 @@ public class Character implements Cloneable {
 	}
 
 	public void tick(float deltaTime) {
+		Iterator<Barrier>ib = barriers.iterator();
+		while (ib.hasNext()){
+			Barrier barrier = ib.next();
+			barrier.time -= deltaTime;
+			if (barrier.time <= 0){
+				StylePainter.append(new Msg("$name's " + barrier.name + " has disappeared").getMessage(this, null, 0));
+				ib.remove();
+			}
+		}
 		Iterator<Status>i = statuses.iterator();
 		while (i.hasNext()){
 			Status status = i.next();
@@ -362,8 +406,6 @@ public class Character implements Cloneable {
 			isDead = true;
 			if (!isAllied && source.equals(CharacterPlayer.instance))
 				giveDrop();
-			//if (Game.getInstance().charsAllies.size() == 0 || Game.getInstance().charsEnemies.size() == 0)
-			//	Game.getInstance().;
 		}
 		return cdmg;
 		}
@@ -395,29 +437,49 @@ public class Character implements Cloneable {
 		inventory.addItem(item);
 	}
 	
-	public float setDamage(Character source, float damage) {
-		float cdmg = (damage - def)*(100 - prot)/100;
-		cdmg = (cdmg <=0 )? 1:cdmg;
-		String style = "";
-		/*if (source != null){
-			
-			style = "[" + Style.getMsg(source.style) + "]";
+	public float setDamage(Damage damage) {
+		Character source = damage.source;
+		
+		Iterator<Barrier> it = barriers.iterator();
+		while(it.hasNext()){
+			Barrier barrier = it.next();
+			barrier.setDamage(damage);
+			if (barrier.hp <= 0){
+				StylePainter.append(new Msg("$name's " + barrier.name + " has been broken!").getMessage(this, null, 0));
+				it.remove();
+			}
 		}
-		Utility.narrate(source + " dealt " + String.valueOf(cdmg) + " damage to " + name + " " + style);*/
-		float change = Style.positive(source, this, Style.dmg, damage, 1 - source.getAccuracy(this));
-		StylePainter.append(new Msg(false, "$name dealt $num damage to $targetname").getMessage(source, this, damage), Style.getSegments(change, source));
+		
+		float cdmg = (damage.amount - def)*(100 - prot)/100,
+				eleMult =  Elements.calculate(damage.elements, getElements());;
+		
+		cdmg *= eleMult;
+		
+		if (rand.nextFloat() <= eleMult /2){
+			if (damage.statuses.size() > 0)
+				for (Status status: damage.statuses){
+					status.character = this;
+					addStatus(status.copy());
+				}
+			if (damage.buffs.size() > 0)
+				for (Buff buff: damage.buffs){
+					applyBuff(buff);
+				}
+		}
+					
+		cdmg = (cdmg <=0 )? 1:cdmg;
+		float change = Style.positive(source, this, Style.dmg, cdmg, 1 - source.getAccuracy(this));
+		StylePainter.append(new Msg(false, "$name dealt $num damage to $targetname").getMessage(source, this, cdmg), Style.getSegments(change, source));
 		LogMsg.addLog(source + " dealt " + String.valueOf(cdmg) + " damage to " + name);
 		hp -= cdmg;
 		if (bal > 0 && cdmg > 1)
-			bal -=cdmg/2;//rand.nextInt(Math.abs((int) (cdmg/2))) + cdmg/2;
+			bal -=cdmg/2;
 		if (hp <= 0){
 			Utility.narrate(name + " has been defeated by " + source.name + "\n");
 			Game.getInstance().removeChar(this);
 			isDead = true;
 			if (!isAllied && source.equals(CharacterPlayer.instance))
 				giveDrop();
-			//if (Game.getInstance().charsAllies.size() == 0 || Game.getInstance().charsEnemies.size() == 0)
-				//Game.getInstance().begin();
 		}
 		return cdmg;
 		}
@@ -432,6 +494,14 @@ public class Character implements Cloneable {
 			LogMsg.addLog(source.name + " healed " + String.valueOf(heal) + " hp to " + name);
 		else
 			LogMsg.addLog(source.name + " healed " + String.valueOf(heal) + " hp to " + pronoun4);
+	}
+	
+	public boolean isEquipted(ItemCustom item) {
+		if (item instanceof Weapon)
+			return isEquipted((Weapon) item);
+		if (item instanceof Armor)
+			return isEquipted((Armor) item);
+		return false;
 	}
 
 	public float getStrDamage() {
@@ -598,123 +668,161 @@ public class Character implements Cloneable {
 	
 	public float getMaxHP(){
 		float result = maxHP;
+		float mult = 1;
 		for (Buff buff: getBuff(Buff.Type.hp))
-			result += buff.getValue(Buff.Type.hp);
+			mult += buff.getValue(Buff.Type.hp);
+		for (Barrier barrier: barriers)
+			result += barrier.getHPBuff();
 		for (Skill skill: skills)
 			result += skill.getHPBuff();
 		for (Armor  armor: getArmors())
 			if (armor != null)
 				result += armor.getHPBuff();
+		result *= mult;
 		return Utility.format(result);
 	}
 	
 	public float getMaxMP(){
 		float result = maxMP;
+		float mult = 1;
 		for (Buff buff: getBuff(Buff.Type.mp))
-			result += buff.getValue(Buff.Type.mp);
+			mult += buff.getValue(Buff.Type.mp);
+		for (Barrier barrier: barriers)
+			result += barrier.getMPBuff();
 		for (Skill skill: skills)
 			result += skill.getMPBuff();
 		for (Armor  armor: getArmors())
 			if (armor != null)
 				result += armor.getMPBuff();
+		result *= mult;
 		return Utility.format(result);
 	}
 	
 	public float getMaxSP(){
 		float result = maxSP;
+		float mult = 1;
 		for (Buff buff: getBuff(Buff.Type.sp))
-			result += buff.getValue(Buff.Type.sp);
+			mult += buff.getValue(Buff.Type.sp);
+		for (Barrier barrier: barriers)
+			result += barrier.getSPBuff();
 		for (Skill skill: skills)
 			result += skill.getSPBuff();
 		for (Armor  armor: getArmors())
 			if (armor != null)
 				result += armor.getSPBuff();
+		result *= mult;
 		return Utility.format(result);
 	}
 	
 	public float getMaxBal(){
 		float result = maxBal;
+		float mult = 1;
 		for (Buff buff: getBuff(Buff.Type.bal))
-			result += buff.getValue(Buff.Type.bal);
+			mult += buff.getValue(Buff.Type.bal);
+		for (Barrier barrier: barriers)
+			result += barrier.getBalBuff();
 		for (Skill skill: skills)
 			result += skill.getBalBuff();
 		for (Armor  armor: getArmors())
 			if (armor != null)
 				result += armor.getBalBuff();
+		result *= mult;
 		return Utility.format(result);
 	}
 	
 	public float getInt(){
 		float result = inte;
+		float mult = 1;
 		for (Buff buff: getBuff(Buff.Type.inte))
-			result += buff.getValue(Buff.Type.inte);
+			mult += buff.getValue(Buff.Type.inte);
+		for (Barrier barrier: barriers)
+			result += barrier.getIntBuff();
 		for (Skill skill: skills)
 			result += skill.getIntBuff();
 		for (Armor  armor: getArmors())
 			if (armor != null)
 				result += armor.getIntBuff();
+		result *= mult;
 		return Utility.format(result);
 	}
 	
 	public float getDex(){
 		float result = dex;
+		float mult = 1;
 		for (Buff buff: getBuff(Buff.Type.dex))
-			result += buff.getValue(Buff.Type.dex);
+			mult += buff.getValue(Buff.Type.dex);
+		for (Barrier barrier: barriers)
+			result += barrier.getDexBuff();
 		for (Skill skill: skills)
 			result += skill.getDexBuff();
 		for (Armor  armor: getArmors())
 			if (armor != null)
 				result += armor.getDexBuff();
+		result *= mult;
 		return Utility.format(result);
 	}
 	
 	public float getStr(){
 		float result = str;
-		for (Buff buff: getBuff(Buff.Type.str)){
-			result += buff.getValue(Buff.Type.str);
-		//	System.out.println(buff.name + " " + buff.value);
-		}
+		float mult = 1;
+		for (Buff buff: getBuff(Buff.Type.str))
+			mult += buff.getValue(Buff.Type.str);
+		for (Barrier barrier: barriers)
+			result += barrier.getStrBuff();
 		for (Skill skill: skills)
 			result += skill.getStrBuff();
 		for (Armor  armor: getArmors())
 			if (armor != null)
 				result += armor.getStrBuff();
+		result *= mult;
 		return Utility.format(result);
 	}
 	
 	public float getAgi(){
 		float result = agi;
+		float mult = 1;
 		for (Buff buff: getBuff(Buff.Type.agi))
-			result += buff.getValue(Buff.Type.agi);
+			mult += buff.getValue(Buff.Type.agi);
+		for (Barrier barrier: barriers)
+			result += barrier.getAgiBuff();
 		for (Skill skill: skills)
 			result += skill.getAgiBuff();
 		for (Armor  armor: getArmors())
 			if (armor != null)
 				result += armor.getAgiBuff();
+		result *= mult;
 		return Utility.format(result);
 	}
 	
 	public float getDef(){
 		float result = def;
+		float mult = 1;
 		for (Buff buff: getBuff(Buff.Type.def))
-			result += buff.getValue(Buff.Type.def);
+			mult += buff.getValue(Buff.Type.def);
+		for (Barrier barrier: barriers)
+			result += barrier.getDefBuff();
 		for (Skill skill: skills)
 			result += skill.getDefBuff();
 		for (Armor  armor: getArmors())
 			if (armor != null)
 				result += armor.getDefBuff();
+		result *= mult;
 		return Utility.format(result);
 	}
 	
 	public float getProt(){
 		float result = prot;
+		float mult = 1;
 		for (Buff buff: getBuff(Buff.Type.prot))
-			result += buff.getValue(Buff.Type.prot);
+			mult += buff.getValue(Buff.Type.prot);
+		for (Barrier barrier: barriers)
+			result += barrier.getProtBuff();
 		for (Skill skill: skills)
 			result += skill.getProtBuff();
 		for (Armor  armor: getArmors())
 			if (armor != null)
 				result += armor.getProtBuff();
+		result *= mult;
 		return Utility.format(result);
 	}
 	
@@ -730,50 +838,73 @@ public class Character implements Cloneable {
 	
 	public float getHpRegen() {
 		float result = hpRegen;
+		float mult = 1;
 		for (Buff buff: getBuff(Buff.Type.hpRegen))
-			result += buff.getValue(Buff.Type.hpRegen);
+			mult += buff.getValue(Buff.Type.hpRegen);
+		for (Barrier barrier: barriers)
+			result += barrier.getHPRegenBuff();
 		for (Skill skill: skills)
 			result += skill.getHPRegenBuff();
 		for (Armor  armor: getArmors())
 			if (armor != null)
 				result += armor.getHPRegenBuff();
+		result *= mult;
 		return Utility.format4( result);
 	}
 	
 	public float getSpRegen() {
 		float result = spRegen;
+		float mult = 1;
 		for (Buff buff: getBuff(Buff.Type.spRegen))
-			result += buff.getValue(Buff.Type.spRegen);
+			mult += buff.getValue(Buff.Type.spRegen);
+		for (Barrier barrier: barriers)
+			result += barrier.getSPRegenBuff();
 		for (Skill skill: skills)
 			result += skill.getSPRegenBuff();
 		for (Armor  armor: getArmors())
 			if (armor != null)
 				result += armor.getSPRegenBuff();
+		result *= mult;
 		return Utility.format4( result);
 	}
 	
 	public float getBalRegen() {
 		float result = balRegen;
+		float mult = 1;
 		for (Buff buff: getBuff(Buff.Type.balRegen))
-			result += buff.getValue(Buff.Type.balRegen);
+			mult += buff.getValue(Buff.Type.balRegen);
+		for (Barrier barrier: barriers)
+			result += barrier.getBalRegenBuff();
 		for (Skill skill: skills)
 			result += skill.getBalRegenBuff();
 		for (Armor  armor: getArmors())
 			if (armor != null)
 				result += armor.getBalRegenBuff();
+		result *= mult;
 		return Utility.format4( result);
 	}
 	
 	public float getMpRegen() {
 		float result =mpRegen;
+		float mult = 1;
 		for (Buff buff: getBuff(Buff.Type.mpRegen))
-			result += buff.getValue(Buff.Type.mpRegen);
+			mult += buff.getValue(Buff.Type.mpRegen);
+		for (Barrier barrier: barriers)
+			result += barrier.getMPRegenBuff();
 		for (Skill skill: skills)
 			result += skill.getMPRegenBuff();
 		for (Armor  armor: getArmors())
 			if (armor != null)
 				result += armor.getMPRegenBuff();
+		result *= mult;
 		return Utility.format4( result);
+	}
+	
+	public float getBuffValue(Buff.Type type){
+		float result = 0;
+		for (Buff buff: getBuff(type))
+			result += buff.getValue(type);
+		return result;
 	}
 	
 	public float getAccuracyBuff(){
@@ -800,45 +931,53 @@ public class Character implements Cloneable {
 	
 	public float getHpCost(){
 		float cost = 1;
+		float mult = 1;
 		for (Armor armor: getArmors())
 			if (armor != null)
 				cost += armor.getHPCostBuff();
 		for (Buff buff: getBuff(Buff.Type.hpCost))
-			cost += buff.getValue(Buff.Type.hpCost);
+			mult += buff.getValue(Buff.Type.hpCost);
 		cost += weapon.getHPCostBuff();
+		cost *= mult;
 		return cost;
 	}
 	
 	public float getMpCost(){
 		float cost = 1;
+		float mult = 1;
 		for (Armor armor: getArmors())
 			if (armor != null)
 				cost += armor.getMPCostBuff();
 		for (Buff buff: getBuff(Buff.Type.mpCost))
-			cost += buff.getValue(Buff.Type.mpCost);
+			mult += buff.getValue(Buff.Type.mpCost);
 		cost += weapon.getMPCostBuff();
+		cost *= mult;
 		return cost;
 	}
 	
 	public float getSpCost(){
 		float cost = 1;
+		float mult = 1;
 		for (Armor armor: getArmors())
 			if (armor != null)
 				cost += armor.getSPCostBuff();
 		for (Buff buff: getBuff(Buff.Type.spCost))
-			cost += buff.getValue(Buff.Type.spCost);
+			mult += buff.getValue(Buff.Type.spCost);
 		cost += weapon.getSPCostBuff();
+		cost *= mult;
 		return cost;
 	}
 	
 	public float getBalCost(){
 		float cost = 1;
+		float mult = 1;
 		for (Armor armor: getArmors())
 			if (armor != null)
 				cost += armor.getBalCostBuff();
 		for (Buff buff: getBuff(Buff.Type.balCost))
-			cost += buff.getValue(Buff.Type.balCost);
+			mult += buff.getValue(Buff.Type.balCost);
 		cost += weapon.getBalCostBuff();
+		cost *= mult;
 		return cost;
 	}
 	
@@ -900,5 +1039,111 @@ public class Character implements Cloneable {
 	}
 
 
-
+	public Wini toWini(File file) throws InvalidFileFormatException, IOException{
+		Wini wini = new Wini(file);
+		wini.put("general info", "Name", name);
+		wini.put("general info", "Gender", gender);
+		wini.put("general info", "hp", maxHP);
+		wini.put("general info", "mp", maxMP);
+		wini.put("general info", "sp", maxSP);
+		wini.put("general info", "bal", maxBal);
+		wini.put("general info", "str", str);
+		wini.put("general info", "dex", dex);
+		wini.put("general info", "int", inte);
+		wini.put("general info", "agi", agi);
+		wini.put("general info", "def", def);
+		wini.put("general info", "prot", prot);
+		wini.put("general info", "crystal", crystals);
+		
+		String str = "";
+		for (ItemStack stack : inventory.itemStacks)
+			str += stack.item.name + "|" + stack.stack + "|";
+		wini.put("Inventory", "Consumables", str);
+		
+		str = "";
+		for (ItemCustom item: inventory.itemCustoms){
+			str += item.name + "|";
+			wini.put(item.name, "durability", item.durability);
+			wini.put(item.name, "isEquipted", isEquipted(item));
+			for (int i = 0; i < item.valueNum; i ++)
+				wini.put(item.name, "value " + i, item.values.get(i));
+		}
+		wini.put("Inventory", "ItemCustoms", str);
+		
+		
+		String skills = "";
+		for (Skill skill: this.skills)
+			skills += skill.name + "|";
+		wini.put("general info", "skills", skills);
+		
+		for (Skill skill: this.skills){
+			wini.put(skill.name, "prof", skill.prof);
+			for (Step step: skill.steps)
+				wini.put(skill.name,"Step "+ skill.steps.indexOf(step), step.prof);
+		}
+		return wini;
+	}
+	
+	public void loadWini(Wini wini){
+		gender = wini.get("general info", "Gender");
+		maxHP = wini.get("general info", "hp",Float.class);
+		maxMP =wini.get("general info", "mp", Float.class);
+		maxSP = wini.get("general info", "sp", Float.class);
+		maxBal = wini.get("general info", "bal", Float.class);
+		str = wini.get("general info", "str", Float.class);
+		dex = wini.get("general info", "dex", Float.class);
+		inte = wini.get("general info", "int",Float.class);
+		agi = wini.get("general info", "agi", Float.class);
+		def = wini.get("general info", "def",Float.class);
+		prot = wini.get("general info", "prot", Float.class);
+		crystals = wini.get("general info", "crystal", Float.class);
+		
+		String items = wini.get("Inventory", "Consumables");
+		
+		boolean getStack = false;
+		Item item = null;
+		for (String str: items.split("\\|")){
+			if (!getStack){
+				item = Items.getItem(str);
+				if (item != null)
+					getStack = true;
+						
+			}else {
+				int stack = Integer.valueOf(str);
+				getStack = false;
+				inventory.addItem(item,stack);
+			}
+		}
+		
+		String skills = wini.get("general info", "skills");
+		for (String str: skills.split("\\|")){
+			Skill skill = Skills.getSkill(str);
+			if (skill == null)
+				continue;
+			skill.prof = wini.get(skill.name, "prof", Float.class);
+			for (int i = 0; i < skill.steps.size(); i ++){
+				Step step = skill.steps.get(i);
+				step.prof = wini.get(skill.name, "Step " + i, Float.class );
+			}
+			addSkills(skill);
+		}
+		
+		items = wini.get("Inventory", "ItemCustoms");
+		for (String str: items.split("\\|")){
+			ItemCustom itemC = Items.getItemCustom(str);
+			if (itemC != null)
+				itemC = Utility.getInstance(itemC.getClass());
+			else
+				continue;
+		//	System.out.println(name + " "+ item.name);
+			float dur = wini.get(itemC.name, "durability", Float.class);
+			itemC.durability = dur;
+			inventory.addItem(itemC);
+			for (int i = 0; i < itemC.valueNum; i ++)
+				itemC.values.add(wini.get(itemC.name, "value " + i));
+			if (wini.get(itemC.name, "isEquipted", Boolean.class)){
+				equip(itemC);
+			}
+		}
+	}
 }

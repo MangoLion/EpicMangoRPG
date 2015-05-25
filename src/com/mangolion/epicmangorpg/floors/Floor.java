@@ -43,6 +43,10 @@ public class Floor {
 		return  Utility.getInstance( allies.get(rand.nextInt(allies.size())).character);
 	}
 	
+	public Character getAlly(int i) {
+		return  Utility.getInstance( allies.get(i).character);
+	}
+	
 	public Character getSpawn(int i){
 		return Utility.getInstance( spawns.get(i).character);
 	}
@@ -80,4 +84,6 @@ public class Floor {
 		result.add(new Floor5());
 		return result;
 	}
+
+
 }

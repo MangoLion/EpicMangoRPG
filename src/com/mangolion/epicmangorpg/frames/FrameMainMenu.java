@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 
@@ -111,7 +112,7 @@ public class FrameMainMenu extends JFrame {
 		
 		JButton btnCredits = new JButton("Credits");
 		btnCredits.setFont(new Font("Comic Sans MS", Font.PLAIN, 16));
-		btnCredits.setBounds(366, 204, 144, 36);
+		btnCredits.setBounds(373, 204, 144, 36);
 		contentPane.add(btnCredits);
 		
 		JButton btnViewEverything = new JButton("View Everything");
@@ -123,5 +124,18 @@ public class FrameMainMenu extends JFrame {
 		btnHelp.setFont(new Font("Comic Sans MS", Font.PLAIN, 16));
 		btnHelp.setBounds(87, 204, 144, 36);
 		contentPane.add(btnHelp);
+		
+		JButton btnBattleCreator = new JButton("Battle Creator");
+		btnBattleCreator.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Game.getInstance().createMode = true;
+				FrameGame.start();
+				FrameGame.getInstance().viewMode = false;
+				dispose();
+			}
+		});
+		btnBattleCreator.setFont(new Font("Comic Sans MS", Font.PLAIN, 16));
+		btnBattleCreator.setBounds(231, 238, 144, 36);
+		contentPane.add(btnBattleCreator);
 	}
 }

@@ -46,4 +46,10 @@ public class Terrain {
 		rugged =ruggedMin +  rand.nextInt(ruggedMax - ruggedMin);
 		return this;
 	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return name;
+	}
 }

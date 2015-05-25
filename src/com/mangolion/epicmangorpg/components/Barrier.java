@@ -1,22 +1,57 @@
 package com.mangolion.epicmangorpg.components;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+
+import com.mangolion.epicmangorpg.characters.Character;
+import com.mangolion.epicmangorpg.characters.CharacterPlayer;
+import com.mangolion.epicmangorpg.game.Game;
+import com.mangolion.epicmangorpg.game.StylePainter;
+import com.mangolion.epicmangorpg.game.Utility;
+import com.mangolion.epicmangorpg.messages.Msg;
+
 public class Barrier implements StatBuff{
-	enum Type{
-		physical,
-		magic,
-		all
-	}
-	
+	public Character character;
 	public String name;
-	float hp, time, absorbPercent = 1;
-	public Type type;
+	public float hp, time, absorbPercent = 1,  def,  prot;
+	public LinkedList<Element> elements = new LinkedList<Element>();
 	
-	public Barrier(String name, float hp, float time, float absorbPercent, Type type) {
+	public Barrier(Character character, String name, float hp, float def, float prot, float time, float absorbPercent, Element ... elements) {
+		this.character = character;
 		this.name = name;
 		this.hp = hp;
 		this.time = time;
+		this.def = def;
+		this.prot = prot;
 		this.absorbPercent = absorbPercent;
-		this.type = type;
+		if (elements != null)
+			this.elements.addAll(Arrays.asList(elements));
+	}
+	
+	public float setDamage(Damage damage){
+		Character source = damage.source;
+		System.out.println("{" + damage.amount);
+		float cdmg = damage.amount * absorbPercent,
+				ldmg;
+		if (cdmg > hp)
+			cdmg = hp;
+		 ldmg = damage.amount - cdmg;
+		 damage.amount = ldmg;
+		 System.out.println( damage.amount+ "}"); 
+		cdmg = (cdmg - def)*(100 - prot)/100;
+		cdmg *= Elements.calculate(damage.elements, getElements());
+		
+		cdmg = (cdmg <=0 )? 1:cdmg;
+		float change = Style.positive(source, character, Style.dmg, cdmg, 1 - source.getAccuracy(character));
+		StylePainter.append(new Msg(false, " $targetname's "+ name + " absorbed $num damage").getMessage(source, character, cdmg), Style.getSegments(change, source));
+		LogMsg.addLog(source + " dealt " + String.valueOf(cdmg) + " damage to " + name);
+		hp -= cdmg;
+		return ldmg;
+	}
+
+	private LinkedList<Element> getElements() {
+		// TODO Auto-generated method stub
+		return elements;
 	}
 
 	@Override

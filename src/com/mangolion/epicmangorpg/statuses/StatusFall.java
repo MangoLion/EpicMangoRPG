@@ -1,6 +1,8 @@
 package com.mangolion.epicmangorpg.statuses;
 
 import com.mangolion.epicmangorpg.characters.Character;
+import com.mangolion.epicmangorpg.components.Damage;
+import com.mangolion.epicmangorpg.components.Element;
 
 public class StatusFall extends Status{
 
@@ -22,7 +24,8 @@ public class StatusFall extends Status{
 	
 	@Override
 	public void remove() {
-		character.setDamage(character, damage);
+		Damage damage = new Damage(character, this.damage, new Element("poison", 1));
+		character.setDamage(damage);
 		super.remove();
 	}
 	

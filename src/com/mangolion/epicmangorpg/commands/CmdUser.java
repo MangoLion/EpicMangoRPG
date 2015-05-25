@@ -17,13 +17,15 @@ public class CmdUser extends CommandCombo {
 	@Override
 	public LinkedList<Command> getSubCommands() {
 		LinkedList<Command> result = new LinkedList<Command>();
-		for (Character character: Game.getInstance().charsAllies)
+		for (Character character: Game.getInstance().charsAllies){
+			System.out.println("CMD: " + character.name);
 			result.add(new Command(character.name, Command.COMBOBOX){
 				@Override
 				public CommandHandler getNextCommand() {
 					return new CmdUse(previous);
 				}
 			});
+		}
 		return result;
 	}
 

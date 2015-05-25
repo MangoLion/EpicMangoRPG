@@ -15,8 +15,8 @@ public class ItemStat extends Item{
 	
 	@Override
 	public void onUse(Character character, Character target) {
-		if (type == Type.Damage)
-			target.setDamage(character, value);
+		/*if (type == Type.Damage)
+			target.setDamage(character, value);*/
 		if (type == Type.Heal)
 			target.setHeal(character, value);
 		super.onUse(character, target);

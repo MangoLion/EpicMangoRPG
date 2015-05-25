@@ -41,7 +41,7 @@ import javax.swing.JTextPane;
 
 import java.awt.Font;
 
-public class FrameCharacterInfo extends JInternalFrame {
+public class FrameCharacterInfoEx extends JFrame {
 
 	private JPanel contentPane;
 	
@@ -179,22 +179,17 @@ public class FrameCharacterInfo extends JInternalFrame {
 	private JLabel label_9;
 	private JLabel lblCrit;
 	/**
-	 * Create the 
+	 * Create the frame.
 	 */
-	public FrameCharacterInfo(final Character character) {
-		super("", true, true, true, true);
-		FrameGame.getInstance().addFrame(this);
+	public FrameCharacterInfoEx(final Character character) {
+		//super("", true, true, true, true);
+		//FrameGame.getInstance().addFrame(this);
+		setVisible(true);
 		setResizable(false);
 		this.character = character;
 		setTitle(character.name);
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 688, 516);
-		Point pt = FrameGame.getInstance().getMousePos();
-		setLocation(pt.x - getWidth()/2, pt.y - getHeight());
-		if (getX() < 0)
-			setLocation(0, getY());
-		if (getY() < 0)
-			setLocation(getX(), 0);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -526,12 +521,8 @@ public class FrameCharacterInfo extends JInternalFrame {
 			}
 		});
 		refresh();
-		super.moveToFront();
 	}
-	
-	@Override
-	public void moveToFront() {
-	}
+
 }
 
 

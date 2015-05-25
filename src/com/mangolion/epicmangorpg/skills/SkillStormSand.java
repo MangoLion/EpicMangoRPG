@@ -88,7 +88,7 @@ public class SkillStormSand extends Skill {
 		
 		@Override
 		public void execute() {
-			target.applyBuff(new Buff("Blind", 2, GenType.negative, Buff.Type.accuracy, Buff.Type.crit).setValues(-0.2f, - 0.2f));
+			target.applyBuff(new Buff("Blind", 2, GenType.negative, Buff.Type.accuracy, Buff.Type.crit).setValue(-0.2f, - 0.2f));
 			super.execute();
 		}
 

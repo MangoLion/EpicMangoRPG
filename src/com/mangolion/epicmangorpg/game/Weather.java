@@ -84,4 +84,10 @@ public class Weather {
 		num = (rand.nextInt(5) == 0) ? 7 : 2;
 		wind += rand.nextInt(num) - rand.nextInt(num);
 	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return name;
+	}
 }

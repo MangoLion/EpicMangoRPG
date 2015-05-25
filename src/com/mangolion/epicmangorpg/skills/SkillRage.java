@@ -41,7 +41,7 @@ public class SkillRage extends Skill{
 		public void execute(Character target, float time) {
 			//System.out.println("" + -getCharacter().str*0.7f);
 			addProf(new Proficiency(getCharacter(), getCharacter()));
-			getCharacter().applyBuff(new Buff("Focus", 1, GenType.positive, Buff.Type.str, Buff.Type.agi, Buff.Type.dex, Buff.Type.spCost, Buff.Type.mpCost, Buff.Type.balCost ).setValues( getCharacter().getStr()*(prof + 1), getCharacter().getAgi()*(prof + 1), -getCharacter().getDex()*(prof + 1)/2, getCharacter().getSpCost()*0.5f*(1 - prof ),getCharacter().getMpCost()*0.5f*(1 - prof ),getCharacter().getBalCost()*0.5f*(1 - prof )));
+			getCharacter().applyBuff(new Buff("Focus", 1, GenType.positive, Buff.Type.str, Buff.Type.agi, Buff.Type.dex, Buff.Type.spCost, Buff.Type.mpCost, Buff.Type.balCost ).setValue((prof + 1), (prof + 1), (prof + 1)/2,0.5f*(1 - prof ),0.5f*(1 - prof ),0.5f*(1 - prof )));
 			super.execute(target, time);
 		}
 

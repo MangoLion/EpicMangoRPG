@@ -8,6 +8,8 @@ import org.ini4j.InvalidFileFormatException;
 import org.ini4j.Wini;
 
 import com.mangolion.epicmangorpg.commands.CmdUser;
+import com.mangolion.epicmangorpg.components.Barrier;
+import com.mangolion.epicmangorpg.components.Element;
 import com.mangolion.epicmangorpg.frames.FrameGame;
 import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.game.Utility;
@@ -41,7 +43,7 @@ import com.mangolion.epicmangorpg.weapons.WandPine;
 import com.mangolion.epicmangorpg.weapons.Weapon;
 
 public class CharacterPlayer extends Character {
-	public static CharacterPlayer instance;
+	public static Character instance;
 	static Weapon weapon = new LongSword();
 	public CharacterPlayer(String name) {
 		super(name, "", 60, 60, 80, 40, 10, 60, 20, 10,0, 0,new Barehands(),
@@ -54,6 +56,7 @@ public class CharacterPlayer extends Character {
 		instance = this;
 		learnRate = 0.5f;
 		inventory.addItem(Items.portalStone, 1);
+
 		//cpBase = -200;
 		//addElements(new Element(Elements.Fire, 1));
 	}
@@ -79,152 +82,18 @@ public class CharacterPlayer extends Character {
 				inventory.addItem(item);
 	}
 
-	@Override
-	public void nextAction() {
-		/*
-		 * if (target == null) target = Game.getInstance().findEnemy(this);
-		 * skills.getLast().execute();
-		 */
-		if (!isStunned())
-			Game.getInstance().timer.stop();
-	}
 	
 	@Override
 	public void addSkills(Skill... skills) {
 		FrameGame frame = FrameGame.instance;
-		if (frame != null)
+		if (frame != null && Game.getInstance() != null)
 			frame.setCommand(new CmdUser(null));
 		super.addSkills(skills);
 	}
 
-	public void reset() {
-		this.hp = getMaxHP();
-		this.mp = getMaxMP();
-		this.sp  = getMaxSP();
-		this.bal = getMaxBal();
-		statuses = new LinkedList<Status>();
-		style = 10;
-		summon = null;
-		buffs.clear();
-		skillCharged = null;
-		buffs.clear();
-		for (Skill skill :skills)
-			skill.reset();
-	}
+	
 
-	public boolean isEquipted(ItemCustom item) {
-		if (item instanceof Weapon)
-			return isEquipted((Weapon) item);
-		if (item instanceof Armor)
-			return isEquipted((Armor) item);
-		return false;
-	}
+
 	
-	public Wini toWini(File file) throws InvalidFileFormatException, IOException{
-		Wini wini = new Wini(file);
-		wini.put("general info", "Name", name);
-		wini.put("general info", "Gender", gender);
-		wini.put("general info", "hp", maxHP);
-		wini.put("general info", "mp", maxMP);
-		wini.put("general info", "sp", maxSP);
-		wini.put("general info", "bal", maxBal);
-		wini.put("general info", "str", str);
-		wini.put("general info", "dex", dex);
-		wini.put("general info", "int", inte);
-		wini.put("general info", "agi", agi);
-		wini.put("general info", "def", def);
-		wini.put("general info", "prot", prot);
-		wini.put("general info", "crystal", crystals);
-		
-		String str = "";
-		for (ItemStack stack : inventory.itemStacks)
-			str += stack.item.name + "|" + stack.stack + "|";
-		wini.put("Inventory", "Consumables", str);
-		
-		str = "";
-		for (ItemCustom item: inventory.itemCustoms){
-			str += item.name + "|";
-			wini.put(item.name, "durability", item.durability);
-			wini.put(item.name, "isEquipted", isEquipted(item));
-			for (int i = 0; i < item.valueNum; i ++)
-				wini.put(item.name, "value " + i, item.values.get(i));
-		}
-		wini.put("Inventory", "ItemCustoms", str);
-		
-		
-		String skills = "";
-		for (Skill skill: this.skills)
-			skills += skill.name + "|";
-		wini.put("general info", "skills", skills);
-		
-		for (Skill skill: this.skills){
-			wini.put(skill.name, "prof", skill.prof);
-			for (Step step: skill.steps)
-				wini.put(skill.name,"Step "+ skill.steps.indexOf(step), step.prof);
-		}
-		return wini;
-	}
-	
-	public void loadWini(Wini wini){
-		gender = wini.get("general info", "Gender");
-		maxHP = wini.get("general info", "hp",Float.class);
-		maxMP =wini.get("general info", "mp", Float.class);
-		maxSP = wini.get("general info", "sp", Float.class);
-		maxBal = wini.get("general info", "bal", Float.class);
-		str = wini.get("general info", "str", Float.class);
-		dex = wini.get("general info", "dex", Float.class);
-		inte = wini.get("general info", "int",Float.class);
-		agi = wini.get("general info", "agi", Float.class);
-		def = wini.get("general info", "def",Float.class);
-		prot = wini.get("general info", "prot", Float.class);
-		crystals = wini.get("general info", "crystal", Float.class);
-		
-		String items = wini.get("Inventory", "Consumables");
-		
-		boolean getStack = false;
-		Item item = null;
-		for (String str: items.split("\\|")){
-			if (!getStack){
-				item = Items.getItem(str);
-				if (item != null)
-					getStack = true;
-						
-			}else {
-				int stack = Integer.valueOf(str);
-				getStack = false;
-				inventory.addItem(item,stack);
-			}
-		}
-		
-		String skills = wini.get("general info", "skills");
-		for (String str: skills.split("\\|")){
-			Skill skill = Skills.getSkill(str);
-			if (skill == null)
-				continue;
-			skill.prof = wini.get(skill.name, "prof", Float.class);
-			for (int i = 0; i < skill.steps.size(); i ++){
-				Step step = skill.steps.get(i);
-				step.prof = wini.get(skill.name, "Step " + i, Float.class );
-			}
-			addSkills(skill);
-		}
-		
-		items = wini.get("Inventory", "ItemCustoms");
-		for (String str: items.split("\\|")){
-			ItemCustom itemC = Items.getItemCustom(str);
-			if (itemC != null)
-				itemC = Utility.getInstance(itemC.getClass());
-			else
-				continue;
-		//	System.out.println(name + " "+ item.name);
-			float dur = wini.get(itemC.name, "durability", Float.class);
-			itemC.durability = dur;
-			inventory.addItem(itemC);
-			for (int i = 0; i < itemC.valueNum; i ++)
-				itemC.values.add(wini.get(itemC.name, "value " + i));
-			if (wini.get(itemC.name, "isEquipted", Boolean.class)){
-				equip(itemC);
-			}
-		}
-	}
+
 }

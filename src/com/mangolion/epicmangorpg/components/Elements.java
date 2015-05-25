@@ -111,6 +111,37 @@ public enum Elements {
 		return null;
 	}
 	
+	/*public static void main(String[] args) {
+			LinkedList<Element> src = new LinkedList<Element>();
+			src.add(new Element("dark", 1));
+			src.add(new Element("water", 1));
+			LinkedList<Element> target = new LinkedList<Element>();
+			target.add(new Element("lava", 1));
+			target.add(new Element("light", 1));
+			
+			System.out.println(Elements.calculate(src, target));
+	}
+	*/
+	public static float calculate(LinkedList<Element> srcElements, LinkedList<Element> targetElements){
+		float result = 1;
+		boolean first = true;
+		for (Element src: srcElements){
+			for (Element target: targetElements){
+				float calc = Elements.getElement(target.type).calculate(src.type);
+				System.out.println(src.type + " " + target.type + " " + calc);
+				if (first){
+					result = calc;
+					first = false;
+				}
+				else if (calc != 1){
+					result = (result + calc)/2;
+				}
+			}
+		}
+		System.out.println("result: " + result);
+		return result;
+	}
+	
 	public static Elements getIce(){
 		return Ice;
 	}

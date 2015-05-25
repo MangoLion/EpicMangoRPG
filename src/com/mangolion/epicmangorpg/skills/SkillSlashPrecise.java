@@ -27,7 +27,7 @@ public class SkillSlashPrecise extends Skill {
 			}
 			
 			public void execute(com.mangolion.epicmangorpg.characters.Character target, float time, String aug) {
-				getCharacter().applyBuff(new Buff("Focus", 1, GenType.positive, Buff.Type.dex, Buff.Type.accuracy, Buff.Type.crit).setValues( getCharacter().getDex()*(prof + 1)*0.2f, getCharacter().getAccuracy(target)*(prof + 1)*0.3f, -getCharacter().getCritical(target)*(prof + 1)*0.3f));
+				getCharacter().applyBuff(new Buff("Focus", 1, GenType.positive, Buff.Type.dex, Buff.Type.accuracy, Buff.Type.crit).setValue((prof + 1)*0.2f, (prof + 1)*0.3f,(prof + 1)*0.3f));
 				super.execute(target, time, aug);
 			};
 		}.setCost(15, 0, 3, 0));

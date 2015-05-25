@@ -1,5 +1,6 @@
 package com.mangolion.epicmangorpg.steps;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -8,6 +9,7 @@ import javax.swing.JOptionPane;
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.characters.CharacterPlayer;
 import com.mangolion.epicmangorpg.components.ActionType;
+import com.mangolion.epicmangorpg.components.Damage;
 import com.mangolion.epicmangorpg.components.Element;
 import com.mangolion.epicmangorpg.components.Elements;
 import com.mangolion.epicmangorpg.components.LogMsg;
@@ -44,8 +46,9 @@ public abstract class Step implements Cloneable, StatBuff {
 			prof = 0, timeLoad, timeExecute, timeCooldown, value = 0, chanceStatus = 0, cp = 0, dmgBase = 0, critBase = 0, timeChargeLoad = 0.1f, timeChargeExecute = 0.1f, timeChargeCD = 0.1f;
 	protected float  hpCost = 0, balCost = 0, mpCost = 0, stamCost = 0, percentBlock = 1, subtractDamage = 0;
 	protected float  dmgPercent = 0;
-	public Element element;
-	public Status status;
+	public LinkedList<Element> elements = new LinkedList<Element>();
+	public LinkedList<Status> statuses = new LinkedList<Status>();
+	public LinkedList<Buff> buffs = new LinkedList<Buff>();
 	public boolean isAOE = false, doDamage = false;
 	public LinkedList<Character> aoeExceptions = new LinkedList<Character>();
 	public boolean useAmmo = false, useItem = false, isCharged = false;
@@ -119,12 +122,12 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 	
 	public Step setElement(Element element){
-		this.element = element;
+		this.elements.add(element);
 		return this;
 	}
 	
 	public Step setStatus(Status status, float chance){
-		this.status = status;
+		this.statuses.add(status);
 		chanceStatus = chance;
 		return this;
 	}
@@ -173,11 +176,15 @@ public abstract class Step implements Cloneable, StatBuff {
 			}
 	}
 	
-	private Status getStatus() {
+	private LinkedList<Status> getStatuses() {
+		LinkedList<Status> result = new LinkedList<Status>();
+		for (Status status: statuses){
 		Status newStatus =status.copy();
 		newStatus.character = getCharacter().getTarget();
 		newStatus.time *= (prof + 1);
-		return newStatus;
+		result.add(newStatus);
+		}
+		return result;
 	}
 	
 	public boolean damage(Character target){
@@ -189,11 +196,8 @@ public abstract class Step implements Cloneable, StatBuff {
 			return false;
 		}
 		
-
-
-		
-		float eleMult = -2;
-		boolean firstCalc = true;
+		/*float eleMult = -2;
+		boolean firstalc = true;
 		for (Element element: getCharacter().weapon.elements)
 			Elements.getElement(element.type).calculate(element.type);
 		for (Element element: target.getElements()){
@@ -205,62 +209,12 @@ public abstract class Step implements Cloneable, StatBuff {
 				firstCalc = false;
 		}
 		if (eleMult == -2)
-			eleMult = 1;
-		float dmg;
+			eleMult = 1;*/
+
 		if (!isAOE){
-			//used for showing the miss message, style is calculated based on the damage of the missed skill, thats why the msg needs to be shown only after the damage is calculated
-			boolean hasMissed = false;
-			float miss = ( chanceMiss) + (1 - getCharacter().getAccuracy(target));
-			if (getCharacter().weapon.isAutomatic)
-				miss *= 1.2f;
-			System.out.println("miss: " + miss);
-			if (rand.nextFloat() <= miss && checkMiss) {
-				hasMissed = true;
-				
-				if (target.skillCurrent != null && target.skillCurrent.type == ActionType.Dodge){
-					
-					target.skillCurrent.steps.get(target.skillCurrent.stepCurrent).addProf(new Proficiency(target, getCharacter()));
-				}
-
-			}	
-
-		dmg= getDamage()*eleMult;
-		
-		if (hasMissed){
-			float change = Style.positive(getCharacter(), target ,Style.miss, 1 - miss, dmg);
-			StylePainter.append(new MsgSlashMiss().getMessage(false, getCharacter(),
-					target, 0), Style.getSegments(change, getCharacter()));
-			return false;
-		}
-		if (calculateChanceMelee(target))
-			return false;
-		float crit = getCharacter().getCritical(target) + critBase;
-		System.out.println("crit: " + crit);
-		if (rand.nextFloat() <= crit) {
-			StylePainter.append(new Msg("$name has landed a critical!").getMessage(getCharacter(), null, 0));
-			dmg *= 1.5;
-		}
-		
-			target.setDamage(getCharacter(), dmg);
-		if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus && rand.nextFloat() <= eleMult ){
-			target.addStatus(getStatus());
-			
-		}
+			return damageSingle(target, checkMiss);
 		}else
 			for (Character character: Game.getInstance().getEnemies(getCharacter())){
-				boolean hasMissed = false;
-				float miss = ( chanceMiss) + (1 - getCharacter().getAccuracy(character));
-				if (getCharacter().weapon.isAutomatic)
-					miss *= 1.2f;
-				System.out.println("miss: " + miss);
-				if (rand.nextFloat() <= miss && checkMiss) {
-					hasMissed = true;
-					if (target.skillCurrent != null && target.skillCurrent.type == ActionType.Dodge){
-						
-						target.skillCurrent.steps.get(target.skillCurrent.stepCurrent).addProf(new Proficiency(target, getCharacter()));
-					}
-				}
-				
 				boolean excepted = false;
 
 				for (Character character2 : aoeExceptions){
@@ -270,32 +224,62 @@ public abstract class Step implements Cloneable, StatBuff {
 				if (excepted)
 					continue;
 				
-				dmg = getDamage()*eleMult;
-				if (hasMissed){
-					float change = Style.positive(getCharacter(), character ,Style.miss, 1 - miss, dmg);
-					StylePainter.append(new MsgSlashMiss().getMessage(false, getCharacter(),
-							character, 0), Style.getSegments(change, getCharacter()));
-					continue;
-				}
-				
-				if (calculateChanceMelee(character))
-					continue;
-				
-				if (chanceStatus > 0 && rand.nextFloat() <= chanceStatus && rand.nextFloat() <= eleMult && subtractDamage  <= 0)
-					character.addStatus(getStatus());
-				
-				float crit = getCharacter().getCritical(target) + critBase;
-				System.out.println("crit: " + crit);
-				if (rand.nextFloat() <= crit) {
-					StylePainter.append(new Msg("$name has landed a critical!").getMessage(getCharacter(), null, 0));
-					dmg *= 1.5;
-				}
-				character.setDamage(getCharacter(), dmg);
+				damageSingle(character, checkMiss);
 			}
 		aoeExceptions.clear();
 			addProf(new Proficiency(getCharacter(), target));
 			subtractDamage = 0;
 			return true;
+	}
+	
+	public boolean damageSingle(Character target, boolean checkMiss){
+		float dmg;
+		//used for showing the miss message, style is calculated based on the damage of the missed skill, thats why the msg needs to be shown only after the damage is calculated
+		boolean hasMissed = false;
+		float miss = ( chanceMiss) + (1 - getCharacter().getAccuracy(target));
+		if (getCharacter().weapon.isAutomatic)
+			miss *= 1.2f;
+		System.out.println("miss: " + miss);
+		if (rand.nextFloat() <= miss && checkMiss) {
+			hasMissed = true;
+			if (target.skillCurrent != null && target.skillCurrent.type == ActionType.Dodge){
+				target.skillCurrent.steps.get(target.skillCurrent.stepCurrent).addProf(new Proficiency(target, getCharacter()));
+			}
+		}	
+
+	dmg= getDamage();
+	
+	if (hasMissed){
+		float change = Style.positive(getCharacter(), target ,Style.miss, 1 - miss, dmg);
+		StylePainter.append(new MsgSlashMiss().getMessage(false, getCharacter(),
+				target, 0), Style.getSegments(change, getCharacter()));
+		return false;
+	}
+	
+	if (calculateChanceMelee(target))
+		return false;
+	
+	float crit = getCharacter().getCritical(target) + critBase;
+	System.out.println("crit: " + crit);
+	if (rand.nextFloat() <= crit) {
+		StylePainter.append(new Msg("$name has landed a critical!").getMessage(getCharacter(), null, 0));
+		dmg *= 1.5;
+	}
+	
+	
+		Damage damage = new Damage(getCharacter(), dmg).setStatuses(statuses).setBuffs(buffs);
+		damage.elements.addAll(getDmgElements());
+		target.setDamage(damage);
+		return true;
+	}
+	
+	public LinkedList<Element> getDmgElements(){
+		LinkedList<Element>results = new LinkedList<Element>();
+		if (elements.size() > 0)
+			results.addAll(elements);
+		else
+			results.addAll(getCharacter().getElements());
+		return results;
 	}
 	
 	public Step setChances(float block, float parry, float miss) {
@@ -758,6 +742,9 @@ public abstract class Step implements Cloneable, StatBuff {
 		return false;
 	}
 
-	
+	public Step setBuff(Buff ... buffs){
+		this.buffs.addAll(Arrays.asList(buffs));
+		return this;
+	}
 
 }

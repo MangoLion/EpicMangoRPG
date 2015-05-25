@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.ini4j.Wini;
 
+import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.characters.CharacterPlayer;
 import com.mangolion.epicmangorpg.components.Themes;
 import com.mangolion.epicmangorpg.frames.FrameGame;
@@ -48,7 +49,7 @@ public class WiniWriter {
 				playerFile.createNewFile();
 			}
 			
-			CharacterPlayer player = profile.player;
+			Character player = profile.player;
 			Wini wini = player.toWini(playerFile);
 			wini.store();
 		} catch (IOException e) {

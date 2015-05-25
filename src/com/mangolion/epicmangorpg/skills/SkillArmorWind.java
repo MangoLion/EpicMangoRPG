@@ -36,7 +36,7 @@ public class SkillArmorWind extends Skill {
 			@Override
 			public void execute(Character target) {
 				for (Character c: Game.getInstance().getAllies(getCharacter()))
-					c.applyBuff(new Buff("Wind Armor", 10, GenType.positive, Buff.Type.agi, Buff.Type.def, Buff.Type.prot).setValues(getCharacter().getAgi()*0.3f, getCharacter().getDef()*0.3f, getCharacter().getProt()*0.15f).setElement(new Element("Wind", 0.3f)));
+					c.applyBuff(new Buff("Wind Armor", 10, GenType.positive, Buff.Type.agi, Buff.Type.def, Buff.Type.prot).setValue(0.3f, 0.3f, 0.15f).setElement(new Element("Wind", 0.3f)));
 				super.execute(character);
 			}			
 			@Override

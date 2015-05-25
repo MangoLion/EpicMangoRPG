@@ -22,6 +22,7 @@ import com.mangolion.epicmangorpg.floors.Floor;
 import com.mangolion.epicmangorpg.floors.FloorTrainning;
 import com.mangolion.epicmangorpg.floors.Floor.Spawn;
 import com.mangolion.epicmangorpg.floors.Floor0;
+import com.mangolion.epicmangorpg.frames.FrameBattleCreate;
 import com.mangolion.epicmangorpg.frames.FrameCharacterInfo;
 import com.mangolion.epicmangorpg.frames.FrameGame;
 import com.mangolion.epicmangorpg.messages.Msg;
@@ -42,7 +43,7 @@ public class Game {
 	public Terrain terrain;
 	public float timePassed = 0, lastWeatherTick = 0, timeSinceTick = 0,
 			floorPercent = 0, timeLimit = 0, endCounter = 0;
-	public boolean nextFloor = true, lastFloor = false, firstBattle = true;
+	public boolean nextFloor = true, lastFloor = false, firstBattle = true, createMode = false;
 	LinkedList<Character> toAdd = new LinkedList<Character>(),
 			toRemove= new LinkedList<Character>();
 	public MangoTimer timer = new MangoTimer(100, new ActionListener() {
@@ -111,7 +112,11 @@ public class Game {
 	}
 
 	public void begin(final Floor floor) {
+			
+		
 		endCounter = 0;
+		
+		if (!createMode)
 		if (!firstBattle) {
 			saveGame();
 		} else
@@ -154,12 +159,14 @@ public class Game {
 				frame.modelMonster.clear();
 				for (int i = 0; i < floor.spawns.size(); i++)
 					frame.modelMonster.addElement(floor.getSpawn(i));
-
+				
+				if (CharacterPlayer.instance == null)
+					new CharacterPlayer(playerName);
+				CharacterPlayer.instance.reset();
+				
 				if (!(floor instanceof Floor0) && !(floor instanceof FloorTrainning)) {
 					float allyCP = 0, enemyCP = 0, limitCP;
-					if (CharacterPlayer.instance == null)
-						new CharacterPlayer(playerName);
-					CharacterPlayer.instance.reset();
+
 
 					charsAllies.add(CharacterPlayer.instance);
 
@@ -205,7 +212,7 @@ public class Game {
 						charsEnemies.add(Utility.getInstance(spawn.character));
 					}
 				}
-				frame.updateInfoTab();
+				//frame.updateInfoTab();
 
 				LinkedList<Character> allChars = getAllChars();
 				for (Character character : allChars) {
@@ -225,6 +232,15 @@ public class Game {
 				// charsEnemies.getFirst().name.replace(" ", ""));
 				frame.setCommand(new CmdUser(null));
 				timer2.stop();
+				
+				if (createMode){
+					boolean mode = FrameGame.getInstance().viewMode;
+					FrameGame.getInstance().viewMode = !mode;
+					if (!mode){
+						FrameGame.getInstance().addFrame(new FrameBattleCreate());
+						timer.stop();
+					}
+				}
 			}
 		});
 		timer2.start();
@@ -325,6 +341,10 @@ public class Game {
 
 	public void updateAll(float deltaTime, Character exception,
 			boolean executeTick) {
+		if (getInstance() != this){
+			timer.stop();
+			return;
+		}
 		for (Character c: toRemove){
 			charsAllies.remove(c);
 			charsEnemies.remove(c);

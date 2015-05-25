@@ -7,10 +7,10 @@ public class Profile {
 	public int currentFloor;
 	public float floorPercent = 0;
 	public boolean nextFloor, lastFloor;
-	public CharacterPlayer player;
+	public Character player;
 	public String theme;
 	
-	public Profile(CharacterPlayer player,  int currentFloor, float floorPercent, boolean nextFloor, boolean lastFloor, String theme) {
+	public Profile(Character player,  int currentFloor, float floorPercent, boolean nextFloor, boolean lastFloor, String theme) {
 		this.player = player;
 		this.currentFloor = currentFloor;
 		this.floorPercent = floorPercent;
