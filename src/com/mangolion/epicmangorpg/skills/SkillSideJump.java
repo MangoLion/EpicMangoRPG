@@ -36,7 +36,7 @@ public class SkillSideJump extends Skill{
 				// TODO Auto-generated method stub
 				return prof*10;
 			}
-		}.setCost(30, 0, 50, 0));
+		}.setCost(30, 0, 30, 0));
 		setObservable(true, 1);
 	}
 

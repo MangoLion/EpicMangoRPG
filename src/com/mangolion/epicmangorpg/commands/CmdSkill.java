@@ -44,7 +44,6 @@ public class CmdSkill extends CommandCombo{
 	public LinkedList<Command> getSubCommands() {
 		LinkedList<Command> results = new LinkedList<Command>();
 		final Character character = CharacterPlayer.instance;//Game.getInstance().getCharacter(previous.getFirst().getSelectedCommand().text);
-		System.out.println("name: " + previous.getFirst().getSelectedCommand().text);
 		if (skill == null || (skill != null && skill.equals("")))
 			results.add(new Command(character.skills.getFirst().name, Command.COMBOBOX) {
 				

@@ -233,7 +233,8 @@ public class FrameBattleCreate extends JInternalFrame {
 		btnCreateBattle.setBounds(211, 338, 124, 23);
 		contentPane.add(btnCreateBattle);
 		btnCreateBattle.addActionListener(new ActionListener() {
-			Timer timer;
+			Timer timer,
+			timer2;
 			Game game;
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -242,12 +243,14 @@ public class FrameBattleCreate extends JInternalFrame {
 					((CharacterPlayer) player).init();
 				player.isPlayer = true;
 				player.name += "(Player)";
+				player.scale(Float.parseFloat(tfScAlly.getText())/100);
+				player.isAllied = true;
 				CharacterPlayer.instance = player;
 				
 				game = Game.getInstance();
 				game.currentFloor = 2;
 				game.begin();
-				timer = new Timer(120, new ActionListener() {
+				timer = new Timer(11, new ActionListener() {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -255,30 +258,43 @@ public class FrameBattleCreate extends JInternalFrame {
 						game.charsAllies.clear();
 						game.charsEnemies.clear();
 
-
+						game.charsAllies.add(player);
 						for (Object  obj: mLAlly.toArray()){
 							Character character = (Character) obj;
 							character.isAllied = true;
+							character.scale(Float.parseFloat(tfScAlly.getText())/100);
 							game.charsAllies.add(character);
 						}
 						for (Object  obj: mLEnemy.toArray()){
 							Character character = (Character) obj;
 							character.isAllied = false;
+							character.scale(Float.parseFloat(tfScEnemy.getText())/100);
 							game.charsEnemies.add(character);
 						}
 						
-						game.charsAllies.add(player);
 					//	player.nextAction();
 						
 						game.weather = (Weather) cbWeather.getSelectedItem();
 						game.terrain = (Terrain) cbTerrain.getSelectedItem();
 						timer.stop();
-						CommandHandler handler = FrameGame.getInstance().cmdHandler;
-						FrameGame.getInstance().setCommand(new CmdUser(null));
-						/*if (handler == null)
-							FrameGame.getInstance().setCommand(new CmdUser(null));
-						else
-							FrameGame.getInstance().setCommand(handler);*/
+
+						timer2 = new Timer(12, new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								System.out.println("timed");
+								//CommandHandler handler = FrameGame.getInstance().cmdHandler;
+							//	if (handler == null)
+								FrameGame.getInstance().setCommand(new CmdUser(null));
+								/*CommandHandler handler = FrameGame.getInstance().cmdHandler;
+								if (handler == null)
+									FrameGame.getInstance().setCommand(new CmdUser(null));
+								else
+									FrameGame.getInstance().setCommand(handler);*/
+								timer2.stop();
+							}
+						});
+						timer2.start();
 					}
 				});
 				timer.start();

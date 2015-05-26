@@ -962,7 +962,7 @@ public class FrameGame extends JFrame {
 		CommandHandler last = null;
 			if (handler.getSubCommands().size() > 0)
 				last = handler.getSubCommands().getFirst().getNextCommand();
-		while (last != null){
+		while (last != null && last.getSubCommands().size() > 0){
 			handler = last;
 			last = last.getSubCommands().getFirst().getNextCommand();
 		}

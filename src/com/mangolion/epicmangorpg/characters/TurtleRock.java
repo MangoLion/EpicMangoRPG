@@ -1,6 +1,7 @@
 package com.mangolion.epicmangorpg.characters;
 
 import com.mangolion.epicmangorpg.ais.AISimple;
+import com.mangolion.epicmangorpg.components.Barrier;
 import com.mangolion.epicmangorpg.components.Element;
 import com.mangolion.epicmangorpg.components.Elements;
 import com.mangolion.epicmangorpg.skills.Skill;
@@ -27,9 +28,10 @@ import com.mangolion.epicmangorpg.weapons.Weapons;
 public class TurtleRock extends Character{
 
 	public TurtleRock() {
-		super("Rock Turtle", "A giant turtle that has a shell made out of rocks. Slow but powerful", 250, 100,350, 70, 20, 300, 10, 10, 10, 30,new Weapon("Hard Shell", 15, 100, Weapons.BareHand, 1.3f, 1,1f),  new SkillBite(), new SkillBodySlam(),new SkillStomp(), new SkillRoar());
+		super("Rock Turtle", "A giant turtle that has a shell made out of rocks. Slow but powerful", 250, 100,350, 70,10, 300, 10, 10, 10, 30,new Weapon("Hard Shell", 15, 100, Weapons.BareHand, 1.3f, 1,1f),  new SkillBite(), new SkillBodySlam(),new SkillStomp(), new SkillRoar());
 		ai = new AISimple(this);
-		addElements(new Element("Earth", 1));
+		addElements(new Element("Tough Hide", 1));
+		addBarrier(new Barrier(this, "Hard Shell", 100, 10, 5, 100, 0.6f, new Element("Tough Hide", 1)));
 		cpBase = 200;
 	}
 }

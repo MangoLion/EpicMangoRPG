@@ -11,14 +11,13 @@ public class CmdUser extends CommandCombo {
 
 	public CmdUser(LinkedList<CommandHandler> previous) {
 		super(previous);
-		// TODO Auto-generated constructor stub
+		setEnabled(false);
 	}
 	
 	@Override
 	public LinkedList<Command> getSubCommands() {
 		LinkedList<Command> result = new LinkedList<Command>();
 		for (Character character: Game.getInstance().charsAllies){
-			System.out.println("CMD: " + character.name);
 			result.add(new Command(character.name, Command.COMBOBOX){
 				@Override
 				public CommandHandler getNextCommand() {

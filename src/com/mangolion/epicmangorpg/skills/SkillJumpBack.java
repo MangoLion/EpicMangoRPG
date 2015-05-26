@@ -39,6 +39,6 @@ public class SkillJumpBack extends Skill{
 				getCharacter().applyBuff(new Buff("Jump Back Boost", 30, 0.3f, GenType.positive, Buff.Type.prot));
 				super.execute(target, time);
 			}
-		}.setCost(20, 0, 50, 0));
+		}.setCost(20, 0, 30, 0));
 	}
 }

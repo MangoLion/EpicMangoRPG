@@ -2,6 +2,8 @@ package com.mangolion.epicmangorpg.commands;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 
 import com.mangolion.epicmangorpg.characters.Character;
@@ -11,7 +13,7 @@ public class CmdUse extends CommandCombo {
 
 	public CmdUse(LinkedList<CommandHandler> previous) {
 		super(previous);
-		// TODO Auto-generated constructor stub
+
 	}
 	
 	@Override
