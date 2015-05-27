@@ -3,7 +3,7 @@ This game was inspired by Iyouboushi's mIRC BattleArena bot - https://github.com
 ###Overview
 Its more or less a dungeon crawling game, you fight monsters and procceeds to the lower floors.
 
-###[Combat System](https://github.com/MangoLion/EpicMangoRPG/wiki/Combat-System)
+###Combat System
 The combat system is much more dynamic than the traditional turn-based game. Instead of having each side takes turn one after another, Mango RPG uses a continuous timeline. For example, in 2 seconds, one character can use 3 fast skills where areas another can use 1 slow skill.
 
 ###[Skill](https://github.com/MangoLion/EpicMangoRPG/wiki/Skill)
