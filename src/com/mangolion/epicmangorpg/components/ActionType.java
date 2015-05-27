@@ -5,6 +5,7 @@ public enum ActionType {
 	MeleeStab(GeneralType.Attack),
 	MeleeBlock(GeneralType.Defend),
 	MeleeParry(GeneralType.Defend),
+	Barrier(GeneralType.Defend),
 	MeleeSpecial(GeneralType.Attack),
 	Magic(GeneralType.Attack),
 	Alchemy(GeneralType.Attack),
@@ -18,6 +19,10 @@ public enum ActionType {
 	Summon(GeneralType.Recover),
 	WeaponMastery (GeneralType.Passive),
 	Defend(GeneralType.Defend),
+	DefendRange(GeneralType.Defend),
+	DefendMagic(GeneralType.Defend),
+	DefendMelee(GeneralType.Defend),
+	Buff(GeneralType.Buff),
 	None(GeneralType.None), 
 	Flight(GeneralType.None);
 	

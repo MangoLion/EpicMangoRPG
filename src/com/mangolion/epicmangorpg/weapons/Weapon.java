@@ -221,4 +221,16 @@ public class Weapon extends ItemCustom implements StatBuff{
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public float getMagicDefBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getBarrierNegate() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

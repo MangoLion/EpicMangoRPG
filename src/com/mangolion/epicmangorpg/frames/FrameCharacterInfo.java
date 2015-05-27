@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.characters.CharacterPlayer;
+import com.mangolion.epicmangorpg.components.Barrier;
 import com.mangolion.epicmangorpg.components.Element;
 import com.mangolion.epicmangorpg.components.Elements;
 import com.mangolion.epicmangorpg.components.LogMsg;
@@ -88,10 +89,14 @@ public class FrameCharacterInfo extends JInternalFrame {
 		for (Buff buff:character.buffs)
 			modelBuff.addElement(buff);
 		
+		modelBarrier.clear();
+		for (Barrier barrier: character.barriers)
+			modelBarrier.addElement(barrier);
+		
 		//update elements
 		String str;
 		
-		if (character.getElements().size()>0){
+		/*if (character.getElements().size()>0){
 		str  = "";
 		float ice = -2, water = -2, lightning = -2, fire = -2, lava = -2, earth = -2, wind = -2, light = -2, dark = -2;
 		for (Element element: character.getElements()){
@@ -128,7 +133,7 @@ public class FrameCharacterInfo extends JInternalFrame {
 			lblWind.setText(" 100%");
 			lblLight.setText(" 100%");
 			lblDark.setText(" 100%");
-		}
+		}*/
 		
 		//update current skill
 		if (Game.getInstance().findTick(character) == null)
@@ -157,26 +162,18 @@ public class FrameCharacterInfo extends JInternalFrame {
 	}
 	
 	JProgressBar pbSP, pbHP, pbMP, pbBal;
-	JLabel lblStr, lblAgi, lblInt, lblDex, lblDef, lblProt, lblCp, lblCrystals,
-		lblIce, lblWater, lblLightning, lblFire, lblEarth, lblWind, lblLava, lblLight, lblDark, lblElement, lblAccuracy;
+	JLabel lblStr, lblAgi, lblInt, lblDex, lblDef, lblProt, lblCp, lblCrystals, lblAccuracy;
 	JList<Skill>listSkill;
 	JList<Status>listStatus;
 	JList<Buff> listBuff;
 	DefaultListModel<Status> modelStatus = new DefaultListModel<Status>();
 			DefaultListModel<Skill> 	modelSkill = new DefaultListModel<Skill>();
 			DefaultListModel<Buff> modelBuff = new DefaultListModel<Buff>();
+			DefaultListModel<Barrier> modelBarrier = new DefaultListModel<Barrier>();
+			
+	JList<Barrier> listBarriers;
 			
 	public JTextPane tfDesc, tfCurrent;
-	private JLabel label;
-	private JLabel label_1;
-	private JLabel label_2;
-	private JLabel label_3;
-	private JLabel label_4;
-	private JLabel label_5;
-	private JLabel label_6;
-	private JLabel label_7;
-	private JLabel label_8;
-	private JLabel label_9;
 	private JLabel lblCrit;
 	/**
 	 * Create the 
@@ -188,7 +185,7 @@ public class FrameCharacterInfo extends JInternalFrame {
 		this.character = character;
 		setTitle(character.name);
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setBounds(100, 100, 688, 516);
+		setBounds(100, 100, 688, 525);
 		Point pt = FrameGame.getInstance().getMousePos();
 		setLocation(pt.x - getWidth()/2, pt.y - getHeight());
 		if (getX() < 0)
@@ -326,7 +323,7 @@ public class FrameCharacterInfo extends JInternalFrame {
 		if (character != CharacterPlayer.instance)
 			btnInventory.setText("Drops");
 		
-		btnInventory.setBounds(120, 138, 100, 23);
+		btnInventory.setBounds(520, 36, 109, 23);
 		contentPane.add(btnInventory);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
@@ -378,58 +375,8 @@ public class FrameCharacterInfo extends JInternalFrame {
 		separator_1.setBounds(468, 0, 17, 487);
 		contentPane.add(separator_1);
 		
-		lblElement = new JLabel("Element: ");
-		lblElement.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		lblElement.setBounds(588, 11, 84, 14);
-		contentPane.add(lblElement);
-		
-		lblIce = new JLabel("Ice:");
-		lblIce.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		lblIce.setBounds(588, 36, 84, 14);
-		contentPane.add(lblIce);
-		
-		lblWater = new JLabel("Water:");
-		lblWater.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		lblWater.setBounds(588, 61, 84, 14);
-		contentPane.add(lblWater);
-		
-		lblLightning = new JLabel("Lightning:");
-		lblLightning.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		lblLightning.setBounds(588, 86, 84, 14);
-		contentPane.add(lblLightning);
-		
-		lblEarth = new JLabel("Earth:");
-		lblEarth.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		lblEarth.setBounds(588, 109, 84, 14);
-		contentPane.add(lblEarth);
-		
-		lblFire = new JLabel("Fire:");
-		lblFire.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		lblFire.setBounds(588, 134, 84, 14);
-		contentPane.add(lblFire);
-		
-		lblLava = new JLabel("Lava:");
-		lblLava.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		lblLava.setBounds(588, 159, 84, 14);
-		contentPane.add(lblLava);
-		
-		lblWind = new JLabel("Wind:");
-		lblWind.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		lblWind.setBounds(588, 184, 84, 14);
-		contentPane.add(lblWind);
-		
-		lblLight = new JLabel("Light:");
-		lblLight.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		lblLight.setBounds(588, 209, 84, 14);
-		contentPane.add(lblLight);
-		
-		lblDark = new JLabel("Dark:");
-		lblDark.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		lblDark.setBounds(588, 234, 84, 14);
-		contentPane.add(lblDark);
-		
 		JScrollPane scrollPane_4 = new JScrollPane();
-		scrollPane_4.setBounds(481, 340, 191, 139);
+		scrollPane_4.setBounds(481, 340, 183, 139);
 		contentPane.add(scrollPane_4);
 		
 		JLabel lblBuffs = new JLabel("Buffs");
@@ -437,63 +384,13 @@ public class FrameCharacterInfo extends JInternalFrame {
 		lblBuffs.setHorizontalAlignment(SwingConstants.CENTER);
 		scrollPane_4.setColumnHeaderView(lblBuffs);
 		
-		 listBuff = new JList(modelBuff);
+		 listBuff = new JList<Buff>(modelBuff);
 		 listBuff.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		scrollPane_4.setViewportView(listBuff);
 		
-		label = new JLabel("Element: ");
-		label.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		label.setBounds(481, 11, 84, 14);
-		contentPane.add(label);
-		
-		label_1 = new JLabel("Ice:");
-		label_1.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		label_1.setBounds(481, 36, 84, 14);
-		contentPane.add(label_1);
-		
-		label_2 = new JLabel("Water:");
-		label_2.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		label_2.setBounds(481, 61, 84, 14);
-		contentPane.add(label_2);
-		
-		label_3 = new JLabel("Lightning:");
-		label_3.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		label_3.setBounds(481, 86, 84, 14);
-		contentPane.add(label_3);
-		
-		label_4 = new JLabel("Earth:");
-		label_4.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		label_4.setBounds(481, 109, 84, 14);
-		contentPane.add(label_4);
-		
-		label_5 = new JLabel("Fire:");
-		label_5.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		label_5.setBounds(481, 134, 84, 14);
-		contentPane.add(label_5);
-		
-		label_6 = new JLabel("Lava:");
-		label_6.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		label_6.setBounds(481, 159, 84, 14);
-		contentPane.add(label_6);
-		
-		label_7 = new JLabel("Wind:");
-		label_7.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		label_7.setBounds(481, 184, 84, 14);
-		contentPane.add(label_7);
-		
-		label_8 = new JLabel("Light:");
-		label_8.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		label_8.setBounds(481, 209, 84, 14);
-		contentPane.add(label_8);
-		
-		label_9 = new JLabel("Dark:");
-		label_9.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		label_9.setBounds(481, 234, 84, 14);
-		contentPane.add(label_9);
-		
 		JButton btnEquipments = new JButton("Equipments");
 		btnEquipments.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		btnEquipments.setBounds(10, 138, 109, 23);
+		btnEquipments.setBounds(520, 11, 109, 23);
 		btnEquipments.addActionListener(new ActionListener() {
 			
 			@Override
@@ -510,13 +407,41 @@ public class FrameCharacterInfo extends JInternalFrame {
 		
 		lblAccuracy = new JLabel("Accuracy:");
 		lblAccuracy.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		lblAccuracy.setBounds(481, 283, 186, 23);
+		lblAccuracy.setBounds(358, 86, 105, 23);
 		contentPane.add(lblAccuracy);
 		
 		lblCrit = new JLabel("Critical: 0.0%");
 		lblCrit.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		lblCrit.setBounds(481, 306, 186, 23);
+		lblCrit.setBounds(358, 109, 105, 23);
 		contentPane.add(lblCrit);
+		
+		JScrollPane scrollPane_5 = new JScrollPane();
+		scrollPane_5.setBounds(481, 163, 183, 166);
+		contentPane.add(scrollPane_5);
+		
+		JLabel lblBarriers = new JLabel("Barriers");
+		lblBarriers.setHorizontalAlignment(SwingConstants.CENTER);
+		lblBarriers.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
+		scrollPane_5.setColumnHeaderView(lblBarriers);
+
+		
+		listBarriers = new JList<Barrier>(modelBarrier);
+		scrollPane_5.setViewportView(listBarriers);
+		listBarriers.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+						new FrameBarrierInfo(listBarriers.getSelectedValue()).setVisible(true);
+						System.out.println("called");
+				}
+				super.mouseClicked(e);
+			}
+		});
+		
+		JButton btnElements = new JButton("Elements");
+		btnElements.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
+		btnElements.setBounds(520, 61, 109, 23);
+		contentPane.add(btnElements);
 		
 		addMouseListener(new MouseAdapter() {
 			@Override

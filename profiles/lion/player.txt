@@ -1,0 +1,401 @@
+[general info]
+Name = lion
+Gender =  male
+hp = 60.0
+mp = 60.0
+sp = 80.0
+bal = 60.0
+str = 40.0
+dex = 10.0
+int = 20.0
+agi = 10.0
+def = 0.0
+prot = 0.0
+crystal = 50.0
+skills = Block|Basic Kick|Barrel Roll|Slash|Parry|Stab|Wait|Fire Coat|Side Step|Respite|Charge|Jump Back|Use Item|Combat Mastery|Sand Avalanche|Barrel Roll|Basic Sword Combo|Bite|Block|Body Slam|FireBolt|IceBolt|LightningBolt|Water Ball|Snap Claws|Combat Mastery|Dodge|Fire Coat|Heal|Jump Attack|Basic Kick|Sword Mastery|Jump Back|Million Slash|Parry|Cast Rock|Shoot Arrow|Side Jump|Side Step|Sidestep Slash|Slash|Heavy Slash|Spit Poison|Stab|Sting|Stomp|Tail Swing|Wait|Web Shoot|Respite|Meditate|Charge|Piercing Arrow|Arrow Rain|Rapid Arrow|Shoot Arrow|Flaming Arrow|Jump Back Arrow|Bow Sweep|Sidestep Arrow|Swift Arrow|Quick Shot|Reload|Jam Fix|Hard Aim|Bullet Spray|Toggle Automatic|Sniper Shot|Sidestep Shoot|Water Cannon|Flame Burst|Summon Golem|Use Item|Launch Grenade|Focus|Spinning Slash|Roar|Wind Gust|Cast Thorn|Fire Storm|Ice Blizzard|Tornado|Sand Storm|Precise Slash|Gun Mastery|
+
+[Inventory]
+Consumables = Portal Stone|3|Small Potion|5|Arrow|100|Bullet|100|Earth Crystal|50|Fire Crystal|50|Water Crystal|50|Wind Crystal|50|Refile Grenade|50|
+ItemCustoms = Long Sword|Copper Dagger|Great Copper Sword|Long Sword|Leather Gloves|Leather Hat|Leather Jacket|Leather Pants|Leather Shoes|Metal Boots|Metal Helm|Metal Guantlet|Plate Armor Lower|Plate Armor Upper|Cloth Robe|Short Bow|Basic Semi-automatic Rifle|Sniper Rifle|Basic Machinegun|Basic Cylinder|Assault Rifle|Pine Wand|
+
+[Long Sword]
+durability = 10.0
+isEquipted = false
+
+[Copper Dagger]
+durability = 6.0
+isEquipted = false
+
+[Great Copper Sword]
+durability = 15.0
+isEquipted = false
+
+[Leather Gloves]
+durability = 10.0
+isEquipted = false
+
+[Leather Hat]
+durability = 10.0
+isEquipted = false
+
+[Leather Jacket]
+durability = 10.0
+isEquipted = false
+
+[Leather Pants]
+durability = 10.0
+isEquipted = false
+
+[Leather Shoes]
+durability = 10.0
+isEquipted = false
+
+[Metal Boots]
+durability = 15.0
+isEquipted = false
+
+[Metal Helm]
+durability = 15.0
+isEquipted = false
+
+[Metal Guantlet]
+durability = 15.0
+isEquipted = false
+
+[Plate Armor Lower]
+durability = 15.0
+isEquipted = false
+
+[Plate Armor Upper]
+durability = 15.0
+isEquipted = false
+
+[Cloth Robe]
+durability = 10.0
+isEquipted = false
+
+[Short Bow]
+durability = 7.0
+isEquipted = false
+
+[Basic Semi-automatic Rifle]
+durability = 7.0
+isEquipted = false
+
+[Sniper Rifle]
+durability = 7.0
+isEquipted = false
+
+[Basic Machinegun]
+durability = 7.0
+isEquipted = false
+
+[Basic Cylinder]
+durability = 7.0
+isEquipted = false
+
+[Assault Rifle]
+durability = 7.0
+isEquipted = true
+
+[Pine Wand]
+durability = 10.0
+isEquipted = false
+
+[Block]
+prof = 0.0
+Step 0 = 0.0
+
+[Basic Kick]
+prof = 0.0
+Step 0 = 0.0
+
+[Barrel Roll]
+prof = 0.0
+Step 0 = 0.0
+
+[Slash]
+prof = 0.0
+Step 0 = 0.0
+
+[Parry]
+prof = 0.0
+Step 0 = 0.0
+
+[Stab]
+prof = 0.0
+Step 0 = 0.0
+
+[Wait]
+prof = 0.0
+Step 0 = 0.0
+
+[Fire Coat]
+prof = 0.0
+Step 0 = 0.0
+
+[Side Step]
+prof = 0.0
+Step 0 = 0.0
+
+[Respite]
+prof = 0.0
+Step 0 = 0.0
+
+[Charge]
+prof = 0.0
+Step 0 = 0.0
+Step 1 = 0.0
+
+[Jump Back]
+prof = 0.0
+Step 0 = 0.0
+
+[Use Item]
+prof = 0.0
+Step 0 = 0.0
+
+[Combat Mastery]
+prof = 0.0
+
+[Sand Avalanche]
+prof = 0.0
+Step 0 = 0.0
+
+[Basic Sword Combo]
+prof = 0.0
+Step 0 = 0.0
+Step 1 = 0.0
+Step 2 = 0.0
+
+[Bite]
+prof = 0.0
+Step 0 = 0.0
+
+[Body Slam]
+prof = 0.0
+Step 0 = 0.0
+
+[FireBolt]
+prof = 0.0
+Step 0 = 0.0
+
+[IceBolt]
+prof = 0.0
+Step 0 = 0.0
+
+[LightningBolt]
+prof = 0.0
+Step 0 = 0.0
+
+[Water Ball]
+prof = 0.0
+Step 0 = 0.0
+
+[Snap Claws]
+prof = 0.0
+Step 0 = 0.0
+Step 1 = 0.0
+
+[Dodge]
+prof = 0.0
+Step 0 = 0.0
+
+[Heal]
+prof = 0.0
+Step 0 = 0.0
+
+[Jump Attack]
+prof = 0.0
+Step 0 = 0.0
+
+[Sword Mastery]
+prof = 0.0
+
+[Million Slash]
+prof = 0.0
+Step 0 = 0.0
+Step 1 = 0.0
+Step 2 = 0.0
+Step 3 = 0.0
+Step 4 = 0.0
+Step 5 = 0.0
+
+[Cast Rock]
+prof = 0.0
+Step 0 = 0.0
+
+[Shoot Arrow]
+prof = 0.0
+Step 0 = 0.0
+
+[Side Jump]
+prof = 0.0
+Step 0 = 0.0
+
+[Sidestep Slash]
+prof = 0.0
+Step 0 = 0.0
+
+[Heavy Slash]
+prof = 0.0
+Step 0 = 0.0
+
+[Spit Poison]
+prof = 0.0
+Step 0 = 0.0
+
+[Sting]
+prof = 0.0
+Step 0 = 0.0
+
+[Stomp]
+prof = 0.0
+Step 0 = 0.0
+Step 1 = 0.0
+
+[Tail Swing]
+prof = 0.0
+Step 0 = 0.0
+
+[Web Shoot]
+prof = 0.0
+Step 0 = 0.0
+
+[Meditate]
+prof = 0.0
+Step 0 = 0.0
+
+[Piercing Arrow]
+prof = 0.0
+Step 0 = 0.0
+
+[Arrow Rain]
+prof = 0.0
+Step 0 = 0.0
+
+[Rapid Arrow]
+prof = 0.0
+Step 0 = 0.0
+Step 1 = 0.0
+Step 2 = 0.0
+
+[Flaming Arrow]
+prof = 0.0
+Step 0 = 0.0
+
+[Jump Back Arrow]
+prof = 0.0
+Step 0 = 0.0
+
+[Bow Sweep]
+prof = 0.0
+Step 0 = 0.0
+
+[Sidestep Arrow]
+prof = 0.0
+Step 0 = 0.0
+
+[Swift Arrow]
+prof = 0.0
+Step 0 = 0.0
+
+[Quick Shot]
+prof = 0.0
+Step 0 = 0.0
+
+[Reload]
+prof = 0.0
+Step 0 = 0.0
+
+[Jam Fix]
+prof = 0.0
+Step 0 = 0.0
+
+[Hard Aim]
+prof = 0.0
+Step 0 = 0.0
+
+[Bullet Spray]
+prof = 0.0
+Step 0 = 0.0
+
+[Toggle Automatic]
+prof = 0.0
+Step 0 = 0.0
+
+[Sniper Shot]
+prof = 0.0
+Step 0 = 0.0
+
+[Sidestep Shoot]
+prof = 0.0
+Step 0 = 0.0
+
+[Water Cannon]
+prof = 0.0
+Step 0 = 0.0
+
+[Flame Burst]
+prof = 0.0
+Step 0 = 0.0
+
+[Summon Golem]
+prof = 0.0
+Step 0 = 0.0
+
+[Launch Grenade]
+prof = 0.0
+Step 0 = 0.0
+
+[Focus]
+prof = 0.0
+Step 0 = 0.0
+
+[Spinning Slash]
+prof = 0.0
+Step 0 = 0.0
+
+[Roar]
+prof = 0.0
+Step 0 = 0.0
+
+[Wind Gust]
+prof = 0.0
+Step 0 = 0.0
+
+[Cast Thorn]
+prof = 0.0
+Step 0 = 0.0
+
+[Fire Storm]
+prof = 0.0
+Step 0 = 0.0
+Step 1 = 0.0
+Step 2 = 0.0
+
+[Ice Blizzard]
+prof = 0.0
+Step 0 = 0.0
+Step 1 = 0.0
+Step 2 = 0.0
+
+[Tornado]
+prof = 0.0
+Step 0 = 0.0
+Step 1 = 0.0
+Step 2 = 0.0
+
+[Sand Storm]
+prof = 0.0
+Step 0 = 0.0
+Step 1 = 0.0
+Step 2 = 0.0
+
+[Precise Slash]
+prof = 0.0
+Step 0 = 0.0
+
+[Gun Mastery]
+prof = 0.0
+

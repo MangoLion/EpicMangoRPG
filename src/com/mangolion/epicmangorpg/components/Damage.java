@@ -8,15 +8,27 @@ import com.mangolion.epicmangorpg.statuses.Buff;
 import com.mangolion.epicmangorpg.statuses.Status;
 
 public class Damage {
+	public static int MELEE = 0, RANGE = 1, MAGIC = 2;	
 	public Character source;
-	public float amount;
+	public float amount, barrierNegation = 0;
+	public int type;
 	public LinkedList<Element> elements = new LinkedList<Element>();
 	public LinkedList<Status> statuses = new LinkedList<Status>();
 	public LinkedList<Buff> buffs = new LinkedList<Buff>();
 	
-	public Damage(Character source, float amount, Element ... elements) {
+	public Damage(Character source, float amount, int type, Element ... elements) {
 		this.source = source;
 		this.amount = amount;
+		this.type = type;
+		if (elements != null)
+			this.elements.addAll( Arrays.asList(elements));
+	}
+	
+	public Damage(Character source, float amount, int type, float negate, Element ... elements) {
+		this.source = source;
+		this.amount = amount;
+		this.type = type;
+		barrierNegation = negate;
 		if (elements != null)
 			this.elements.addAll( Arrays.asList(elements));
 	}

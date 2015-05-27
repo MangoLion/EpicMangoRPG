@@ -152,8 +152,10 @@ public abstract class Step implements Cloneable, StatBuff {
 		else
 			return ((getCharacter().weapon.baseDamage + dmgbaseTemp + getCharacter().getStrDamage())*getDmgPercent()*getCharacter().weapon.meleeDamageModifier)*skilDmg;
 		}
-		else
+		else if (intBased)
 			return ((getCharacter().weapon.magicDamage + dmgbaseTemp + getCharacter().getIntDamage())*getDmgPercent()*getCharacter().weapon.baseMagicDmgMod)*skilDmg;
+		else
+			return (dmgbaseTemp*(1+prof))*getDmgPercent()*skilDmg;
 	}
 	
 	public void addProf(Proficiency p){
@@ -247,11 +249,12 @@ public abstract class Step implements Cloneable, StatBuff {
 			}
 		}	
 
+	//need to call damage here to determine style points
 	dmg= getDamage();
 	
 	if (hasMissed){
 		float change = Style.positive(getCharacter(), target ,Style.miss, 1 - miss, dmg);
-		StylePainter.append(new MsgSlashMiss().getMessage(false, getCharacter(),
+		StylePainter.append(new Msg("$name's " + name + " slice the air in a wide arc, missing its target.").getMessage(false, getCharacter(),
 				target, 0), Style.getSegments(change, getCharacter()));
 		return false;
 	}
@@ -259,6 +262,8 @@ public abstract class Step implements Cloneable, StatBuff {
 	if (calculateChanceMelee(target))
 		return false;
 	
+	//get damage thats subtracted
+	dmg= getDamage();
 	float crit = getCharacter().getCritical(target) + critBase;
 	System.out.println("crit: " + crit);
 	if (rand.nextFloat() <= crit) {
@@ -266,11 +271,25 @@ public abstract class Step implements Cloneable, StatBuff {
 		dmg *= 1.5;
 	}
 	
-	
-		Damage damage = new Damage(getCharacter(), dmg).setStatuses(statuses).setBuffs(buffs);
+		int type = getType();
+		
+		Damage damage = new Damage(getCharacter(), dmg, type).setStatuses(statuses).setBuffs(buffs);
 		damage.elements.addAll(getDmgElements());
+		if (type == Damage.MELEE)
+				damage.barrierNegation = getCharacter().getBarrierNegate();
 		target.setDamage(damage);
 		return true;
+	}
+
+	public int getType(){
+		int type;
+		if (intBased)
+			type = Damage.MAGIC;
+		else if (doDamage)
+			type = Damage.MELEE;
+		else
+			type = Damage.RANGE;
+		return type;
 	}
 	
 	public LinkedList<Element> getDmgElements(){
@@ -311,7 +330,7 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 
 	public Msg msgLoad, msgExecute, msgCooldown, msgMiss = new MsgSlashMiss()
-		, msgParry = new MsgParrySuccess(), msgSuccess = new Msg("$name has successfully executed $skill");
+		, msgParry = new MsgParrySuccess(), msgSuccess/* = new Msg("$name has successfully executed $skill")*/;
 	public float customExecutionTime = -1;
 
 	public Character getCharacter() {
@@ -344,6 +363,7 @@ public abstract class Step implements Cloneable, StatBuff {
 	
 		LogMsg.addLog(new LogMsg(getCharacter().name + " is loading " + name
 				 + ": " + getLoadTime() + " sec", Game.getInstance().timePassed));
+		if (getLoadTime() > 0)
 		if (msgLoad == null)
 			StylePainter.append(new StyleSegment(StylePainter.NAME,
 					getCharacter().name), new StyleSegment(StylePainter.NULL,
@@ -355,6 +375,8 @@ public abstract class Step implements Cloneable, StatBuff {
 		else
 			StylePainter.append(msgLoad.getMessage(parent.character,
 					parent.character.getTarget(), getLoadTime()));
+		else
+			Utility.narrate("-");
 		getCharacter().useStamina(getStamCost()*(prof + 1)/2);
 		getCharacter().useMana(getMpCost()*(prof + 1)/2);
 	}
@@ -400,11 +422,14 @@ public abstract class Step implements Cloneable, StatBuff {
 
 		LogMsg.addLog(new LogMsg(getCharacter().name + " is executing " + name
 				 + ": " +time + " sec", Game.getInstance().timePassed));
+		if (getExecutionTime() > 0)
 		if (msgExecute == null)
 			StylePainter.append(new Msg("$name is executing $skill, duration: " + time + " seconds").getMessage(getCharacter(), target, 0));
 		else
 			StylePainter.append(msgExecute.getMessage(parent.character,
 					target, getExecutionTime()));
+		else
+			Utility.narrate("-");
 		
 		if ((doDamage && damage(target)) || !doDamage){
 			if (msgSuccess != null)
@@ -423,11 +448,14 @@ public abstract class Step implements Cloneable, StatBuff {
 		LogMsg.addLog(new LogMsg(getCharacter().name + "'s  " + name
 				+ " is on cooldown: "
 				+ getCooldownTime() + " sec", Game.getInstance().timePassed));
+		if (getCooldownTime() > 0)
 		if (msgCooldown == null)
 			StylePainter.append(new Msg("$name's $skill has completed and has left an opening for " + getCooldownTime() + " seconds").getMessage(getCharacter(), null, 0));
 		else
 			StylePainter.append(msgCooldown.getMessage(parent.character,
 					parent.character.getTarget(), getCooldownTime()));
+		else
+			Utility.narrate("-");
 	}
 
 	public float getLoadTime() {
@@ -550,7 +578,19 @@ public abstract class Step implements Cloneable, StatBuff {
 	public float getDefBuff(){
 		return 0;
 	}
+	
+	@Override
+	public float getMagicDefBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	public float getProtBuff(){
+		return 0;
+	}
+	
+	@Override
+	public float getBarrierNegate() {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 	

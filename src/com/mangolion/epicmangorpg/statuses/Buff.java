@@ -65,6 +65,7 @@ public class Buff {
 		str,
 		agi,
 		def,
+		magicDef,
 		prot,
 		hpRegen,
 		mpRegen,
@@ -77,7 +78,8 @@ public class Buff {
 		hpCost,
 		spCost,
 		mpCost,
-		balCost
+		balCost,
+		barrierNegate
 	}
 	
 	public static enum GenType{

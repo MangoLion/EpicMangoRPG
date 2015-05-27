@@ -9,6 +9,7 @@ public enum Weapons {
 	Wand,
 	Shield,
 	Dagger,
+	Rapier,
 	GreatSword,
 	Fang,
 	Claws,

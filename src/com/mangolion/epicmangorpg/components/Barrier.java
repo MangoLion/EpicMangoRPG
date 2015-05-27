@@ -11,34 +11,62 @@ import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.messages.Msg;
 
 public class Barrier implements StatBuff{
+	public static final int MELEE = 0, RANGE = 1, MAGIC = 2, ALL = 3;
+	
 	public Character character;
 	public String name;
-	public float hp, time, absorbPercent = 1,  def,  prot;
+	public float hp, maxHp, time, absorbPercent = 1,  def,  magicDef,prot;
+	public int type = ALL;
 	public LinkedList<Element> elements = new LinkedList<Element>();
 	
-	public Barrier(Character character, String name, float hp, float def, float prot, float time, float absorbPercent, Element ... elements) {
+	public Barrier(Character character, String name, float hp, float def, float magicDef,float prot, float time, float absorbPercent, Element ... elements) {
 		this.character = character;
 		this.name = name;
 		this.hp = hp;
+		maxHp = hp;
 		this.time = time;
 		this.def = def;
+		this.magicDef = magicDef;
 		this.prot = prot;
 		this.absorbPercent = absorbPercent;
 		if (elements != null)
 			this.elements.addAll(Arrays.asList(elements));
 	}
 	
+	public Barrier(Character character, String name, float hp, float def, float magicDef,float prot, float time, float absorbPercent, int type, Element ... elements) {
+		this.character = character;
+		this.name = name;
+		this.hp = hp;
+		maxHp = hp;
+		this.time = time;
+		this.def = def;
+		this.magicDef = magicDef;
+		this.prot = prot;
+		this.absorbPercent = absorbPercent;
+		this.type = type;
+		if (elements != null)
+			this.elements.addAll(Arrays.asList(elements));
+	}
+	
 	public float setDamage(Damage damage){
+		if (type != 3 && damage.type != type){
+			System.out.println("not correct");
+			return damage.amount;
+		}
+		
 		Character source = damage.source;
 		System.out.println("{" + damage.amount);
-		float cdmg = damage.amount * absorbPercent,
+		float cdmg = damage.amount * absorbPercent*(1 - damage.barrierNegation),
 				ldmg;
-		if (cdmg > hp)
-			cdmg = hp;
+		if (cdmg > (hp + def)*1.2f)
+			cdmg = (hp + def)*1.2f;
 		 ldmg = damage.amount - cdmg;
 		 damage.amount = ldmg;
-		 System.out.println( damage.amount+ "}"); 
-		cdmg = (cdmg - def)*(100 - prot)/100;
+		 System.out.println( damage.amount+ "}, hp:" + hp); 
+			if (damage.type == Damage.MELEE || damage.type == Damage.RANGE)
+				 cdmg = (cdmg - def)*(100 - prot)/100;
+			else
+				cdmg = (cdmg - magicDef)*(100 - prot)/100;
 		cdmg *= Elements.calculate(damage.elements, getElements());
 		
 		cdmg = (cdmg <=0 )? 1:cdmg;
@@ -52,6 +80,12 @@ public class Barrier implements StatBuff{
 	private LinkedList<Element> getElements() {
 		// TODO Auto-generated method stub
 		return elements;
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return name + " (" + hp/maxHp*100+ "%)";
 	}
 
 	@Override
@@ -212,6 +246,18 @@ public class Barrier implements StatBuff{
 
 	@Override
 	public float getMagicSpeedBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getMagicDefBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getBarrierNegate() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

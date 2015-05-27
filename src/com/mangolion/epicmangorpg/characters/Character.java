@@ -31,6 +31,7 @@ import com.mangolion.epicmangorpg.items.ItemStack;
 import com.mangolion.epicmangorpg.items.Items;
 import com.mangolion.epicmangorpg.messages.Msg;
 import com.mangolion.epicmangorpg.skills.Skill;
+import com.mangolion.epicmangorpg.skills.SkillRespite;
 import com.mangolion.epicmangorpg.skills.Skills;
 import com.mangolion.epicmangorpg.statuses.Buff;
 import com.mangolion.epicmangorpg.statuses.BuffAirborne;
@@ -60,7 +61,7 @@ public class Character implements Cloneable{
 	public Inventory inventory = new Inventory();
 	public LinkedList<Drop> drops = new LinkedList<Drop>();
 	public LinkedList<Barrier> barriers = new LinkedList<Barrier>();
-	float str, agi,  inte, dex, maxHP, maxMP, maxSP, maxBal, prot, def, meleeSpeedMod = 1, magicSpeedMod = 1, hpRegen = 0, mpRegen =0.05f, spRegen = 0.1f, balRegen = 0.1f, cpBase = 0, crystals = 0;
+	float str, agi,  inte, dex, maxHP, maxMP, maxSP, maxBal, prot, def, magicDef, meleeSpeedMod = 1, magicSpeedMod = 1, hpRegen = 0, mpRegen =0.05f, spRegen = 0.1f, balRegen = 0.1f, cpBase = 0, crystals = 0;
 	public float style = 10;
 	public float  learnRate = 0;
 	float hp, mp, sp, bal;
@@ -97,7 +98,7 @@ public class Character implements Cloneable{
 		this.name = name;
 		maxHP = hp;
 		maxMP = mp;
-		maxSP = stam;
+		maxSP = stam*2;
 		maxBal = bal;
 		this.hp = maxHP;
 		this.mp = maxMP;
@@ -113,12 +114,20 @@ public class Character implements Cloneable{
 		this.weapon = weapons;
 		this.desc = desc;
 		addSkills(skills);
+		//
+		addSkills(new SkillRespite());
 		equip(weapon);
 		//barriers.add(new Barrier(this, "Fire Barrier", 100, 0, 0, 100, 0.7f, new Element("Fire", 1)));
 	}
 	
 	public void addBarrier(Barrier barrier){
-		barriers.add(barrier);
+		for (Barrier b: barriers)
+			if (b.name.equalsIgnoreCase(barrier.name)){
+				b.time += barrier.time;
+				b.hp = barrier.hp;
+				return;
+			}
+			barriers.add(barrier);
 	}
 
 	public void addSkills(Skill... skills) {
@@ -312,7 +321,7 @@ public class Character implements Cloneable{
 			Buff buff = it.next();
 			buff.time -=  deltaTime;
 			if (buff.time <= 0){
-				StylePainter.append(new Msg("$name is no longer " + name).getMessage(this, null, 0));
+				StylePainter.append(new Msg("$name's " + buff.name + " buff has disapeared").getMessage(this, null, 0));
 				it.remove();
 			}
 		}
@@ -338,7 +347,7 @@ public class Character implements Cloneable{
 	
 	public void applyBuff(Buff buff){
 		for (Buff b: buffs)
-			if (b.name.equals(buff.name) && b.types == buff.types){
+			if (b.name.equalsIgnoreCase(buff.name)){
 				b.time += buff.time;
 				return;
 			}
@@ -368,7 +377,7 @@ public class Character implements Cloneable{
 	
 	public Skill getSkill(String name){
 		for (Skill skill: skills){
-			if (skill.name.equals(name))
+			if (skill.name.equalsIgnoreCase(name))
 				return skill;
 		}
 		return null;
@@ -383,7 +392,9 @@ public class Character implements Cloneable{
 	}
 
 	public float setDamage(String source, float damage, boolean noLog) {
-		float cdmg = (damage - def)*(100 - prot)/100;
+		float cdmg;
+		
+		cdmg = (damage - def)*(100 - prot)/100;
 		cdmg = (cdmg <=0 )? 1:cdmg;
 		if (!noLog){
 			String style = "";
@@ -450,9 +461,12 @@ public class Character implements Cloneable{
 			}
 		}
 		
-		float cdmg = (damage.amount - def)*(100 - prot)/100,
+		float cdmg,
 				eleMult =  Elements.calculate(damage.elements, getElements());;
-		
+		if (damage.type == Damage.MELEE || damage.type == Damage.RANGE)
+			 cdmg = (damage.amount - def)*(100 - prot)/100;
+		else
+			cdmg = (damage.amount - magicDef)*(100 - prot)/100;
 		cdmg *= eleMult;
 		
 		if (rand.nextFloat() <= eleMult /2){
@@ -810,6 +824,22 @@ public class Character implements Cloneable{
 		return Utility.format(result);
 	}
 	
+	public float getMagicDef(){
+		float result = magicDef;
+		float mult = 1;
+		for (Buff buff: getBuff(Buff.Type.magicDef))
+			mult += buff.getValue(Buff.Type.magicDef);
+		for (Barrier barrier: barriers)
+			result += barrier.getMagicDefBuff();
+		for (Skill skill: skills)
+			result += skill.getMagicDefBuff();
+		for (Armor  armor: getArmors())
+			if (armor != null)
+				result += armor.getMagicDefBuff();
+		result *= mult;
+		return Utility.format(result);
+	}
+	
 	public float getProt(){
 		float result = prot;
 		float mult = 1;
@@ -823,6 +853,20 @@ public class Character implements Cloneable{
 			if (armor != null)
 				result += armor.getProtBuff();
 		result *= mult;
+		return Utility.format(result);
+	}
+	
+	public float getBarrierNegate(){
+		float result = 0;
+		for (Buff buff: getBuff(Buff.Type.barrierNegate))
+			result += buff.getValue(Buff.Type.barrierNegate);
+		for (Barrier barrier: barriers)
+			result += barrier.getBarrierNegate();
+		for (Skill skill: skills)
+			result += skill.getBarrierNegate();
+		for (Armor  armor: getArmors())
+			if (armor != null)
+				result += armor.getBarrierNegate();
 		return Utility.format(result);
 	}
 	

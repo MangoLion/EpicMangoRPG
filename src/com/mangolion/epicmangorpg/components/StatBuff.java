@@ -21,6 +21,7 @@ public abstract interface StatBuff {
 	public float getStrBuff();
 	public float getAgiBuff();
 	public float getDefBuff();
+	public float getMagicDefBuff();
 	public float getProtBuff();
 	public float getAccuracyBuff();
 	public float getCriticalBuff();
@@ -31,4 +32,5 @@ public abstract interface StatBuff {
 	public float getMagicDmgBuff();
 	public float getMeleeSpeedBuff();
 	public float getMagicSpeedBuff();
+	public float getBarrierNegate();
 }

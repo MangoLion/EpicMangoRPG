@@ -48,25 +48,24 @@ public class Skill implements StatBuff {
 		chanceObserve = chance;
 	}
 
-	public Skill(String name, String desc, LinkedList<Weapons> weapon_, ActionType type, Step... steps) {
+	public Skill(String name, String desc, ActionType type, Weapons ... weapon_) {
 		this.name = name;
 		this.desc = desc;
-		weapons =  weapon_;
-		if (steps != null) {
-			this.steps.addAll(Arrays.asList(steps));
-		}
+		weapons.addAll(Arrays.asList(weapon_));
 		this.type = type;
 	}
 	
-	public Skill(String name,  String desc, Weapons weapon_,  ActionType type, Step... steps) {
+	public Skill(String name,  String desc, Weapons weapon_,  ActionType type) {
 		this.name = name;
 		this.desc = desc;
 		weapons.add(weapon_);
-		if (steps != null) {
-			this.steps.addAll(Arrays.asList(steps));
-		}
 		this.type = type;
 	}
+	
+	public int getType(){
+		return steps.getFirst().getType();
+	}
+	
 	/*
 	 * Only available for passive skills
 	 */
@@ -119,7 +118,8 @@ public class Skill implements StatBuff {
 				//Utility.narrate(character.name
 				//		+ "'s cooldown time is over, and  is  now ready to prepare another skill");
 				LogMsg.addLog(new LogMsg(character.name	+ "'s cooldown time is over, and  is  now ready to prepare another skill", Game.getInstance().timePassed));
-				StylePainter.append(msgCooldown.getMessage(character, null, 0));
+				if (character == CharacterPlayer.instance)
+					StylePainter.append(msgCooldown.getMessage(character, null, 0));
 				complete();
 				return true;
 			} else {
@@ -206,7 +206,7 @@ public class Skill implements StatBuff {
 	}
 
 	public Skill copy() {
-		Skill result = new Skill(name, desc, weapons, type);
+		Skill result = new Skill(name, desc, null, type);
 		for (Step step : steps)
 			result.steps.add(step.copy());
 		return result;
@@ -472,6 +472,16 @@ public class Skill implements StatBuff {
 	}
 	@Override
 	public float getMagicSpeedBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getMagicDefBuff() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getBarrierNegate() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

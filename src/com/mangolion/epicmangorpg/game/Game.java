@@ -43,9 +43,10 @@ public class Game {
 	public Terrain terrain;
 	public float timePassed = 0, lastWeatherTick = 0, timeSinceTick = 0,
 			floorPercent = 0, timeLimit = 0, endCounter = 0;
-	public boolean nextFloor = true, lastFloor = false, firstBattle = true, createMode = false;
+	public boolean nextFloor = true, lastFloor = false, firstBattle = true,
+			createMode = false;
 	LinkedList<Character> toAdd = new LinkedList<Character>(),
-			toRemove= new LinkedList<Character>();
+			toRemove = new LinkedList<Character>();
 	public MangoTimer timer = new MangoTimer(100, new ActionListener() {
 
 		@Override
@@ -112,15 +113,14 @@ public class Game {
 	}
 
 	public void begin(final Floor floor) {
-			
-		
+
 		endCounter = 0;
-		
+
 		if (!createMode)
-		if (!firstBattle) {
-			saveGame();
-		} else
-			firstBattle = false;
+			if (!firstBattle) {
+				saveGame();
+			} else
+				firstBattle = false;
 
 		if (timer != null)
 			timer.stop();
@@ -159,14 +159,14 @@ public class Game {
 				frame.modelMonster.clear();
 				for (int i = 0; i < floor.spawns.size(); i++)
 					frame.modelMonster.addElement(floor.getSpawn(i));
-				
+
 				if (CharacterPlayer.instance == null)
 					new CharacterPlayer(playerName);
 				CharacterPlayer.instance.reset();
-				
-				if (!(floor instanceof Floor0) && !(floor instanceof FloorTrainning)) {
-					float allyCP = 0, enemyCP = 0, limitCP;
 
+				if (!(floor instanceof Floor0)
+						&& !(floor instanceof FloorTrainning)) {
+					float allyCP = 0, enemyCP = 0, limitCP;
 
 					charsAllies.add(CharacterPlayer.instance);
 
@@ -196,23 +196,23 @@ public class Game {
 							firstAdd = false;
 						}
 					}
-				}else if (floor instanceof Floor0){
+				} else if (floor instanceof Floor0) {
 					charsAllies.add(CharacterPlayer.instance);
-					for (Spawn spawn: floor.allies){
+					for (Spawn spawn : floor.allies) {
 						charsAllies.add(Utility.getInstance(spawn.character));
 					}
-					for (Spawn spawn: floor.spawns){
+					for (Spawn spawn : floor.spawns) {
 						charsEnemies.add(Utility.getInstance(spawn.character));
 					}
-				}else{
+				} else {
 					timeLimit = 15;
 					charsAllies.add(CharacterPlayer.instance);
 					charsAllies.add(floor.getAlly());
-					for (Spawn spawn: floor.spawns){
+					for (Spawn spawn : floor.spawns) {
 						charsEnemies.add(Utility.getInstance(spawn.character));
 					}
 				}
-				//frame.updateInfoTab();
+				// frame.updateInfoTab();
 
 				LinkedList<Character> allChars = getAllChars();
 				for (Character character : allChars) {
@@ -232,12 +232,13 @@ public class Game {
 				// charsEnemies.getFirst().name.replace(" ", ""));
 				frame.setCommand(new CmdUser(null));
 				timer2.stop();
-				
-				if (createMode){
+
+				if (createMode) {
 					boolean mode = FrameGame.getInstance().viewMode;
 					FrameGame.getInstance().viewMode = !mode;
-					if (!mode){
-						FrameGame.getInstance().addFrame(new FrameBattleCreate());
+					if (!mode) {
+						FrameGame.getInstance().addFrame(
+								new FrameBattleCreate());
 						timer.stop();
 					}
 				}
@@ -307,7 +308,7 @@ public class Game {
 			if (iterator.next().character == character)
 				;
 	}
-	
+
 	public void tick(Tick tick) {
 		if (tick.character.isStunned()) {
 			// addTick(tick.character, 0.1f, Tick.ACTION);
@@ -316,7 +317,8 @@ public class Game {
 			return;
 		}
 
-		if (timeSinceTick != 0 && (tick.character.ai != null || tick.character == CharacterPlayer.instance))
+		if (timeSinceTick != 0
+				&& (tick.character.ai != null || tick.character == CharacterPlayer.instance))
 			StylePainter.appendTime(timeSinceTick);
 		timeSinceTick = 0;
 		if (!tick.character.isDead)
@@ -341,21 +343,21 @@ public class Game {
 
 	public void updateAll(float deltaTime, Character exception,
 			boolean executeTick) {
-		if (getInstance() != this){
+		if (getInstance() != this) {
 			timer.stop();
 			return;
 		}
-		for (Character c: toRemove){
+		for (Character c : toRemove) {
 			charsAllies.remove(c);
 			charsEnemies.remove(c);
 		}
 		toRemove.clear();
-		
-		if (timePassed > timeLimit){
+
+		if (timePassed > timeLimit) {
 			begin();
 			return;
 		}
-		
+
 		LinkedList<Tick> toExecute = new LinkedList<>();
 		timeSinceTick = Math.round((timeSinceTick + deltaTime) * 100f) / 100f;
 		FrameGame.instance.lblTimePassed.setText("Time passed: " + timePassed
@@ -373,22 +375,11 @@ public class Game {
 			tick(tick);
 		}
 
-		if (Game.getInstance().charsAllies.size() == 0
-				|| Game.getInstance().charsEnemies.size() == 0) {
-			if (endCounter == 0)
-				Utility.narrate("A new battle will start in 2 seconds");
-			endCounter += 0.01;
-			if (endCounter > 2){
-				begin();
-				return;
-			}
-		}
-
 		LinkedList<Event> evtoExecute = new LinkedList<>();
 		Iterator<Event> it1 = events.iterator();
 		while (it1.hasNext()) {
 			Event event = it1.next();
-			event.time = (float) (Math.round((event.time - deltaTime) * 100d) / 100d);
+			event.tick(deltaTime);
 			if (executeTick && event.time <= 0) {
 				evtoExecute.add(event);
 				it1.remove();
@@ -405,12 +396,44 @@ public class Game {
 			if (character != exception)
 				character.tick(deltaTime);
 		for (Character character : toAdd) {
+			int num = 1;
+			boolean done = false;
+			while (!done) {
+				String name = character.name;
+				if (num > 1)
+					name = name + num;
+				boolean checked = true;
+				for (Character c : getAllChars())
+					if (c.name.equals(name)) {
+						num++;
+						checked = false;
+					}
+
+				if (checked) {
+					done = true;
+					if (num > 1)
+						character.name += num;
+				}
+			}
 			if (character.isAllied)
 				charsAllies.add(character);
 			else
 				charsEnemies.add(character);
 		}
 		toAdd.clear();
+
+		if (Game.getInstance().charsAllies.size() == 0
+				|| Game.getInstance().charsEnemies.size() == 0) 
+		if (!createMode){
+			if (endCounter == 0)
+				Utility.narrate("A new battle will start in 2 seconds");
+			endCounter += 0.01;
+			if (endCounter > 2) {
+				begin();
+				return;
+			}
+		}else
+			Utility.narrate("The battle is over! Select reset battle to start a new one");
 
 		SwingUtilities.invokeLater(new Runnable() {
 
@@ -472,7 +495,6 @@ public class Game {
 			} else
 				return charsAllies.getFirst();
 		}
-		
 
 		return null;
 	}
@@ -539,7 +561,7 @@ public class Game {
 		else
 			return charsAllies;
 	}
-	
+
 	public LinkedList<Character> getAllies(Character character) {
 		if (!character.isAllied)
 			return charsEnemies;

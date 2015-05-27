@@ -15,6 +15,7 @@ import com.mangolion.epicmangorpg.characters.SpriteLightning;
 import com.mangolion.epicmangorpg.characters.Minotaur;
 import com.mangolion.epicmangorpg.characters.SlimePoison;
 import com.mangolion.epicmangorpg.characters.AntSoldier;
+import com.mangolion.epicmangorpg.characters.TankGuard;
 import com.mangolion.epicmangorpg.characters.WildFox;
 import com.mangolion.epicmangorpg.characters.RabbitWild;
 import com.mangolion.epicmangorpg.characters.SpiderWolf;
@@ -30,5 +31,6 @@ public class Floor5 extends Floor {
 		addSpawn(SpriteIce.class, 0.2f, 1.2f);
 		addSpawn( AntSoldier.class, 0.1f, 1.4f);
 		addSpawn(SlimeHeal.class, 0.2f, 1.5f);
+		addSpawn(TankGuard.class, 1);
 	}
 }

@@ -77,11 +77,13 @@ public class Floor {
 	public static LinkedList<Floor> getFloors() {
 		LinkedList<Floor> result = new LinkedList<Floor>();
 		result.add(new Floor0());
+		result.add(new FloorDayBreak());
 		result.add(new Floor1());
 		result.add(new Floor2());
 		result.add(new Floor3());
 		result.add(new Floor4());
 		result.add(new Floor5());
+		
 		return result;
 	}
 

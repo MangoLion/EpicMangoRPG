@@ -85,10 +85,10 @@ public class CharacterPlayer extends Character {
 	
 	@Override
 	public void addSkills(Skill... skills) {
+		super.addSkills(skills);
 		FrameGame frame = FrameGame.instance;
 		if (frame != null && Game.getInstance() != null)
 			frame.setCommand(new CmdUser(null));
-		super.addSkills(skills);
 	}
 
 	

@@ -8,6 +8,7 @@ import com.mangolion.epicmangorpg.components.Element;
 import com.mangolion.epicmangorpg.components.Elements;
 import com.mangolion.epicmangorpg.components.LogMsg;
 import com.mangolion.epicmangorpg.components.Proficiency;
+import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.steps.Step;
 import com.mangolion.epicmangorpg.weapons.Weapons;
@@ -17,16 +18,18 @@ public class SkillHealBasic extends Skill {
 	public SkillHealBasic() {
 		super("Heal", "Basic healing magic",Weapons.ALL, ActionType.RecoverHP);
 		setObservable(true, 0.7f);
-		addSteps(new Step(this, "Basic Heal", "",ActionType.Magic, 0.7f, 0.5f, 0.2f,0){
+		addSteps(new Step(this, "Basic Heal", "",ActionType.Magic, 0.5f, 0.3f, 0f,0){
 			@Override
 			public float getDamage() {
 				// TODO Auto-generated method stub
 				return super.getDamage();
 			}
 			
-			float healRate = 40;
+			float healRate = 50;
 			@Override
 			public void execute(Character target) {
+				if (target.isAllied != getCharacter().isAllied)
+					target = Game.getInstance().findAlly(getCharacter());
 				target.setHeal(character, (healRate + getCharacter().getIntDamage()*prof));
 				addProf(new Proficiency(getCharacter(), target));
 				setObservable(true, 0.7f);

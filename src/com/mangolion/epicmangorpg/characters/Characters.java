@@ -8,18 +8,31 @@ import com.mangolion.epicmangorpg.floors.Floor0;
 public class Characters {
 	public static LinkedList<Character> getAllCharacters(){
 		LinkedList<Character> result = new LinkedList<Character>();
-		result.add(new CharacterPlayer("Player"));
 		for (Floor floor: Floor.getFloors()){
 			if (floor instanceof Floor0)
 				continue;
 			for (int i = 0; i < floor.spawns.size(); i ++){
 				Character character = floor.getSpawn(i);
-				result.add(character);
+				boolean already = false;
+				for (Character character2: result)
+					if (character2.name.equals(character.name)){
+						already = true;
+						break;
+					}
+				if (!already)
+					result.add(character);
 			}
-			/*for (int i = 0; i < floor.allies.size(); i ++){
+			for (int i = 0; i < floor.allies.size(); i ++){
 				Character character = floor.getAlly(i);
-				result.add(character);
-			}*/
+				boolean already = false;
+				for (Character character2: result)
+					if (character2.name.equals(character.name)){
+						already = true;
+						break;
+					}
+				if (!already)
+					result.add(character);
+			}
 		}
 		return result;
 	}

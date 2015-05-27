@@ -23,19 +23,16 @@ public class SkillLaunchGrenade extends Skill {
 			@Override
 			public void init() {
 			dmgBase = 10;
-			isCharged = true;
 			chanceParry = 0;
-			chanceDodge = 0;
-			timeChargeExecute = 0.2f;
+			doDamage = false;
 			isAOE = true;
-			setElement(new Element("Fire", 1));
+			setElement(new Element("Bomb", 1));
 				super.init();
 			}
-			@Override
-			public void releaseCharge(Character target, float time) {
+			public void execute(Character target, float time, String aug) {
 				Event.addEvent(new Launch(0.5f, getCharacter(), target, 20, this));
-				super.releaseCharge(target, time);
-			}
+				super.execute(target, time, aug);
+			};
 		}.setCost(20, 0, 0, 0).setUseItem(Items.grenadeAmmo, 1));
 		setObservable(true, 0.7f);
 	}

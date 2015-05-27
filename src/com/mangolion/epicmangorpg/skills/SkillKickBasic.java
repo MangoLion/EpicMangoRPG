@@ -19,7 +19,7 @@ public class SkillKickBasic extends Skill {
 				"Basic Kick",
 				"This skill cannot be used to counter other melee atks due to its long load time, but it can stun and takes away the target's balance.",
 				Weapons.ALL, ActionType.MeleeSwing);
-		addSteps(new StepMeleeKick(this, "Basic Kick", "", 0.7f, 0.1f, 0.5f, 15, 2f) {
+		addSteps(new StepMeleeKick(this, "Basic Kick", "", 0.7f, 0.1f, 0.7f, 15, 2f) {
 			@Override
 			public float getStrBuff() {
 				// TODO Auto-generated method stub
@@ -37,7 +37,7 @@ public class SkillKickBasic extends Skill {
 				// TODO Auto-generated method stub
 				return prof * 20;
 			}
-		}.setStatus(new StatusStun(null, 0.7f), 0.8f)
+		}.setStatus(new StatusStun(null, 0.6f), 0.8f)
 		.setCost(25, 0, 40, 0));
 	}
 

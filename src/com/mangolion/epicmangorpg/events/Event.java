@@ -28,11 +28,15 @@ public abstract class Event {
 		this.msgExecute = msg;
 	}
 	
+	public void tick(float dtime){
+		time = (float) (Math.round((time - dtime) * 100d) / 100d);
+	}
+	
 	public void execute(){
 		if (msgExecute != null)
 			StylePainter.append(msgExecute.getMessage(source, target, 0));
-		else
-			StylePainter.append(new Msg(source.name + "'s " + name + " to " + target.name + " has completed.").getMessage(null, null, 0));
+		//else
+		//	StylePainter.append(new Msg(source.name + "'s " + name + " to " + target.name + " has completed.").getMessage(null, null, 0));
 	}
 	
 	public static void addEvent(Event event){

@@ -23,12 +23,13 @@ import javax.swing.event.ListSelectionListener;
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.commands.CommandHandler;
 import com.mangolion.epicmangorpg.components.ActionType;
+import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.weapons.Weapons;
 
 import javax.swing.ListModel;
 
-public class FrameSkills extends JDialog {
+public class FrameSkills extends JDialog implements MouseListener {
 
 	Character character;
 	CommandHandler handler;
@@ -46,6 +47,7 @@ public class FrameSkills extends JDialog {
 	 */
 	public FrameSkills(Character character) {
 		setModal(true);
+		setTitle("Right Click to view details, double click to choose");
 		this.character = character;
 		setBounds(100, 100, 857, 448);
 		
@@ -64,17 +66,7 @@ public class FrameSkills extends JDialog {
 		scrollPane.setColumnHeaderView(lblCombat);
 		
 		 listCombat = new JList<Skill>(mCombat);
-		 listCombat.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					if (e.getClickCount() == 2){
-						result = listCombat.getSelectedValue().name;
-						setVisible(false);
-						dispose();
-					}
-					super.mouseClicked(e);
-				}
-			});
+		 listCombat.addMouseListener(this);
 		scrollPane.setViewportView(listCombat);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
@@ -87,17 +79,7 @@ public class FrameSkills extends JDialog {
 		scrollPane_1.setColumnHeaderView(lblRecent);
 		
 		listRecent = new JList<Skill>(mRecent);
-		listRecent.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 2){
-					result = listRecent.getSelectedValue().name;
-					setVisible(false);
-					dispose();
-				}
-				super.mouseClicked(e);
-			}
-		});
+		listRecent.addMouseListener(this);
 		scrollPane_1.setViewportView(listRecent);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
@@ -110,17 +92,7 @@ public class FrameSkills extends JDialog {
 		scrollPane_2.setColumnHeaderView(lblSwords);
 		
 		listSword = new JList<Skill>(mSword);
-		listSword.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 2){
-					result = listSword.getSelectedValue().name;
-					setVisible(false);
-					dispose();
-				}
-				super.mouseClicked(e);
-			}
-		});
+		listSword.addMouseListener(this);
 		scrollPane_2.setViewportView(listSword);
 		
 		JScrollPane scrollPane_3 = new JScrollPane();
@@ -133,17 +105,7 @@ public class FrameSkills extends JDialog {
 		scrollPane_3.setColumnHeaderView(lblAlchemy);
 		
 		listAlchemy = new JList<Skill>(mAlchemy);
-		listAlchemy.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 2){
-					result = listAlchemy.getSelectedValue().name;
-					setVisible(false);
-					dispose();
-				}
-				super.mouseClicked(e);
-			}
-		});
+		listAlchemy.addMouseListener(this);
 		scrollPane_3.setViewportView(listAlchemy);
 		
 		JScrollPane scrollPane_4 = new JScrollPane();
@@ -157,17 +119,7 @@ public class FrameSkills extends JDialog {
 		
 		 listBow = new JList<Skill>(mBow);
 		scrollPane_4.setViewportView(listBow);
-		listBow.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 2){
-					result = listBow.getSelectedValue().name;
-					setVisible(false);
-					dispose();
-				}
-				super.mouseClicked(e);
-			}
-		});
+		listBow.addMouseListener(this);
 		
 		JScrollPane scrollPane_5 = new JScrollPane();
 		scrollPane_5.setBounds(10, 213, 200, 192);
@@ -179,17 +131,7 @@ public class FrameSkills extends JDialog {
 		scrollPane_5.setColumnHeaderView(lblGuns);
 		
 		listGun = new JList<Skill>(mGun);
-		listGun.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 2){
-					result = listGun.getSelectedValue().name;
-					setVisible(false);
-					dispose();
-				}
-				super.mouseClicked(e);
-			}
-		});
+		listGun.addMouseListener(this);
 		scrollPane_5.setViewportView(listGun);
 		
 		JScrollPane scrollPane_6 = new JScrollPane();
@@ -201,17 +143,7 @@ public class FrameSkills extends JDialog {
 		scrollPane_6.setColumnHeaderView(lblMagic);
 		
 		listMagic = new JList<Skill>(mMagic);
-		listMagic.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 2){
-					result = listMagic.getSelectedValue().name;
-					setVisible(false);
-					dispose();
-				}
-				super.mouseClicked(e);
-			}
-		});
+		listMagic.addMouseListener(this);
 		scrollPane_6.setViewportView(listMagic);
 		refresh();
 	}
@@ -224,7 +156,7 @@ public class FrameSkills extends JDialog {
 				mCombat.addElement(skill);
 				continue;
 			}
-			if (skill.checkWeapon(Weapons.Bladed))
+			if (skill.checkWeapon(Weapons.Bladed) || skill.checkWeapon(Weapons.Rapier))
 				mSword.addElement(skill);
 			if (skill.checkWeapon(Weapons.Bow))
 				mBow.addElement(skill);
@@ -241,4 +173,46 @@ public class FrameSkills extends JDialog {
 		setVisible(true);
 			return result;
 }
+	
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		JList<Skill> list = (JList<Skill>) e.getSource();
+		if (e.getClickCount() == 2){
+			result = list.getSelectedValue().name;
+			setVisible(false);
+			dispose();
+		}else
+			if (e.getButton() == MouseEvent.BUTTON3){
+				setVisible(false);
+				dispose();
+				Point p = e.getPoint();
+				new FrameSkillInfo(list.getModel().getElementAt(
+                        list.locationToIndex(p))).setVisible(true);
+			}
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 }

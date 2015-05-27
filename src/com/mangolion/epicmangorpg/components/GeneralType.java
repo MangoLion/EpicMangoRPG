@@ -4,6 +4,7 @@ public enum GeneralType {
 	Attack,
 	Defend,
 	Recover,
+	Buff,
 	Passive,
 	None;
 }

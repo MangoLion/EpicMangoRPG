@@ -8,6 +8,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.swing.JFrame;
@@ -30,13 +31,17 @@ import com.mangolion.epicmangorpg.characters.CharacterPlayer;
 import com.mangolion.epicmangorpg.characters.Characters;
 import com.mangolion.epicmangorpg.commands.CmdUser;
 import com.mangolion.epicmangorpg.commands.CommandHandler;
+import com.mangolion.epicmangorpg.floors.CharacterLine;
 import com.mangolion.epicmangorpg.floors.Floor;
 import com.mangolion.epicmangorpg.floors.Floor2;
 import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.game.Terrain;
 import com.mangolion.epicmangorpg.game.Weather;
+import com.mangolion.epicmangorpg.skills.SkillWait;
 import com.mangolion.epicmangorpg.weapons.Barehands;
 import com.mangolion.epicmangorpg.weapons.Weapons;
+
+import javax.swing.ListModel;
 
 public class FrameBattleCreate extends JInternalFrame {
 
@@ -58,15 +63,15 @@ public class FrameBattleCreate extends JInternalFrame {
 		});
 	}
 
-	JComboBox<Character> cbPlayer, cbAlly, cbEnemy;
-	DefaultComboBoxModel<Character> mPlayer = new DefaultComboBoxModel<Character>()
-	, mAlly = new DefaultComboBoxModel<Character>()
-	, mEnemy = new DefaultComboBoxModel<Character>();
+	JComboBox<Character> cbPlayer;
+	DefaultComboBoxModel<Character> mPlayer = new DefaultComboBoxModel<Character>();
 	
 	JList<Character> listAlly,
-	listEnemy;
+	listEnemy,
+	listAll;
 	DefaultListModel<Character> mLAlly = new DefaultListModel<Character>(),
-			mLEnemy = new DefaultListModel<Character>();
+			mLEnemy = new DefaultListModel<Character>(),
+					 mAll = new DefaultListModel<Character>();
 	
 	JComboBox<Weather> cbWeather;
 	JComboBox<Terrain> cbTerrain;
@@ -79,18 +84,18 @@ public class FrameBattleCreate extends JInternalFrame {
 		//FrameGame.getInstance().viewMode = true;
 		setTitle("Battle Creator");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 576, 411);
+		setBounds(100, 100, 798, 368);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JLabel lblPlayer = new JLabel("Player:");
-		lblPlayer.setBounds(169, 15, 46, 14);
+		lblPlayer.setBounds(266, 15, 46, 14);
 		contentPane.add(lblPlayer);
 		
 		cbPlayer = new JComboBox<Character>(mPlayer);
-		cbPlayer.setBounds(211, 11, 209, 22);
+		cbPlayer.setBounds(308, 11, 209, 22);
 		contentPane.add(cbPlayer);
 		
 		JScrollPane scrAlly = new JScrollPane();
@@ -121,10 +126,6 @@ public class FrameBattleCreate extends JInternalFrame {
 		lblAllies.setHorizontalAlignment(SwingConstants.CENTER);
 		scrAlly.setColumnHeaderView(lblAllies);
 		
-		cbAlly = new JComboBox<Character>(mAlly);
-		cbAlly.setBounds(10, 53, 191, 22);
-		contentPane.add(cbAlly);
-		
 		JButton btnAddAlly = new JButton("Add");
 		btnAddAlly.setBounds(208, 52, 53, 23);
 		contentPane.add(btnAddAlly);
@@ -132,14 +133,15 @@ public class FrameBattleCreate extends JInternalFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Character character = Characters.getCharacter(((Character)cbAlly.getSelectedItem()).name);
+				//Character character = Characters.getCharacter(((Character)cbAlly.getSelectedItem()).name);
+				for(Character character: listAll.getSelectedValuesList())
 				if (character != null)
-					mLAlly.addElement(character);
+					mLAlly.addElement(Characters.getCharacter(character.name));
 			}
 		});
 		
 		JScrollPane scrEnemy = new JScrollPane();
-		scrEnemy.setBounds(300, 86, 251, 162);
+		scrEnemy.setBounds(523, 86, 251, 162);
 		contentPane.add(scrEnemy);
 		listEnemy = new JList<Character>(mLEnemy);
 		scrEnemy.setViewportView(listEnemy);
@@ -166,20 +168,17 @@ public class FrameBattleCreate extends JInternalFrame {
 		lblEnemies.setHorizontalAlignment(SwingConstants.CENTER);
 		scrEnemy.setColumnHeaderView(lblEnemies);
 		
-		cbEnemy = new JComboBox<Character>(mEnemy);
-		cbEnemy.setBounds(300, 53, 191, 22);
-		contentPane.add(cbEnemy);
-		
 		JButton btnAddEnemy = new JButton("Add");
-		btnAddEnemy.setBounds(498, 53, 53, 23);
+		btnAddEnemy.setBounds(523, 52, 53, 23);
 		contentPane.add(btnAddEnemy);
 		btnAddEnemy.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Character character = Characters.getCharacter(((Character)cbEnemy.getSelectedItem()).name);
+				//Character character = Characters.getCharacter(((Character)listAll.getSelectedValue()).name);
+				for (Character character: listAll.getSelectedValuesList())
 				if (character != null)
-					mLEnemy.addElement(character);
+					mLEnemy.addElement(Characters.getCharacter(character.name));
 			}
 		});
 		
@@ -198,11 +197,11 @@ public class FrameBattleCreate extends JInternalFrame {
 		tfScEnemy = new JTextField();
 		tfScEnemy.setText("100");
 		tfScEnemy.setColumns(10);
-		tfScEnemy.setBounds(336, 256, 37, 20);
+		tfScEnemy.setBounds(559, 256, 37, 20);
 		contentPane.add(tfScEnemy);
 		
 		JLabel label = new JLabel("Scale:");
-		label.setBounds(300, 259, 46, 14);
+		label.setBounds(523, 259, 46, 14);
 		contentPane.add(label);
 		
 		JLabel label_1 = new JLabel("%");
@@ -210,7 +209,7 @@ public class FrameBattleCreate extends JInternalFrame {
 		contentPane.add(label_1);
 		
 		JLabel label_2 = new JLabel("%");
-		label_2.setBounds(383, 259, 23, 14);
+		label_2.setBounds(606, 259, 23, 14);
 		contentPane.add(label_2);
 		
 		JLabel lblWeather = new JLabel("Weather:");
@@ -230,23 +229,50 @@ public class FrameBattleCreate extends JInternalFrame {
 		contentPane.add(cbTerrain);
 		
 		JButton btnCreateBattle = new JButton("Create Battle!");
-		btnCreateBattle.setBounds(211, 338, 124, 23);
+		btnCreateBattle.setBounds(321, 284, 124, 23);
 		contentPane.add(btnCreateBattle);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(266, 86, 251, 162);
+		contentPane.add(scrollPane);
+		
+		listAll = new JList<Character>(mAll);
+		scrollPane.setViewportView(listAll);
+		listAll.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2){
+					 new FrameCharacterInfo(listAll.getSelectedValue());
+				}
+				super.mouseClicked(e);
+			}
+		});
+		
+		JLabel lblAllCharacters = new JLabel("All Characters");
+		lblAllCharacters.setHorizontalAlignment(SwingConstants.CENTER);
+		scrollPane.setColumnHeaderView(lblAllCharacters);
 		btnCreateBattle.addActionListener(new ActionListener() {
 			Timer timer,
 			timer2;
 			Game game;
+			Character player;
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				final Character player = (Character) cbPlayer.getSelectedItem();
+				 player = (Character) cbPlayer.getSelectedItem();
+				if (player.name.equalsIgnoreCase("none"))
+					player = null;
+				else{
 				if (player instanceof CharacterPlayer)
 					((CharacterPlayer) player).init();
 				player.isPlayer = true;
 				player.name += "(Player)";
 				player.scale(Float.parseFloat(tfScAlly.getText())/100);
 				player.isAllied = true;
+				if (player.getSkill("wait") == null)
+					player.addSkills(new SkillWait());
 				CharacterPlayer.instance = player;
-				
+				}
 				game = Game.getInstance();
 				game.currentFloor = 2;
 				game.begin();
@@ -257,19 +283,19 @@ public class FrameBattleCreate extends JInternalFrame {
 						game.ticks.clear();
 						game.charsAllies.clear();
 						game.charsEnemies.clear();
-
-						game.charsAllies.add(player);
+						if (player != null)
+							game.addCharacter(player);
 						for (Object  obj: mLAlly.toArray()){
 							Character character = (Character) obj;
 							character.isAllied = true;
 							character.scale(Float.parseFloat(tfScAlly.getText())/100);
-							game.charsAllies.add(character);
+							game.addCharacter(character);
 						}
 						for (Object  obj: mLEnemy.toArray()){
 							Character character = (Character) obj;
 							character.isAllied = false;
 							character.scale(Float.parseFloat(tfScEnemy.getText())/100);
-							game.charsEnemies.add(character);
+							game.addCharacter(character);
 						}
 						
 					//	player.nextAction();
@@ -278,7 +304,7 @@ public class FrameBattleCreate extends JInternalFrame {
 						game.terrain = (Terrain) cbTerrain.getSelectedItem();
 						timer.stop();
 
-						timer2 = new Timer(12, new ActionListener() {
+						timer2 = new Timer(100, new ActionListener() {
 							
 							@Override
 							public void actionPerformed(ActionEvent e) {
@@ -308,14 +334,25 @@ public class FrameBattleCreate extends JInternalFrame {
 	
 	public void reload(){
 		LinkedList<Character> characters = Characters.getAllCharacters();
-		for (Character character: characters){
+		
+		Iterator<Character> it = characters.iterator();
+		while (it.hasNext()){
+			Character character = it.next();
 			mPlayer.addElement(character);
 			if (character == CharacterPlayer.instance)
 				continue;
-			mAlly.addElement(character);
-			mEnemy.addElement(character);
+			mAll.addElement(character);
+			
+			if (character instanceof CharacterLine){
+				mAll.addElement(new Character("None", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, new Barehands()));
+				mPlayer.addElement(new Character("None", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, new Barehands()));
+				Character player = new CharacterPlayer("Standard Player");
+				player.scale(2);
+				mAll.addElement(player);
+				mPlayer.addElement(player);
+			}
 		}
-		mPlayer.addElement(new Character("None", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, new Barehands()));
+
 		
 		for (Weather weather: Weather.weathers)
 			mWeather.addElement(weather);
