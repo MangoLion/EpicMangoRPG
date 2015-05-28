@@ -54,4 +54,10 @@ public class SkillParry extends Skill{
 			return true;
 		}
 	}
+	
+	@Override
+	public boolean checkCompatability(Skill skill) {
+		Step step = skill.steps.getFirst();
+		return step.chanceParry > 0;
+	}
 }

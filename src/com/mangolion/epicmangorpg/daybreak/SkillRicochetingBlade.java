@@ -33,14 +33,11 @@ public class SkillRicochetingBlade extends Skill {
 			mpCost = 35;
 			stamCost =  35;
 			chanceMiss = -0.2f;
+			setEvents(new EventMainBlast(0.7f, getCharacter(), null, 20, this));
 			setMessages(null,new Msg("$name took no chances as $p hurled a specially enchanted kukri outside. The curved blade ricocheted off the walls with perfect bounces, multiplying into three each time. Within mere seconds, a roaming cloud of whirling steel swept down the hall, dicing through anything softer than rock with impunity."), null);
 				super.init();
 			}
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventMainBlast(0.7f, getCharacter(), target, 20, this));
-				super.execute(character);
-			}			
+
 			
 			@Override
 			public float getIntBuff() {
@@ -54,7 +51,7 @@ public class SkillRicochetingBlade extends Skill {
 	@Override
 	public float getTotalDamage() {
 		// TODO Auto-generated method stub
-		return steps.getFirst().getDamage()*10;
+		return 10000;
 	}
 	
 	public class EventMainBlast extends EventRange{
@@ -62,9 +59,10 @@ public class SkillRicochetingBlade extends Skill {
 		public EventMainBlast(float time, Character source, Character target, float dmgbase, Step step) {
 			super("Ricocheting Blade", "", time, source, target, dmgbase, step);
 			setMessages(null, null, null, new Msg("$name had parried $targetname's $targetskill"));
+			if (Game.getInstance().timePassed > 0){
 			LinkedList<Character> enemies = Game.getInstance().getEnemies(source);
 			if (enemies.size() > 1)
-				this.target = enemies.get(new Random().nextInt(enemies.size()));
+				this.target = enemies.get(new Random().nextInt(enemies.size()));}
 		}
 
 		

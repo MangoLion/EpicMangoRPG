@@ -31,14 +31,10 @@ public class SkillScorchEther extends Skill {
 			mpCost =  45;
 			chanceBlock = 0;
 			setElement(new Element("Fire", 1));
+			setEvents(new EventMainBlast(0.5f, getCharacter(), null, 20, this));
 			setMessages(null,new Msg("'Scorch-Ether, Catalyst Fragmentation Dispel!' $name yelled as $p releases an X-shaped fire blast, which procceded to suck in atmosphere like a black hole as it soared towards $targetname"), null);
 				super.init();
 			}
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventMainBlast(0.5f, getCharacter(), target, 20, this));
-				super.execute(character);
-			}			
 			
 			@Override
 			public float getIntBuff() {

@@ -62,6 +62,10 @@ public class Skill implements StatBuff {
 		this.type = type;
 	}
 	
+	public boolean checkCompatability (Skill skill){
+		return true;
+	}
+	
 	public int getType(){
 		return steps.getFirst().getType();
 	}
@@ -484,6 +488,10 @@ public class Skill implements StatBuff {
 	public float getBarrierNegate() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	public Step getCurrentStep() {
+		// TODO Auto-generated method stub
+		return steps.get(stepCurrent);
 	}
 
 

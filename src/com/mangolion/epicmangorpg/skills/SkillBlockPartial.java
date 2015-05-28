@@ -50,4 +50,10 @@ public void execute(Character target, float time) {
 	}.setMessages(new MsgMeleeBlockLoad(), new MsgMeleeBlockExecute(), new MsgBasicCD(), null)
 	.setCost(15, 0, 0, 0));
 	}
+	
+	@Override
+	public boolean checkCompatability(Skill skill) {
+		Step step = skill.steps.getFirst();
+		return step.chanceBlock > 0;
+	}
 }

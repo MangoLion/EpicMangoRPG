@@ -19,34 +19,26 @@ public class SkillArrowSwift extends Skill {
 		super("Swift Arrow", "Fires an arrow as swift as the wind itself.",Weapons.Bow, ActionType.RangeNormal) ;
 		setObservable(true, 0.7f);
 		shopPrice = 30;
-		addSteps(new Step(this, "Swift Arrow", "", ActionType.RangeNormal,0.3f, 0.1f, 0.1f, 0.7f){
-			public float getStrBuff() {
-				// TODO Auto-generated method stub
-				return prof * 15;
-			}
-
-			public boolean checkConndition() {
-				if (getCharacter().inventory.getItemNumber(Items.arrow) > 0)
-					return super.checkConndition();
-				return false;
+		addSteps(new Step(this, "Swift Arrow", "",ActionType.RangeNormal, 0.5f, 0.1f, 0,1f){
+			
+			public void init() {
+				setEvents(new EventArrow(0.3f, getCharacter(), null, 20, this));
+				setUseItem(Items.arrow, 1);
 			};
 			
-			public float getSPBuff() {
-				return prof*15;
-			};
 			public float getDexBuff() {
 				return prof*10;
 			};
+
 			
-			@Override
-			public void execute(Character target) {
-				EventRange event = new EventArrow(0.3f, character, target, 10, this);
-				event.chanceBlock = 0;
-				setEvents(event);
-				getCharacter().inventory.removeItem(Items.arrow, 1);
-				super.execute(target);
-			}	
-		}.setCost(10, 0, 10, 0).setElement(new Element("Wind", 1)));
+			public float getStrBuff() {
+				// TODO Auto-generated method stub
+				return prof * 10;
+			}
+			public float getSPBuff() {
+				return prof*10;
+			};
+		}.setCost(10, 0, 0, 0).setElement(new Element("Wind", 1)));
 	}
 	
 }

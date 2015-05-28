@@ -32,6 +32,7 @@ import com.mangolion.epicmangorpg.items.Items;
 import com.mangolion.epicmangorpg.messages.Msg;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.skills.SkillRespite;
+import com.mangolion.epicmangorpg.skills.SkillWait;
 import com.mangolion.epicmangorpg.skills.Skills;
 import com.mangolion.epicmangorpg.statuses.Buff;
 import com.mangolion.epicmangorpg.statuses.BuffAirborne;
@@ -116,6 +117,7 @@ public class Character implements Cloneable{
 		addSkills(skills);
 		//
 		addSkills(new SkillRespite());
+		addSkills(new SkillWait());
 		equip(weapon);
 		//barriers.add(new Barrier(this, "Fire Barrier", 100, 0, 0, 100, 0.7f, new Element("Fire", 1)));
 	}

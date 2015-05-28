@@ -74,7 +74,7 @@ public enum Style {
 			result *= 1 + value[1]/target.getMaxHP();
 			break;
 		case parry:
-			result = 2*(source.getStr()/target.getStr());
+			result = (source.getStr()/target.getStr());
 			break;
 		case interrupt:
 			result = 5*value[0];
@@ -114,7 +114,7 @@ public enum Style {
 			result *= 1 + value[1]/target.getMaxHP();
 			break;
 		case parry:
-			result = -2*(target.getStr()/source.getStr());
+			result = -(target.getStr()/source.getStr());
 			break;
 		case interrupt:
 			result = -5*value[0];

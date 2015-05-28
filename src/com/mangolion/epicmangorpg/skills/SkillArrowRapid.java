@@ -16,23 +16,17 @@ public class SkillArrowRapid extends Skill {
 		super("Rapid Arrow", "Fires 3 arrows consecutively.",Weapons.Bow, ActionType.RangeNormal);
 		setObservable(true, 0.7f);
 		shopPrice = 20;
-		addSteps(new Step(this, "First Arrow", "",ActionType.RangeNormal, 0.4f, 0.1f, 0.1f,1f){
+		addSteps(new Step(this, "First Arrow", "",ActionType.RangeNormal, 0.6f, 0.1f, 0,1f){
 			
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventArrow(0.5f, getCharacter(), target, 20, this));
-				getCharacter().inventory.removeItem(Items.arrow, 1);
-				super.execute(target);
-			}	
+			public void init() {
+				setEvents(new EventArrow(0.5f, getCharacter(), null, 20, this));
+				setUseItem(Items.arrow, 1);
+			};
+			
 			public float getDexBuff() {
 				return prof*10;
 			};
-			
-			public boolean checkConndition() {
-				if (getCharacter().inventory.getItemNumber(Items.arrow) > 0)
-					return super.checkConndition();
-				return false;
-			};
+
 			
 			public float getStrBuff() {
 				// TODO Auto-generated method stub
@@ -42,34 +36,17 @@ public class SkillArrowRapid extends Skill {
 				return prof*10;
 			};
 		}.setCost(10, 0, 0, 0),
-		new Step(this, "Second Arrow", "",ActionType.RangeNormal, 0.3f, 0.1f, 0.1f,1.4f){
+		new Step(this, "Second Arrow", "",ActionType.RangeNormal, 0.2f, 0.1f, 0f,1.2f){
 			
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventArrow(0.5f, getCharacter(), target, 20, this));
-				getCharacter().inventory.removeItem(Items.arrow, 1);
-				super.execute(target);
-			}			
-			
-			public float getStrBuff() {
-				// TODO Auto-generated method stub
-				return prof * 10;
-			}
-			public float getSPBuff() {
-				return prof*10;
+			public void init() {
+				setEvents(new EventArrow(0.5f, getCharacter(), null, 20, this));
+				setUseItem(Items.arrow, 1);
 			};
+			
 			public float getDexBuff() {
 				return prof*10;
 			};
-		}.setCost(12, 0, 0, 0),
-		new Step(this, "Second Arrow", "",ActionType.RangeNormal, 0.3f, 0.1f, 0.4f,2f){
-			
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventArrow(0.5f, getCharacter(), target, 20, this));
-				getCharacter().inventory.removeItem(Items.arrow, 1);
-				super.execute(target);
-			}			
+
 			
 			public float getStrBuff() {
 				// TODO Auto-generated method stub
@@ -78,7 +55,27 @@ public class SkillArrowRapid extends Skill {
 			public float getSPBuff() {
 				return prof*10;
 			};
-		}.setCost(15, 0, 0, 0));
+		}.setCost(10, 0, 0, 0),
+		new Step(this, "Third Arrow", "",ActionType.RangeNormal, 0.3f, 0.1f, 0f,1.5f){
+			
+			public void init() {
+				setEvents(new EventArrow(0.5f, getCharacter(), null, 20, this));
+				setUseItem(Items.arrow, 1);
+			};
+			
+			public float getDexBuff() {
+				return prof*10;
+			};
+
+			
+			public float getStrBuff() {
+				// TODO Auto-generated method stub
+				return prof * 10;
+			}
+			public float getSPBuff() {
+				return prof*10;
+			};
+		}.setCost(10, 0, 0, 0));
 	}
 
 }

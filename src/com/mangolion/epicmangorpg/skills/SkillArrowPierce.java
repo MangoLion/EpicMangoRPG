@@ -15,7 +15,7 @@ import com.mangolion.epicmangorpg.weapons.Weapons;
 public class SkillArrowPierce extends Skill {
 
 	public SkillArrowPierce() {
-		super("Piercing Arrow", "Fires an arrow assisted with magic that can pierce armor, ignores 20% of target defense",Weapons.Bow, ActionType.MeleeStab) ;
+		super("Piercing Arrow", "Fires an arrow assisted with magic that can pierce armor, ignores 20% of target defense",Weapons.Bow, ActionType.RangeNormal) ;
 		setObservable(true, 0.7f);
 		shopPrice = 50;
 		addSteps(new StepStab(this, "Piercing Arrow", "", 0.7f, 0.1f, 0f, 2f){
@@ -35,6 +35,11 @@ public class SkillArrowPierce extends Skill {
 				return prof*10;
 			};
 			
+			public void init() {
+				chanceBlock = 0;
+				setEvents(new EventArrow(0.5f, getCharacter(), null, 10, this));
+			};
+			
 			public boolean checkConndition() {
 				if (getCharacter().inventory.getItemNumber(Items.arrow) > 0)
 					return super.checkConndition();
@@ -50,9 +55,6 @@ public class SkillArrowPierce extends Skill {
 			
 			@Override
 			public void execute(Character target) {
-				EventRange event = new EventArrow(0.5f, character, target, 10, this);
-				event.chanceBlock = 0;
-				setEvents(event);
 				getCharacter().inventory.removeItem(Items.arrow, 1);
 				super.execute(target);
 			}	

@@ -26,6 +26,10 @@ public class SkillArrowJumpBack extends Skill{
 		shopPrice = 40;
 		addSteps(new Step(this, "Jump Back Arrow", "",  ActionType.Defend, 0.2f, 0.3f, 0.4f, 1.2f){
 			
+			public void init() {
+				setEvents(new EventArrow(0.3f, getCharacter(), null, 20, this));
+			};
+			
 			@Override
 			public float getAgiBuff() {
 				// TODO Auto-generated method stub
@@ -48,7 +52,6 @@ public class SkillArrowJumpBack extends Skill{
 			public void execute(Character target, float time) {
 				addProf(new Proficiency(getCharacter(), getCharacter()));
 				getCharacter().applyBuff(new Buff("Jump Back Boost", 25, 0.3f, GenType.positive, Buff.Type.prot));
-				setEvents(new EventArrow(0.3f, getCharacter(), target, 20, this));
 				getCharacter().inventory.removeItem(Items.arrow, 1);
 				super.execute(target, time);
 			}

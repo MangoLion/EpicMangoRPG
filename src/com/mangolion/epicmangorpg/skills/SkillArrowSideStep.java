@@ -34,18 +34,10 @@ public class SkillArrowSideStep extends Skill {
 			super(parent, name, desc, ActionType.Dodge, timeLoad, timeExecute, timeCooldown, baseDamage_);
 			chanceDodge = 0.6f;
 		}
-		public boolean checkConndition() {
-			if (getCharacter().inventory.getItemNumber(Items.arrow) > 0)
-				return super.checkConndition();
-			return false;
+		public void init() {
+			setEvents(new EventArrow(0.3f, getCharacter(), null, 20, this));
+			setUseItem(Items.arrow, 1);
 		};
-		
-		@Override
-		public void execute(Character target) {
-			setEvents(new EventArrow(0.3f, getCharacter(), target, 20, this));
-			getCharacter().inventory.removeItem(Items.arrow, 1);
-			super.execute(target);
-		}		
 		
 		@Override
 		public float getAgiBuff() {

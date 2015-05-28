@@ -1,13 +1,22 @@
 package com.mangolion.epicmangorpg.ais;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Random;
+
+import javax.swing.JOptionPane;
+
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.components.ActionType;
 import com.mangolion.epicmangorpg.components.Barrier;
 import com.mangolion.epicmangorpg.components.Damage;
 import com.mangolion.epicmangorpg.components.GeneralType;
+import com.mangolion.epicmangorpg.events.Event;
+import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.statuses.Buff;
+import com.mangolion.epicmangorpg.steps.Step;
 
 public class AISimple extends AI {
 
@@ -29,7 +38,8 @@ public class AISimple extends AI {
 	@Override
 	public void nextAction() {
 		if (character.target == null) {
-			Utility.narrate(character.name + " decided to stay idle this turn");
+			// Utility.narrate(character.name +
+			// " decided to stay idle this turn");
 			character.ai = null;
 			return;
 		}
@@ -99,25 +109,156 @@ public class AISimple extends AI {
 			return false;
 		}
 
-		float tempChance = chanceDefend;
-
-		if (skill.type.getGeneralType() == GeneralType.Attack
-				&& (skill.isLoading || ((skill.getType() == Damage.MAGIC || skill
-						.getType() == Damage.RANGE) && !skill.isCooldown)))
-			if (rand.nextFloat() <= chanceDefend
-					+ skill.getTotalDamage() / character.getHp()) {
-				boolean execute = false;
-				if (skill.getType() == Damage.MELEE)
-					execute = executeSkill(ActionType.DefendMelee);
-				if (skill.getType() == Damage.MAGIC)
-					execute = executeSkill(ActionType.DefendMagic);
-				if (skill.getType() == Damage.MELEE)
-					execute = executeSkill(ActionType.DefendMelee);
-				if (!execute)
-					return executeSkill(GeneralType.Defend);
-				return true;
-
+		boolean check = false;
+		float damage = 0;
+		Step step = null;
+		Event event = null;
+		
+		//check if there are projectiles heading to character
+		for (Event e: Game.getInstance().events)
+			if (e.target == character || e.step.isAOE){
+				damage = e.step.parent.getTotalDamage()/ character.getHp();
+				check = true;
+				event = e;
+				step = event.step;
+				
+				}				
+		
+		//check if target is attacking
+		if (skill.type.getGeneralType() == GeneralType.Attack && (skill.isLoading || skill.type == ActionType.RangeNormal || skill.type == ActionType.Magic)){
+			float damageS = skill.getTotalDamage()/ character.getHp();
+			System.out.println("dmg: " +  skill.getTotalDamage() );
+			if ((check && damageS > damage ) || !check){
+				step = skill.getCurrentStep();
+				damage = damageS;
+				check = true;
 			}
+		}
+		
+		
+		if (check)
+		if (rand.nextFloat() <= chanceDefend + damage) {
+			boolean execute = false;
+			
+			ActionType type = null;
+			if (step.getType() == Damage.MELEE)
+				type = ActionType.DefendMelee;
+			if (step.getType() == Damage.MAGIC)
+				type = ActionType.DefendMagic;
+			if (step.getType() == Damage.MELEE)
+				type = ActionType.DefendMelee;
+
+			if (type != null)
+				if (event == null){
+					if (executeSkill(type, null, charTarget))
+						return true;
+				}
+				else
+					if (executeSkill(type, null, event))
+						return true;
+
+			if (!execute)
+				return executeSkill(null, GeneralType.Defend, charTarget);
+
+		}
+		return false;
+	}
+
+	public Skill getRandomSkill(LinkedList<Skill> skills) {
+		if (skills.size() == 0)
+			return null;
+		if (skills.size() == 1)
+			return skills.getFirst();
+		else
+			return skills.get(new Random().nextInt(skills.size() - 1));
+	}
+
+	public boolean executeSkill(ActionType type, GeneralType typeGen,
+			Event event) {
+		System.out.println("Defend Range!!");
+		System.out.println("Defend Range!!");
+		System.out.println("Defend Range!!");
+		if (type == null)
+			typeGen = GeneralType.Defend;
+		
+		LinkedList<Skill> applicable = new LinkedList<Skill>();
+		LinkedList<Skill> tooFast = new LinkedList<Skill>();
+
+		float tick = event.time, load = event.time;
+
+		for (Skill skill : character.skills)
+			if ((type != null && skill.type == type)
+					|| (typeGen != null && skill.type.getGeneralType() == typeGen)) {
+				Step s = skill.steps.getFirst();
+				float sExecute = s.getExecutionTime() + s.getLoadTime();
+				if (s.getLoadTime() < load && sExecute > load)
+					applicable.add(skill);
+				else if (s.getLoadTime() < load)
+					tooFast.add(skill);
+			}
+
+		if (applicable.size() > 0) {
+			Collections.shuffle(applicable);
+			for (Skill skill : applicable)
+				if (skill.checkCompatability(event.step.parent) && skill.checkCondition())
+					return skill.execute();
+		}
+		if (tooFast.size() > 0) {
+			Collections.shuffle(tooFast);
+			for (Skill skill : tooFast) {
+				float wait = load - skill.steps.getFirst().getLoadTime();
+				System.out.println("wait " + wait + " load " + load + " skill "
+						+ skill.steps.getFirst().getLoadTime());
+				skill = character.getSkill("Wait");
+				if (skill.checkCompatability(event.step.parent) && skill.checkCondition())
+					return skill.execute(character.getTarget(), wait);
+			}
+		}
+		System.out.println("FAILED! " + load + " " + type + typeGen);
+		return false;
+	}
+
+	public boolean executeSkill(ActionType type, GeneralType typeGen,
+			Character target) {
+		System.out.println("Defend Skill!!");
+		System.out.println("Defend Skill!!");
+		System.out.println("Defend Skill!!");
+		LinkedList<Skill> applicable = new LinkedList<Skill>();
+		LinkedList<Skill> tooFast = new LinkedList<Skill>();
+
+		Step step = target.skillCurrent.getCurrentStep();
+		float tick = Game.getInstance().findTick(target).time, load = tick
+				+ step.getEventTime(), execute = step.getExecutionTime() + tick;
+
+		for (Skill skill : character.skills)
+			if ((type != null && skill.type == type)
+					|| (typeGen != null && skill.type.getGeneralType() == typeGen)) {
+				Step s = skill.steps.getFirst();
+				float sExecute = s.getExecutionTime() + s.getLoadTime();
+				if (s.getLoadTime() < load && sExecute > load)
+					applicable.add(skill);
+				else if (s.getLoadTime() < load)
+					tooFast.add(skill);
+			}
+
+		if (applicable.size() > 0) {
+			Collections.shuffle(applicable);
+			for (Skill skill : applicable)
+				if (skill.checkCompatability(target.skillCurrent) && skill.checkCondition())
+					return skill.execute();
+		}
+		if (tooFast.size() > 0) {
+			Collections.shuffle(tooFast);
+			for (Skill skill : tooFast) {
+				float wait = load - skill.steps.getFirst().getLoadTime();
+				System.out.println("wait " + wait + " load " + load + " skill "
+						+ skill.steps.getFirst().getLoadTime());
+				skill = character.getSkill("Wait");
+				if (skill.checkCompatability(target.skillCurrent) && skill.checkCondition())
+					return skill.execute(target, wait);
+			}
+		}
+		System.out.println("FAILED! " + load + " " + type + typeGen);
 		return false;
 	}
 

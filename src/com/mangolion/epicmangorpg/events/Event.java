@@ -9,7 +9,7 @@ import com.mangolion.epicmangorpg.game.StylePainter;
 import com.mangolion.epicmangorpg.messages.Msg;
 import com.mangolion.epicmangorpg.steps.Step;
 
-public abstract class Event {
+public abstract class Event implements Cloneable {
 	public String name, desc;
 	public Character source, target;
 	public boolean hitAllEnemies = false, hitAll = false;
@@ -52,4 +52,15 @@ public abstract class Event {
 		else 
 			return name + "will be cancelled in " + time;
 	}
+	
+	public Event copy(){
+		try {
+			return (Event) clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 }

@@ -25,6 +25,10 @@ public class SkillArrowFlame extends Skill {
 				return prof * 15;
 			}
 			
+			public void init() {
+				setEvents(new EventArrow(0.5f, character, null, 10, this));
+			};
+			
 			public boolean checkConndition() {
 				if (getCharacter().inventory.getItemNumber(Items.arrow) > 0)
 					return super.checkConndition();
@@ -44,8 +48,6 @@ public class SkillArrowFlame extends Skill {
 			};
 			@Override
 			public void execute(Character target) {
-				EventRange event = new EventArrow(0.5f, character, target, 10, this);
-				setEvents(event);
 				getCharacter().inventory.removeItem(Items.arrow, 1);
 				super.execute(target);
 			}	

@@ -24,16 +24,13 @@ public class SkillStormTopaz extends Skill {
 			mpCost = 45;
 			setElement(new Element("Wind", 1));
 			setStatus(new StatusFall(null, 0.1f), 0.2f);
+			for (int i = 0; i < 6; i ++)
+				setEvents(new EventStorm(0.6f, getCharacter(), null, 20, this));
 			setChances(1, 1, -0.5f);
 				super.init();
 			}
-			@Override
-			public void execute(Character target) {
-				for (int i = 0; i < 6; i ++)
-					setEvents(new EventStorm(0.6f, getCharacter(), target, 20, this));
-				super.execute(character);
-			}			
-		});
+		}
+			);
 		setObservable(true, 0.7f);
 	}
 	public class EventStorm extends EventRange{
@@ -46,10 +43,5 @@ public class SkillStormTopaz extends Skill {
 		}
 
 }
-	
-	@Override
-	public float getTotalDamage() {
-		// TODO Auto-generated method stub
-		return steps.getFirst().getDamage()*6;
-	}
+
 }

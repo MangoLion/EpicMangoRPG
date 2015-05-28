@@ -20,17 +20,10 @@ public class SkillArrowRain extends Skill {
 		shopPrice = 80;
 		addSteps(new Step(this, "Arrow Rain(First)", "",ActionType.RangeNormal, 01f, 0.1f, 0.1f,1){
 			
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventArrow(0.7f, getCharacter(), target, 10, this, true));
-				getCharacter().inventory.removeItem(Items.arrow, (int) ( 10*(prof + 1)));
-				super.execute(target);
-			}			
-			
-			public boolean checkConndition() {
-				if (getCharacter().inventory.getItemNumber(Items.arrow) > 0)
-					return super.checkConndition();
-				return false;
+			public void init() {
+				setEvents(new EventArrow(0.7f, getCharacter(), null, 20, this));
+				setUseItem(Items.arrow, 1);
+				isAOE = true;
 			};
 			
 			public float getDexBuff() {

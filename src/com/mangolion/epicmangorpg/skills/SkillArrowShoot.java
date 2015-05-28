@@ -15,33 +15,26 @@ public class SkillArrowShoot extends Skill {
 	public SkillArrowShoot() {
 		super("Shoot Arrow", "Pulls back the bowstring and let loose an arrow, standard bow attack.",Weapons.Bow, ActionType.RangeNormal);
 		setObservable(true, 1);
-		addSteps(new Step(this, "Shoot Arrow", "",ActionType.RangeNormal, 0.6f, 0.1f, 0.1f,1){
+		addSteps((new Step(this, " Arrow", "",ActionType.RangeNormal, 0.5f, 0.1f, 0,1f){
 			
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventArrow(0.5f, getCharacter(), target, 30, this));
-				getCharacter().inventory.removeItem(Items.arrow, 1);
-				super.execute(target);
-			}	
+			public void init() {
+				setEvents(new EventArrow(0.5f, getCharacter(), null, 20, this));
+				setUseItem(Items.arrow, 1);
+			};
 			
 			public float getDexBuff() {
-				return prof*15;
+				return prof*10;
 			};
-			
-			public boolean checkConndition() {
-				if (getCharacter().inventory.getItemNumber(Items.arrow) > 0)
-					return super.checkConndition();
-				return false;
-			};
+
 			
 			public float getStrBuff() {
 				// TODO Auto-generated method stub
-				return prof * 15;
+				return prof * 10;
 			}
 			public float getSPBuff() {
-				return prof*15;
+				return prof*10;
 			};
-		}.setCost(15, 0, 0, 0).setChances(1, 1, 0f));
+		}.setCost(10, 0, 0, 0)));
 	}
 
 }

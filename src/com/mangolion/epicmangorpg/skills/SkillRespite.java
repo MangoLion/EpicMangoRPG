@@ -7,6 +7,7 @@ import com.mangolion.epicmangorpg.characters.CharacterPlayer;
 import com.mangolion.epicmangorpg.components.ActionType;
 import com.mangolion.epicmangorpg.components.GeneralType;
 import com.mangolion.epicmangorpg.components.Proficiency;
+import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.messages.Msg;
 import com.mangolion.epicmangorpg.messages.MsgBasicCD;
 import com.mangolion.epicmangorpg.messages.MsgDodgeExecute;
@@ -38,6 +39,16 @@ public class SkillRespite extends Skill{
 			// TODO Auto-generated method stub
 			return prof * 15;
 		}
+		
+		public boolean checkConndition() {
+			for (Buff buff: getCharacter().buffs)
+				if (buff.name.equals(name)){
+					if (getCharacter() == CharacterPlayer.instance)
+						Utility.narrate("You can only have one buff of the same type");
+					return false;
+				}
+			return super.checkConndition();
+		};
 		
 		float customTime = 0;
 		

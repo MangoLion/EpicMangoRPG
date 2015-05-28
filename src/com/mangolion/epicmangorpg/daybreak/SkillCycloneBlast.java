@@ -26,15 +26,12 @@ public class SkillCycloneBlast extends Skill {
 			isAOE = true;
 			setElement(new Element("Wind", 0.5f));
 			setElement(new Element("Bomb", 0.5f));
+			setEvents(new EventStorm(0.3f, getCharacter(), null, 20, this),new EventStorm(0.5f, getCharacter(), null, 20, this),new EventStorm(0.7f, getCharacter(), null, 20, this));
 			setMessages(null, new Msg("A gush of hurricane-force winds threatens to blow away $name's enemies, the blast of air also acted as a contingency trigger, pulling dozens of runic pebbles into the air, hurling about the enclosed room like a whirlwind of destruction, exploding each time one of them met a living entity that did not carry the ether of their creator "), null);
 			setStatus(new StatusFall(null, 0.6f), 1);
 				super.init();
 			}
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventStorm(0.3f, getCharacter(), target, 20, this),new EventStorm(0.5f, getCharacter(), target, 20, this),new EventStorm(0.7f, getCharacter(), target, 20, this));
-				super.execute(character);
-			}			
+					
 		}.setChances(1, 0, 0f));
 		setObservable(true, 0.7f);
 	}
