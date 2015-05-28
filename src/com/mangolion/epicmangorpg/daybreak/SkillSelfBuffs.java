@@ -3,6 +3,7 @@ package com.mangolion.epicmangorpg.daybreak;
 import com.mangolion.epicmangorpg.components.ActionType;
 import com.mangolion.epicmangorpg.components.Barrier;
 import com.mangolion.epicmangorpg.components.Element;
+import com.mangolion.epicmangorpg.messages.Msg;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.statuses.Buff;
 import com.mangolion.epicmangorpg.statuses.Buff.GenType;
@@ -34,7 +35,8 @@ public class SkillSelfBuffs extends Skill{
 				getCharacter().applyBuff(new Buff("Elemental Body of Earth", 10, Buff.GenType.positive, Buff.Type.str).setValue(0.2f).setElement(new Element("Earth", 1)));
 			super.execute(target,time,aug);
 			}
-		}.setCost(0, 0, 0, 0));
+		}.setCost(0, 0, 0, 0)
+		.setMessages(new Msg("$name activates four buffs of $p3 usual defensive array"), new Msg("$name has activated 4 buffs, Sensory Clarity, Shift Impulse, Metabolic Boost and Elemental Body of Earth"), null));
 	}
 
 }

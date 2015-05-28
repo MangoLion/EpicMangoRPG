@@ -45,6 +45,7 @@ public class Kaede extends Character {
 		pronoun2 = "her";
 		pronoun3 = "her";
 		pronoun4 = "her";
+		hpRegen = 0.02f;
 		ai = new AISimple(this);
 		isAllied = true;
 		addBarrier(new Barrier(this, "Enchanted Garments", 50, 6, 6, 4, 100, 0.6f, Barrier.ALL));

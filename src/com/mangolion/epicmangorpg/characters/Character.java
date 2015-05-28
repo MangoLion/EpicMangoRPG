@@ -62,7 +62,7 @@ public class Character implements Cloneable{
 	public Inventory inventory = new Inventory();
 	public LinkedList<Drop> drops = new LinkedList<Drop>();
 	public LinkedList<Barrier> barriers = new LinkedList<Barrier>();
-	float str, agi,  inte, dex, maxHP, maxMP, maxSP, maxBal, prot, def, magicDef, meleeSpeedMod = 1, magicSpeedMod = 1, hpRegen = 0, mpRegen =0.05f, spRegen = 0.1f, balRegen = 0.1f, cpBase = 0, crystals = 0;
+	protected float str, agi,  inte, dex, maxHP, maxMP, maxSP, maxBal, prot, def, magicDef, meleeSpeedMod = 1, magicSpeedMod = 1, hpRegen = 0, mpRegen =0.05f, spRegen = 0.1f, balRegen = 0.1f, cpBase = 0, crystals = 0;
 	public float style = 10;
 	public float  learnRate = 0;
 	float hp, mp, sp, bal;

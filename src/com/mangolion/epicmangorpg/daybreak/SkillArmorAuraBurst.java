@@ -34,7 +34,7 @@ public class SkillArmorAuraBurst extends Skill{
 					}
 				return super.checkConndition();
 			};
-		}.setCost(20, 30, 0, 0).setMessages(null, new Msg("'Armor Aura Burst!' $name called, sending out a pressurized blast of air as $p used $p3 aura stance switch to conjure an invisible suit of magic armor."), null));
+		}.setCost(20, 30, 0, 0).setMessages(new Msg("'Armor Aura Burst!' $name called"), new Msg("$name sends out a pressurized blast of air as $p used $p3 aura stance switch to conjure an invisible suit of magic armor."), null));
 	}
 
 }

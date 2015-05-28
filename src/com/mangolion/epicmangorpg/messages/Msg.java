@@ -9,6 +9,7 @@ import javax.swing.text.Style;
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.game.StylePainter;
 import com.mangolion.epicmangorpg.game.StyleSegment;
+import com.mangolion.epicmangorpg.game.Utility;
 
 public class Msg {
 	public LinkedList<String> msgs = new LinkedList<String>();
@@ -132,5 +133,10 @@ public class Msg {
 			this.str = str;
 			this.type = type;
 		}
+	}
+
+	public static LinkedList<StyleSegment> getMsg(float time) {
+		time = Utility.format(time);
+		return new Msg("[ $num ]").getMessage(null, null, time);
 	}
 }

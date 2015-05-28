@@ -33,7 +33,8 @@ public class SkillDefensiveRunes extends Skill{
 				super.execute(target, time, aug);
 			}
 		}.setCost(20, 60, 0, 0)
-		.setMessages(null, new Msg("$name's left hand stretched out with fingers extended, triggering a contingency effect as four rune-engraved pebbles materialized into $p3 hand. $name is now surrounded with the invisible aura of $p3 anti-projectile Repulsion Field, five rotating turquoise shields of $p3 auto-blocking Spellshield Fortress, and the unseen plates of $p3 weightless Barrier Armor, which grew translucent as the magic-resistant Barrier Guard layered onto it."), null));
+		.setMessages(new Msg("$name's left hand stretched out with fingers extended, triggering a contingency effect as four rune-engraved pebbles materialized into $p3 hand. "),
+				new Msg("$name is now surrounded with the invisible aura of $p3 anti-projectile Repulsion Field, five rotating turquoise shields of $p3 auto-blocking Spellshield Fortress, and the unseen plates of $p3 weightless Barrier Armor, which grew translucent as the magic-resistant Barrier Guard layered onto it."), null));
 	}
 
 }

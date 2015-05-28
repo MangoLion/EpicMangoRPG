@@ -34,7 +34,7 @@ public class SkillRicochetingBlade extends Skill {
 			stamCost =  35;
 			chanceMiss = -0.2f;
 			setEvents(new EventMainBlast(0.7f, getCharacter(), null, 20, this));
-			setMessages(null,new Msg("$name took no chances as $p hurled a specially enchanted kukri outside. The curved blade ricocheted off the walls with perfect bounces, multiplying into three each time. Within mere seconds, a roaming cloud of whirling steel swept down the hall, dicing through anything softer than rock with impunity."), null);
+			setMessages(new Msg(" $p hurled a specially enchanted kukri outside. "),new Msg("The curved blade ricocheted off the walls with perfect bounces, multiplying into three each time. Within mere seconds, a roaming cloud of whirling steel swept down the hall, dicing through anything softer than rock with impunity."), null);
 				super.init();
 			}
 

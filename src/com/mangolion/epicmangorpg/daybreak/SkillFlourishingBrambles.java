@@ -29,7 +29,7 @@ public class SkillFlourishingBrambles extends Skill {
 			setElement(new Element("Poison", 1));
 			setStatus(new StatusEnsnare(null, 1f), 1);
 			msgSuccess = new Msg("Caught off-guard by the attack from $p3 rear, $name's $weapon slashed and cut on impulse. But there was simply far too many. The veritable horde of vines soon squeezed around $p3 body without mercy, spiked tendrils moving to push between every gap -- even a mouth opened to emit a painful cry.");
-			setMessages(null, new Msg("A single sprout came forth from $name's conjuration, but the transmutation magic $p poured in immediately grew it into a mass of thorny vines. Spreading out across the room, the spiked tendrils leaped towards $targetname  like an unstoppable torrent."), null);
+			setMessages(new Msg("A single sprout came forth from $name's conjuration"), new Msg("The transmutation magic $p poured in immediately grew it into a mass of thorny vines. Spreading out across the room, the spiked tendrils leaped towards $targetname  like an unstoppable torrent."), null);
 				super.init();
 			}
 			@Override

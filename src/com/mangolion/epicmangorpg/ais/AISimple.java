@@ -4,16 +4,14 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
-import javax.swing.JOptionPane;
-
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.components.ActionType;
 import com.mangolion.epicmangorpg.components.Barrier;
 import com.mangolion.epicmangorpg.components.Damage;
 import com.mangolion.epicmangorpg.components.GeneralType;
+import com.mangolion.epicmangorpg.components.Tick;
 import com.mangolion.epicmangorpg.events.Event;
 import com.mangolion.epicmangorpg.game.Game;
-import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.skills.Skill;
 import com.mangolion.epicmangorpg.statuses.Buff;
 import com.mangolion.epicmangorpg.steps.Step;
@@ -50,8 +48,8 @@ public class AISimple extends AI {
 						if (!executeSkill(GeneralType.Attack))
 							if (!executeSkill(GeneralType.Defend)) {
 
-								Utility.narrate(character.name
-										+ " decided to stay idle this turn");
+							//	Utility.narrate(character.name
+							//			+ " decided to stay idle this turn");
 								super.nextAction();
 							}
 	}
@@ -206,7 +204,7 @@ public class AISimple extends AI {
 		if (tooFast.size() > 0) {
 			Collections.shuffle(tooFast);
 			for (Skill skill : tooFast) {
-				float wait = load - skill.steps.getFirst().getLoadTime();
+				float wait = load - skill.steps.getFirst().getLoadTime()- skill.steps.getFirst().getExecutionTime()/2;
 				System.out.println("wait " + wait + " load " + load + " skill "
 						+ skill.steps.getFirst().getLoadTime());
 				skill = character.getSkill("Wait");
@@ -214,7 +212,7 @@ public class AISimple extends AI {
 					return skill.execute(character.getTarget(), wait);
 			}
 		}
-		System.out.println("FAILED! " + load + " " + type + typeGen);
+		System.out.println("FAILED! " + load + " " + type + typeGen + " app " + applicable.size() + " " + tooFast.size());
 		return false;
 	}
 
@@ -226,8 +224,11 @@ public class AISimple extends AI {
 		LinkedList<Skill> applicable = new LinkedList<Skill>();
 		LinkedList<Skill> tooFast = new LinkedList<Skill>();
 
+		Tick t = Game.getInstance().findTick(target);
+		if (t == null)
+			return false;
 		Step step = target.skillCurrent.getCurrentStep();
-		float tick = Game.getInstance().findTick(target).time, load = tick
+		float tick = t.time, load = tick
 				+ step.getEventTime(), execute = step.getExecutionTime() + tick;
 
 		for (Skill skill : character.skills)
@@ -250,7 +251,7 @@ public class AISimple extends AI {
 		if (tooFast.size() > 0) {
 			Collections.shuffle(tooFast);
 			for (Skill skill : tooFast) {
-				float wait = load - skill.steps.getFirst().getLoadTime();
+				float wait = load - skill.steps.getFirst().getLoadTime() - skill.steps.getFirst().getExecutionTime()/2;
 				System.out.println("wait " + wait + " load " + load + " skill "
 						+ skill.steps.getFirst().getLoadTime());
 				skill = character.getSkill("Wait");

@@ -20,14 +20,14 @@ public class SkillEtherSeeker extends Skill {
 
 	public SkillEtherSeeker() {
 		super("Ether Seeker", "Fires projectiles that intercept incoming ranged attacks, only intercept projectiles heading towards the user, not other allies, does not work against AOE atks.",Weapons.ALL, ActionType.DefendMagic);
-		addSteps(new Step(this, "Ether Seeker", "",ActionType.Magic, 0.3f, 0.1f, 0.4f,1f){
+		addSteps(new Step(this, "Ether Seeker", "",ActionType.DefendMagic, 0.3f, 0.1f, 0.4f,1f){
 			@Override
 			public void init() {
 			strBased = false;
 			intBased = false;
 			dmgBase = 0;
 			mpCost = 15;
-			setMessages(null, new Msg("The defensive homing bullets shot out from $name with a wave of $p3 $weapon. Streaking across the open air"), null);
+			setMessages(new Msg("Seeing the numerous ranged attacks aimed at $name, $p prepares to intercept them"), new Msg("The defensive homing bullets shot out from $name with a wave of $p3 $weapon. Streaking across the open air"), null);
 				super.init();
 			}
 			@Override
