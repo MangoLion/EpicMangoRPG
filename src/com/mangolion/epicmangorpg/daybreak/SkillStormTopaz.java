@@ -30,7 +30,7 @@ public class SkillStormTopaz extends Skill {
 			@Override
 			public void execute(Character target) {
 				for (int i = 0; i < 6; i ++)
-					Event.addEvent(new EventStorm(0.6f, getCharacter(), target, 20, this));
+					setEvents(new EventStorm(0.6f, getCharacter(), target, 20, this));
 				super.execute(character);
 			}			
 		});

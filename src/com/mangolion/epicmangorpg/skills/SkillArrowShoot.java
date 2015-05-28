@@ -19,7 +19,7 @@ public class SkillArrowShoot extends Skill {
 			
 			@Override
 			public void execute(Character target) {
-				Event.addEvent(new EventArrow(0.5f, getCharacter(), target, 30, this));
+				setEvents(new EventArrow(0.5f, getCharacter(), target, 30, this));
 				getCharacter().inventory.removeItem(Items.arrow, 1);
 				super.execute(target);
 			}	

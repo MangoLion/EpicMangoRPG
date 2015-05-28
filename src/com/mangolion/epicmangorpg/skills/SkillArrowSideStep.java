@@ -42,7 +42,7 @@ public class SkillArrowSideStep extends Skill {
 		
 		@Override
 		public void execute(Character target) {
-			Event.addEvent(new EventArrow(0.3f, getCharacter(), target, 20, this));
+			setEvents(new EventArrow(0.3f, getCharacter(), target, 20, this));
 			getCharacter().inventory.removeItem(Items.arrow, 1);
 			super.execute(target);
 		}		

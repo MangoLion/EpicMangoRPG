@@ -20,7 +20,7 @@ public class SkillArrowRapid extends Skill {
 			
 			@Override
 			public void execute(Character target) {
-				Event.addEvent(new EventArrow(0.5f, getCharacter(), target, 20, this));
+				setEvents(new EventArrow(0.5f, getCharacter(), target, 20, this));
 				getCharacter().inventory.removeItem(Items.arrow, 1);
 				super.execute(target);
 			}	
@@ -46,7 +46,7 @@ public class SkillArrowRapid extends Skill {
 			
 			@Override
 			public void execute(Character target) {
-				Event.addEvent(new EventArrow(0.5f, getCharacter(), target, 20, this));
+				setEvents(new EventArrow(0.5f, getCharacter(), target, 20, this));
 				getCharacter().inventory.removeItem(Items.arrow, 1);
 				super.execute(target);
 			}			
@@ -66,7 +66,7 @@ public class SkillArrowRapid extends Skill {
 			
 			@Override
 			public void execute(Character target) {
-				Event.addEvent(new EventArrow(0.5f, getCharacter(), target, 20, this));
+				setEvents(new EventArrow(0.5f, getCharacter(), target, 20, this));
 				getCharacter().inventory.removeItem(Items.arrow, 1);
 				super.execute(target);
 			}			

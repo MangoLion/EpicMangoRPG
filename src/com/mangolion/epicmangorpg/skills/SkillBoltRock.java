@@ -32,7 +32,7 @@ public class SkillBoltRock extends Skill {
 			}
 			@Override
 			public void execute(Character target) {
-				Event.addEvent(new EventCastRock(0.3f, getCharacter(), target, 20, this));
+				setEvents(new EventCastRock(0.3f, getCharacter(), target, 20, this));
 				super.execute(character);
 			}			
 			@Override

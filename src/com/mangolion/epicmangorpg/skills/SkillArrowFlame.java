@@ -45,7 +45,7 @@ public class SkillArrowFlame extends Skill {
 			@Override
 			public void execute(Character target) {
 				EventRange event = new EventArrow(0.5f, character, target, 10, this);
-				Event.addEvent(event);
+				setEvents(event);
 				getCharacter().inventory.removeItem(Items.arrow, 1);
 				super.execute(target);
 			}	

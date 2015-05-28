@@ -40,7 +40,7 @@ public class SkillBulletSpray extends Skill {
 			public void execute(Character target) {
 				for (int i = 0; i < ammoUse; i ++){
 						Character enemy = Game.getInstance().getRandomEnemy(getCharacter());
-						Event.addEvent(new EventRange("Bullet", "", 0.3f, getCharacter(), enemy, 0, this));
+						setEvents(new EventRange("Bullet", "", 0.3f, getCharacter(), enemy, 0, this));
 				}
 				super.execute(target);
 				ammoUse = 1;

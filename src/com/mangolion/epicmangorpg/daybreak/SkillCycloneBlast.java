@@ -32,9 +32,7 @@ public class SkillCycloneBlast extends Skill {
 			}
 			@Override
 			public void execute(Character target) {
-				Event.addEvent(new EventStorm(0.3f, getCharacter(), target, 20, this));
-				Event.addEvent(new EventStorm(0.5f, getCharacter(), target, 20, this));
-				Event.addEvent(new EventStorm(0.7f, getCharacter(), target, 20, this));
+				setEvents(new EventStorm(0.3f, getCharacter(), target, 20, this),new EventStorm(0.5f, getCharacter(), target, 20, this),new EventStorm(0.7f, getCharacter(), target, 20, this));
 				super.execute(character);
 			}			
 		}.setChances(1, 0, 0f));

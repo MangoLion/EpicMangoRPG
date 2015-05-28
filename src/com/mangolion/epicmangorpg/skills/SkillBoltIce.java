@@ -30,7 +30,7 @@ public class SkillBoltIce extends Skill {
 			}
 			@Override
 			public void execute(Character target) {
-				Event.addEvent(new EventIceBolt(0.3f, getCharacter(), target, 20, this));
+				setEvents(new EventIceBolt(0.3f, getCharacter(), target, 20, this));
 				super.execute(character);
 			}			
 		});

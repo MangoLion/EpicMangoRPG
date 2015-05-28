@@ -32,7 +32,7 @@ public class SkillBoltWater extends Skill {
 			}
 			@Override
 			public void execute(Character target) {
-				Event.addEvent(new EventWaterBall(0.3f, getCharacter(), target, 20, this));
+				setEvents(new EventWaterBall(0.3f, getCharacter(), target, 20, this));
 				super.execute(character);
 			}			
 			@Override

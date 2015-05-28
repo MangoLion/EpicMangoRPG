@@ -42,7 +42,7 @@ public class SkillArrowSwift extends Skill {
 			public void execute(Character target) {
 				EventRange event = new EventArrow(0.3f, character, target, 10, this);
 				event.chanceBlock = 0;
-				Event.addEvent(event);
+				setEvents(event);
 				getCharacter().inventory.removeItem(Items.arrow, 1);
 				super.execute(target);
 			}	

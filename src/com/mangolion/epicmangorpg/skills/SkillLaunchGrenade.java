@@ -30,7 +30,7 @@ public class SkillLaunchGrenade extends Skill {
 				super.init();
 			}
 			public void execute(Character target, float time, String aug) {
-				Event.addEvent(new Launch(0.5f, getCharacter(), target, 20, this));
+				setEvents(new Launch(0.5f, getCharacter(), target, 20, this));
 				super.execute(target, time, aug);
 			};
 		}.setCost(20, 0, 0, 0).setUseItem(Items.grenadeAmmo, 1));

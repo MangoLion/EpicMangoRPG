@@ -22,7 +22,7 @@ public class SkillArrowRain extends Skill {
 			
 			@Override
 			public void execute(Character target) {
-				Event.addEvent(new EventArrow(0.7f, getCharacter(), target, 10, this, true));
+				setEvents(new EventArrow(0.7f, getCharacter(), target, 10, this, true));
 				getCharacter().inventory.removeItem(Items.arrow, (int) ( 10*(prof + 1)));
 				super.execute(target);
 			}			

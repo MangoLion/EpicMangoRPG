@@ -33,7 +33,7 @@ public class SkillHardAim extends Skill {
 			public void execute(Character target) {
 
 				for (int i = 0; i < ammoUse; i ++)
-					Event.addEvent(new EventRange("Bullet", "", 0.3f, getCharacter(), target, 0, this));
+					setEvents(new EventRange("Bullet", "", 0.3f, getCharacter(), target, 0, this));
 				super.execute(target);
 			}			
 			

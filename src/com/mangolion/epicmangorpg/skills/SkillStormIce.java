@@ -32,7 +32,7 @@ public class SkillStormIce extends Skill {
 			}
 			@Override
 			public void execute(Character target) {
-				Event.addEvent(new EventStorm(0.3f, getCharacter(), target, 20, this));
+				setEvents(new EventStorm(0.3f, getCharacter(), target, 20, this));
 				super.execute(character);
 			}			
 		}.setChances(1, 0, -0.2f),
@@ -49,7 +49,7 @@ public class SkillStormIce extends Skill {
 			}
 			@Override
 			public void execute(Character target) {
-				Event.addEvent(new EventStorm(0.3f, getCharacter(), target, 20, this));
+				setEvents(new EventStorm(0.3f, getCharacter(), target, 20, this));
 				super.execute(character);
 			}			
 		}.setChances(1, 0, -0.2f),
@@ -66,7 +66,7 @@ public class SkillStormIce extends Skill {
 			}
 			@Override
 			public void execute(Character target) {
-				Event.addEvent(new EventStorm(0.3f, getCharacter(), target, 20, this));
+				setEvents(new EventStorm(0.3f, getCharacter(), target, 20, this));
 				super.execute(character);
 			}			
 		}.setChances(1, 0, -0.2f));

@@ -32,7 +32,7 @@ public class SkillWaterCannon extends Skill {
 			}
 			@Override
 			public void releaseCharge(Character target, float time) {
-				Event.addEvent(new EventWaterCannon(0.5f, getCharacter(), target, 20, this));
+				setEvents(new EventWaterCannon(0.5f, getCharacter(), target, 20, this));
 				super.releaseCharge(target, time);
 			}
 		}.setCost(20, 0, 0, 0).setUseItem(Items.crystalWater, 1));
