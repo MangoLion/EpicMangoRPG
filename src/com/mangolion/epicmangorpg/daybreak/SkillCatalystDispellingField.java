@@ -31,7 +31,7 @@ public class SkillCatalystDispellingField extends Skill{
 				return super.checkConndition();
 			};
 		}.setCost(0, 20, 0, 0).
-		setMessages(null, new Msg("$name held up $p3 right hand, fingers outstretched. Waves of antimagic poured off $p3 shining glove as $p marched into the steel storm. $p3 burning-red aura surrounded him like a globe of protection, and every magic entity that touched its edge vanished from existence."),null));
+		setMessages(null, new Msg("$name held up $p3 right hand, fingers outstretched. Waves of antimagic poured off $p3 shining glove as $p marched into the storm. $p3 burning-red aura surrounded him like a globe of protection, and every magic entity that touched its edge vanished from existence."),null));
 	}
 
 }

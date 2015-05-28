@@ -19,9 +19,9 @@ public enum ActionType {
 	Summon(GeneralType.Recover),
 	WeaponMastery (GeneralType.Passive),
 	Defend(GeneralType.Defend),
-	DefendRange(GeneralType.Defend),
-	DefendMagic(GeneralType.Defend),
-	DefendMelee(GeneralType.Defend),
+	DefendRange(GeneralType.None),
+	DefendMagic(GeneralType.None),
+	DefendMelee(GeneralType.None),
 	Buff(GeneralType.Buff),
 	None(GeneralType.None), 
 	Flight(GeneralType.None);

@@ -432,8 +432,10 @@ public class Game {
 				begin();
 				return;
 			}
-		}else
+		}else{
 			Utility.narrate("The battle is over! Select reset battle to start a new one");
+			timer.stop();
+		}
 
 		SwingUtilities.invokeLater(new Runnable() {
 

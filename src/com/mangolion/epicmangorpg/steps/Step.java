@@ -194,24 +194,10 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 	public boolean damage(Character target, boolean checkMiss){
 		if ((type == ActionType.MeleeBlock || type == ActionType.MeleeSpecial||type == ActionType.MeleeStab||type == ActionType.MeleeSwing) && target.isAirborne()){
-			StylePainter.append(new Msg("$name cannot reach $targetname because $p is airborne!").getMessage(getCharacter(), target, 0));
+			getCharacter().changeStyle(-0.5f);
+			StylePainter.append(new Msg("$name cannot reach $targetname because $p is airborne!").getMessage(getCharacter(), target, 0), Style.getSegments(-0.5f, getCharacter()));
 			return false;
 		}
-		
-		/*float eleMult = -2;
-		boolean firstalc = true;
-		for (Element element: getCharacter().weapon.elements)
-			Elements.getElement(element.type).calculate(element.type);
-		for (Element element: target.getElements()){
-			if (this.element != null)
-				eleMult = (eleMult == -2)? Elements.getElement(element.type).calculate(this.element.type): (eleMult +  Elements.getElement(element.type).calculate(this.element.type))/2;
-				else if (getCharacter().getElements().size() > 0)
-					eleMult = (eleMult == -2)?  Elements.getElement(element.type).calculate(getCharacter().getElements().getFirst().type): (eleMult +  Elements.getElement(element.type).calculate(getCharacter().getElements().getFirst().type))/2;
-			if (firstCalc)
-				firstCalc = false;
-		}
-		if (eleMult == -2)
-			eleMult = 1;*/
 
 		if (!isAOE){
 			return damageSingle(target, checkMiss);
@@ -747,7 +733,7 @@ public abstract class Step implements Cloneable, StatBuff {
 				&& rand.nextFloat() <= ((StepParry) step).chanceParry*chanceParry
 						/ getCharacter().weapon.sizeModifier) {
 			step.addProf(new Proficiency(target, getCharacter()));
-			float change = Style.positive(getCharacter(), target, Style.parry,1-((StepParry) step).chanceParry*chanceParry
+			float change = Style.positive(target, getCharacter(), Style.parry,1-((StepParry) step).chanceParry*chanceParry
 					/ getCharacter().weapon.sizeModifier);
 			StylePainter.append(msgParry.getMessage(false, target, getCharacter(), 0), Style.getSegments(change, target));
 			aoeExceptions.add(target);

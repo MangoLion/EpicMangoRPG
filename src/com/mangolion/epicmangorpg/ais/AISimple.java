@@ -33,11 +33,10 @@ public class AISimple extends AI {
 			character.ai = null;
 			return;
 		}
-
-		if (!checkBarrier())
-			if (!checkBuff())
-				if (!checkRecovery())
-					if (!checkDefense())
+		if (!checkDefense())
+			if (!checkBarrier())
+				if (!checkBuff())
+					if (!checkRecovery())
 						if (!executeSkill(GeneralType.Attack))
 							if (!executeSkill(GeneralType.Defend)) {
 
@@ -101,24 +100,24 @@ public class AISimple extends AI {
 		}
 
 		float tempChance = chanceDefend;
-		
-		
-		if (skill.type.getGeneralType() == GeneralType.Attack
-				&& (skill.isLoading ||((skill.getType() == Damage.MAGIC || skill.getType() == Damage.RANGE) && !skill.isCooldown)))
-			if ( rand.nextFloat() <= chanceDefend + tempChance + skill.getTotalDamage()/character.getHp())
-		{
-			boolean execute = false;
-			if (skill.getType() == Damage.MELEE)
-				execute = executeSkill(ActionType.DefendMelee);
-			if (skill.getType() == Damage.MAGIC)
-				execute = executeSkill(ActionType.DefendMagic);
-			if (skill.getType() == Damage.MELEE)
-				execute = executeSkill(ActionType.DefendMelee);
-			if (!execute)
-				return executeSkill(ActionType.Defend);
-			return true;
 
-		}
+		if (skill.type.getGeneralType() == GeneralType.Attack
+				&& (skill.isLoading || ((skill.getType() == Damage.MAGIC || skill
+						.getType() == Damage.RANGE) && !skill.isCooldown)))
+			if (rand.nextFloat() <= chanceDefend
+					+ skill.getTotalDamage() / character.getHp()) {
+				boolean execute = false;
+				if (skill.getType() == Damage.MELEE)
+					execute = executeSkill(ActionType.DefendMelee);
+				if (skill.getType() == Damage.MAGIC)
+					execute = executeSkill(ActionType.DefendMagic);
+				if (skill.getType() == Damage.MELEE)
+					execute = executeSkill(ActionType.DefendMelee);
+				if (!execute)
+					return executeSkill(GeneralType.Defend);
+				return true;
+
+			}
 		return false;
 	}
 

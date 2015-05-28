@@ -837,7 +837,11 @@ public class FrameGame extends JFrame {
 	}
 	
 	public void updateInfoTab(){
-		Character character = CharacterPlayer.instance;
+		Character character;
+		if (Game.getInstance().getCharacter(CharacterPlayer.instance.name) != null || game.charsAllies.size() == 0)
+			character = CharacterPlayer.instance;
+		else
+			character = game.charsAllies.getFirst();
 		lblPName.setText(character.name + " \t , crystals: " + character.getCrystals());
 		pbHP.setValue((int) ((int) character.getHp()/character.getMaxHP()*100));
 		pbHP.setString( character.getHp() + "/" +character.getMaxHP());

@@ -36,7 +36,7 @@ public class SkillJumpBack extends Skill{
 			@Override
 			public void execute(Character target, float time) {
 				addProf(new Proficiency(getCharacter(), getCharacter()));
-				getCharacter().applyBuff(new Buff("Jump Back Boost", 30, 0.3f, GenType.positive, Buff.Type.prot));
+				getCharacter().applyBuff(new Buff("Jump Back Boost", 0.3f, GenType.positive, Buff.Type.prot, Buff.Type.agi).setValue(30, 0.3f));
 				super.execute(target, time);
 			}
 		}.setCost(20, 0, 30, 0));

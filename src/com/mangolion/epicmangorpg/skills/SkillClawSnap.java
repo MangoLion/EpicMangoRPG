@@ -16,7 +16,7 @@ public class SkillClawSnap extends Skill {
 
 
 	public SkillClawSnap() {
-		super("Snap Claws", "Snapping Claws at target, intend to tear them appart.",Weapons.Claws, ActionType.MeleeSwing);
+		super("Snap Claws", "Snapping Claws at target, intend to tear them appart.",Weapons.ALL, ActionType.MeleeSwing);
 		addSteps(new StepMeleeSlash(this, "Snap Claws","", 0.7f,
 				0.2f, 0.2f,1f) {}.setCost(15, 0, 0, 0),
 				new StepMeleeSlash(this, "Snap Claws","", 0.2f,

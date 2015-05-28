@@ -334,7 +334,7 @@ public class FrameBattleCreate extends JInternalFrame {
 	
 	public void reload(){
 		LinkedList<Character> characters = Characters.getAllCharacters();
-		
+		characters.add(0,new Character("None", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, new Barehands()));
 		Iterator<Character> it = characters.iterator();
 		while (it.hasNext()){
 			Character character = it.next();
@@ -344,8 +344,8 @@ public class FrameBattleCreate extends JInternalFrame {
 			mAll.addElement(character);
 			
 			if (character instanceof CharacterLine){
-				mAll.addElement(new Character("None", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, new Barehands()));
-				mPlayer.addElement(new Character("None", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, new Barehands()));
+				/*mAll.addElement(new Character("None", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, new Barehands()));
+				mPlayer.addElement(new Character("None", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, new Barehands()));*/
 				Character player = new CharacterPlayer("Standard Player");
 				player.scale(2);
 				mAll.addElement(player);

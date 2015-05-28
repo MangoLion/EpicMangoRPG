@@ -20,6 +20,7 @@ import com.mangolion.epicmangorpg.characters.WildFox;
 import com.mangolion.epicmangorpg.characters.RabbitWild;
 import com.mangolion.epicmangorpg.characters.SpiderWolf;
 import com.mangolion.epicmangorpg.daybreak.Ariadne;
+import com.mangolion.epicmangorpg.daybreak.Kaede;
 import com.mangolion.epicmangorpg.daybreak.MantisAssassin;
 import com.mangolion.epicmangorpg.daybreak.Parzifal;
 import com.mangolion.epicmangorpg.daybreak.Pascal;
@@ -33,6 +34,7 @@ public class FloorDayBreak extends Floor {
 		terrains.add(Terrain.Plain);
 		terrains.add(Terrain.Taiga);
 
+		addSpawn(Kaede.class, 0.2f);
 		addSpawn(Ariadne.class, 0.2f);
 		addSpawn(Parzifal.class, 0.2f);
 		addSpawn(Pascal.class, 0.2f);

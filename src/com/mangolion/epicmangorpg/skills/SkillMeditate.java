@@ -48,7 +48,10 @@ public class SkillMeditate extends Skill{
 		
 		@Override
 		public void load() {
-			customTime = customExecutionTime;
+			if (getCharacter().isPlayer)
+				customTime = customExecutionTime;
+			else
+				customTime = 2;
 			customExecutionTime = 0;
 			super.load();
 		}

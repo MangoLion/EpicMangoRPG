@@ -3,6 +3,7 @@ package com.mangolion.epicmangorpg.skills;
 import java.util.LinkedList;
 
 import com.mangolion.epicmangorpg.characters.Character;
+import com.mangolion.epicmangorpg.characters.CharacterPlayer;
 import com.mangolion.epicmangorpg.components.ActionType;
 import com.mangolion.epicmangorpg.components.GeneralType;
 import com.mangolion.epicmangorpg.components.Proficiency;
@@ -42,7 +43,10 @@ public class SkillRespite extends Skill{
 		
 		@Override
 		public void load() {
-			customTime = customExecutionTime;
+			if (getCharacter().isPlayer)
+				customTime = customExecutionTime;
+			else
+				customTime = 2;
 			customExecutionTime = 0;
 			super.load();
 		}
