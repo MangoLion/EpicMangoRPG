@@ -28,13 +28,10 @@ public class SkillStormFire extends Skill {
 			mpCost = 10;
 			isAOE = true;
 			setElement(new Element("Fire", 1));
+			setEvents(new EventFireStorm(0.3f, getCharacter(), null, 20, this));
 				super.init();
 			}
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventFireStorm(0.3f, getCharacter(), target, 20, this));
-				super.execute(character);
-			}			
+	
 		}.setChances(1, 0, -0.2f),
 		new Step(this, "Fire Storm", "",ActionType.Magic, 0.5f, 0.3f, 0.1f, 1f){
 			@Override
@@ -45,13 +42,10 @@ public class SkillStormFire extends Skill {
 			mpCost = 15;
 			isAOE = true;
 			setElement(new Element("Fire", 1));
+			setEvents(new EventFireStorm(0.4f, getCharacter(), null, 20, this));
 				super.init();
 			}
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventFireStorm(0.4f, getCharacter(), target, 20, this));
-				super.execute(character);
-			}			
+	
 		}.setChances(1, 0, -0.2f),
 		new Step(this, "Fire Storm", "",ActionType.Magic, 0.5f, 0.3f, 0.1f, 1.2f){
 			@Override
@@ -61,14 +55,11 @@ public class SkillStormFire extends Skill {
 			dmgBase = 5;
 			mpCost = 20;
 			isAOE = true;
+			setEvents(new EventFireStorm(0.5f, getCharacter(), null, 20, this));
 			setElement(new Element("Fire", 1));
 				super.init();
 			}
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventFireStorm(0.5f, getCharacter(), target, 20, this));
-				super.execute(character);
-			}			
+
 		}.setChances(1, 0, -0.2f));
 		setObservable(true, 0.7f);
 	}

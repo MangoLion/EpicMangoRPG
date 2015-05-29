@@ -29,14 +29,11 @@ public class SkillStormWind extends Skill {
 			mpCost = 20;
 			isAOE = true;
 			setElement(new Element("Wind", 1));
+			setEvents(new EventStorm(0.3f, getCharacter(), null, 20, this));
 			setStatus(new StatusFall(null, 0.6f), 1);
 				super.init();
 			}
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventStorm(0.3f, getCharacter(), target, 20, this));
-				super.execute(character);
-			}			
+	
 		}.setChances(1, 0, -0.2f),
 		new Step(this, "Tornado", "",ActionType.Magic, 0.5f, 0.3f, 0f, 1f){
 			@Override
@@ -47,14 +44,11 @@ public class SkillStormWind extends Skill {
 			mpCost = 15;
 			isAOE = true;
 			setElement(new Element("Wind", 1));
+			setEvents(new EventStorm(0.3f, getCharacter(), null, 20, this));
 			setStatus(new StatusFall(null, 0.6f), 1);
 				super.init();
 			}
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventStorm(0.3f, getCharacter(), target, 20, this));
-				super.execute(character);
-			}			
+
 		}.setChances(1, 0, -0.2f),
 		new Step(this, "Tornado", "",ActionType.Magic, 0.5f, 0.3f, 0f, 1.2f){
 			@Override
@@ -65,14 +59,11 @@ public class SkillStormWind extends Skill {
 			mpCost = 10;
 			isAOE = true;
 			setElement(new Element("Wind", 1));
+			setEvents(new EventStorm(0.3f, getCharacter(), null, 20, this));
 			setStatus(new StatusFall(null, 0.6f), 1);
 				super.init();
 			}
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventStorm(0.3f, getCharacter(), target, 20, this));
-				super.execute(character);
-			}			
+	
 		}.setChances(1, 0, -0.2f));
 		setObservable(true, 0.7f);
 	}

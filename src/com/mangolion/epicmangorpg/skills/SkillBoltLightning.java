@@ -28,13 +28,10 @@ public class SkillBoltLightning extends Skill {
 			mpCost = 10;
 			setElement(new Element("Lightning", 1));
 			setStatus(new StatusStun(null, 0.6f), 1);
+			setEvents(new EventIceBolt(0.5f, getCharacter(), null, 20, this));
 				super.init();
 			}
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventIceBolt(0.5f, getCharacter(), target, 20, this));
-				super.execute(character);
-			}			
+
 			
 			@Override
 			public float getIntBuff() {

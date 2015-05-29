@@ -166,7 +166,7 @@ public class FrameMainMenu extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				Game.getInstance().createMode = true;
 				FrameGame.start();
-				FrameGame.getInstance().viewMode = false;
+				//FrameGame.getInstance().viewMode = false;
 				dispose();
 			}
 		});

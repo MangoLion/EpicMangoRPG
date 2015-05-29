@@ -24,6 +24,10 @@ public class EventRange extends Event{
 	public Status status;
 	public boolean isAOE = false;
 
+	public EventRange(String name, String desc, float time, Character souce, float dmgbase, Step step) {
+		super(name, desc, time, souce, null, null, step);
+		this.dmgBase = dmgbase;
+	}
 	
 	public EventRange(String name, String desc, float time, Character souce,
 			Character target, float dmgbase, Step step) {

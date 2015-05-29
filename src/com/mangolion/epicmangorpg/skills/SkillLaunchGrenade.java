@@ -27,12 +27,10 @@ public class SkillLaunchGrenade extends Skill {
 			doDamage = false;
 			isAOE = true;
 			setElement(new Element("Bomb", 1));
+			setEvents(new Launch(0.5f, getCharacter(), null, 20, this));
 				super.init();
 			}
-			public void execute(Character target, float time, String aug) {
-				setEvents(new Launch(0.5f, getCharacter(), target, 20, this));
-				super.execute(target, time, aug);
-			};
+
 		}.setCost(20, 0, 0, 0).setUseItem(Items.grenadeAmmo, 1));
 		setObservable(true, 0.7f);
 	}

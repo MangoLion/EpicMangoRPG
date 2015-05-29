@@ -36,17 +36,16 @@ public class SkillSidestepShoot extends Skill {
 			chanceDodge = 0.6f;
 			useAmmo = true;
 		}
-		public boolean checkConndition() {
-			if (getCharacter().inventory.getItemNumber(Items.arrow) > 0)
-				return super.checkConndition();
-			return false;
-		};
+		@Override
+		public void init() {
+			setUseItem(Items.bullet, 1);
+			setEvents(new EventArrow(0.3f, getCharacter(), null, 20, this));
+			super.init();
+		}
 		
 		@Override
 		public void execute(Character target) {
-			Event.addEvent(new EventArrow(0.3f, getCharacter(), target, 20, this));
 			getCharacter().applyBuff(new Buff("Evasion", getCharacter().getDex()*1.5f, getExecutionTime(), GenType.positive, Buff.Type.dex));
-			getCharacter().inventory.removeItem(Items.bullet, 1);
 			super.execute(target);
 		}		
 		

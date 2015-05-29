@@ -30,14 +30,10 @@ public class SkillStormSand extends Skill {
 			mpCost = 10;
 			isAOE = true;
 			setElement(new Element("Earth", 1));
-			
+			setEvents(new EventStorm(0.3f, getCharacter(), null, 20, this));
 				super.init();
 			}
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventStorm(0.3f, getCharacter(), target, 20, this));
-				super.execute(character);
-			}			
+
 		}.setChances(1, 0, -0.2f),
 		new Step(this, "Sand Storm", "",ActionType.Magic, 0.5f, 0.3f, 0.1f,1f){
 			@Override
@@ -47,15 +43,12 @@ public class SkillStormSand extends Skill {
 			dmgBase = 5;
 			mpCost = 15;
 			isAOE = true;
+			setEvents(new EventStorm(0.3f, getCharacter(), null, 20, this));
 			setElement(new Element("Earth", 1));
 			
 				super.init();
 			}
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventStorm(0.3f, getCharacter(), target, 20, this));
-				super.execute(character);
-			}			
+	
 		}.setChances(1, 0, -0.2f),
 		new Step(this, "Sand Storm", "",ActionType.Magic, 0.5f, 0.3f, 0.1f, 1.2f){
 			@Override
@@ -65,15 +58,12 @@ public class SkillStormSand extends Skill {
 			dmgBase = 5;
 			mpCost = 20;
 			isAOE = true;
+			setEvents(new EventStorm(0.3f, getCharacter(), null, 20, this));
 			setElement(new Element("Earth", 1));
 			
 				super.init();
 			}
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventStorm(0.3f, getCharacter(), target, 20, this));
-				super.execute(character);
-			}			
+
 		}.setChances(1, 0, -0.2f));
 		setObservable(true, 0.7f);
 	}

@@ -15,6 +15,7 @@ import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.game.StylePainter;
 import com.mangolion.epicmangorpg.game.StyleSegment;
 import com.mangolion.epicmangorpg.game.Utility;
+import com.mangolion.epicmangorpg.items.ItemCustom;
 import com.mangolion.epicmangorpg.messages.Msg;
 import com.mangolion.epicmangorpg.messages.MsgFinishCD;
 import com.mangolion.epicmangorpg.steps.Step;
@@ -166,8 +167,17 @@ public class Skill implements StatBuff {
 			}
 		} else {
 			if (!checkWeapon(character.weapon)){
-				Utility.narrate(character.name + " do not have the right weapon to use this skill");
-				return false;
+				boolean changed = false;
+				for (ItemCustom item: character.inventory.itemCustoms)
+					if (item instanceof Weapon && checkWeapon((Weapon) item)){
+						character.equip(item);
+						changed = true;
+						break;
+					}
+				if (!changed){
+					Utility.narrate(character.name + " do not have the right weapon to use this skill");
+					return false;
+				}
 			}
 			
 			boolean check;

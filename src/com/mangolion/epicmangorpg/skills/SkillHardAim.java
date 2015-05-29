@@ -27,15 +27,9 @@ public class SkillHardAim extends Skill {
 			
 			public void init() {
 				useAmmo = true;
+				setEvents(new EventRange("Bullet", "", 0.3f, getCharacter(), null, 0, this));
 			};
-			
-			@Override
-			public void execute(Character target) {
 
-				for (int i = 0; i < ammoUse; i ++)
-					setEvents(new EventRange("Bullet", "", 0.3f, getCharacter(), target, 0, this));
-				super.execute(target);
-			}			
 			
 			public void load() {
 				getCharacter().applyBuff(new Buff("Focus", getCharacter().getDex()*0.1f, getLoadTime() + getExecutionTime() + getCooldownTime()+0.5f, GenType.positive,Buff.Type.dex));

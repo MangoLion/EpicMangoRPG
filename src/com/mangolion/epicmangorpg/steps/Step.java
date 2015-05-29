@@ -57,7 +57,7 @@ public abstract class Step implements Cloneable, StatBuff {
 	public LinkedList<Buff> buffs = new LinkedList<Buff>();
 	public boolean isAOE = false, doDamage = false;
 	public LinkedList<Character> aoeExceptions = new LinkedList<Character>();
-	public boolean useAmmo = false, useItem = false, isCharged = false;
+	public boolean useAmmo = false, useItem = false, isCharged = false, chooseRandomTarget = false;;
 	public int ammoUse = 0, itemUse = 0, maxChage = 1;
 	public Item item;
 
@@ -460,6 +460,8 @@ public abstract class Step implements Cloneable, StatBuff {
 			getCharacter().skillCharged = parent;
 			return;
 		}
+		if (chooseRandomTarget)
+			 target = Game.getInstance().getRandomEnemy(getCharacter());
 
 		getCharacter().useStamina(getStamCost() * (prof + 1) / 2);
 		getCharacter().useMana(getMpCost() * (prof + 1) / 2);
@@ -482,7 +484,9 @@ public abstract class Step implements Cloneable, StatBuff {
 						target, getExecutionTime()), Msg.getMsg(getExecutionTime()));
 		else
 			Utility.narrate("-");
-
+		
+		
+		for (int i = 0; i <((ammoUse == 0)?1 : ammoUse); i++)
 		for (Event event : events) {
 			event = event.copy();
 			event.source = getCharacter();

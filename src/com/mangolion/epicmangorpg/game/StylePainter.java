@@ -69,6 +69,9 @@ public class StylePainter {
 	}
 	
 	public static void append(StyleSegment ... segments){
+		if (FrameGame.getInstance().viewMode)
+			return;
+		
 		 paneMango = FrameGame.instance.tfNarration;
 			paneTime = FrameGame.instance.tfTime;
 		StyledDocument document = paneMango.getStyledDocument();
@@ -100,6 +103,8 @@ public class StylePainter {
 	}
 
 	public static void append(LinkedList<StyleSegment> ... message){
+		if (FrameGame.getInstance().viewMode)
+			return;
 		LinkedList<StyleSegment> result = new LinkedList<StyleSegment>();
 		for (int i = 0; i < message.length; i ++){
 			LinkedList<StyleSegment> s =  message[i];
@@ -109,6 +114,8 @@ public class StylePainter {
 	}
 	
 	public static void append(LinkedList<StyleSegment> message) {
+		if (FrameGame.getInstance().viewMode)
+			return;
 		 paneMango = FrameGame.instance.tfNarration;
 			paneTime = FrameGame.instance.tfTime;
 		lineNum ++;
@@ -141,6 +148,8 @@ public class StylePainter {
 	}
 	
 	public static void appendTime(float time) {
+		if (FrameGame.getInstance().viewMode)
+			return;
 		paneTime = FrameGame.instance.tfTime;
 		 paneMango = FrameGame.instance.tfNarration;
 		//System.out.println("-" + lineNum);

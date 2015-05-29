@@ -24,6 +24,8 @@ public class SkillBulletSpray extends Skill {
 			
 			public void init() {
 				useAmmo = true;
+				chooseRandomTarget = true;
+				setEvents(new EventRange("Bullet", "", 0.3f, getCharacter(), null, 0, this));
 			};
 			
 			public void load() {
@@ -35,16 +37,7 @@ public class SkillBulletSpray extends Skill {
 				super.load();
 
 			}
-			
-			@Override
-			public void execute(Character target) {
-				for (int i = 0; i < ammoUse; i ++){
-						Character enemy = Game.getInstance().getRandomEnemy(getCharacter());
-						setEvents(new EventRange("Bullet", "", 0.3f, getCharacter(), enemy, 0, this));
-				}
-				super.execute(target);
-				ammoUse = 1;
-			}			
+	
 			
 			public float getStrBuff() {
 				// TODO Auto-generated method stub

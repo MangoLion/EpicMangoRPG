@@ -28,13 +28,9 @@ public class SkillBoltFire extends Skill {
 			dmgBase = 5;
 			mpCost = 10;
 			setElement(new Element("Fire", 1));
+			setEvents(new EventFireBolt(0.3f, getCharacter(), null, 20, this));
 				super.init();
-			}
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventFireBolt(0.3f, getCharacter(), target, 20, this));
-				super.execute(character);
-			}			
+			}	
 			
 			@Override
 			public float getIntBuff() {

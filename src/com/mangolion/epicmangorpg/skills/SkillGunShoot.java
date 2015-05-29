@@ -21,15 +21,9 @@ public class SkillGunShoot extends Skill {
 			
 			public void init() {
 				useAmmo = true;
+				setEvents(new EventRange("Bullet", "", 0.3f, getCharacter(), null, 0, this));
 			};
 			
-			@Override
-			public void execute(Character target) {
-
-				for (int i = 0; i < ammoUse; i ++)
-					setEvents(new EventRange("Bullet", "", 0.3f, getCharacter(), target, 0, this));
-				super.execute(target);
-			}			
 			
 			public float getStrBuff() {
 				// TODO Auto-generated method stub

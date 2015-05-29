@@ -26,6 +26,7 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
+import com.mangolion.epicmangorpg.ais.AISimple;
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.characters.CharacterPlayer;
 import com.mangolion.epicmangorpg.characters.Characters;
@@ -178,7 +179,14 @@ public class FrameBattleCreate extends JInternalFrame {
 				//Character character = Characters.getCharacter(((Character)listAll.getSelectedValue()).name);
 				for (Character character: listAll.getSelectedValuesList())
 				if (character != null)
-					mLEnemy.addElement(Characters.getCharacter(character.name));
+					if (!(character instanceof CharacterPlayer))
+						mLEnemy.addElement(Characters.getCharacter(character.name));
+					else{
+						 ((CharacterPlayer) character).init();
+						character.ai = new AISimple(character);
+						character.isPlayer = false;
+						mLEnemy.addElement(character);
+					}
 			}
 		});
 		

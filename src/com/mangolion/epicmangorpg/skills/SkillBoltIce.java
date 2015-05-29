@@ -26,13 +26,9 @@ public class SkillBoltIce extends Skill {
 			dmgBase = 5;
 			mpCost = 10;
 			setElement(new Element("Ice", 1));
+			setEvents(new EventIceBolt(0.3f, getCharacter(), null, 20, this));
 				super.init();
 			}
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventIceBolt(0.3f, getCharacter(), target, 20, this));
-				super.execute(character);
-			}			
 		});
 		setObservable(true, 0.7f);
 	}

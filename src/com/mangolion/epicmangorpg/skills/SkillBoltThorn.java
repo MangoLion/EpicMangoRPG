@@ -26,15 +26,11 @@ public class SkillBoltThorn extends Skill {
 			intBased = true;
 			dmgBase = 5;
 			mpCost = 10;
+			setEvents(new EventIceBolt(0.3f, getCharacter(), null, 20, this));
 			setElement(new Element("Poison", 1));
 			setStatus(new StatusPoison(null, 1f), 1);
 				super.init();
 			}
-			@Override
-			public void execute(Character target) {
-				setEvents(new EventIceBolt(0.3f, getCharacter(), target, 20, this));
-				super.execute(character);
-			}			
 			
 			@Override
 			public float getIntBuff() {
