@@ -1,6 +1,7 @@
 package com.mangolion.epicmangorpg.frames;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -14,6 +15,9 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -56,7 +60,7 @@ public class FrameMainMenu extends JFrame {
 	 * Create the frame.
 	 */
 	public FrameMainMenu() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 649, 435);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -114,16 +118,48 @@ public class FrameMainMenu extends JFrame {
 		btnCredits.setFont(new Font("Comic Sans MS", Font.PLAIN, 16));
 		btnCredits.setBounds(373, 204, 144, 36);
 		contentPane.add(btnCredits);
+		btnCredits.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new FrameCredits().setVisible(true);
+			}
+		});
 		
 		JButton btnViewEverything = new JButton("View Everything");
 		btnViewEverything.setFont(new Font("Comic Sans MS", Font.PLAIN, 16));
 		btnViewEverything.setBounds(444, 168, 173, 36);
 		contentPane.add(btnViewEverything);
+		btnViewEverything.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new frameEverything().setVisible(true);
+			}
+		});
 		
 		JButton btnHelp = new JButton("Help");
 		btnHelp.setFont(new Font("Comic Sans MS", Font.PLAIN, 16));
 		btnHelp.setBounds(87, 204, 144, 36);
 		contentPane.add(btnHelp);
+		btnHelp.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				 Desktop d=Desktop.getDesktop();
+
+				 // Browse a URL, say google.com
+				 try {
+					d.browse(new URI("https://github.com/MangoLion/EpicMangoRPG/wiki"));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (URISyntaxException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}	
+			}
+		});
 		
 		JButton btnBattleCreator = new JButton("Battle Creator");
 		btnBattleCreator.addActionListener(new ActionListener() {
@@ -135,7 +171,7 @@ public class FrameMainMenu extends JFrame {
 			}
 		});
 		btnBattleCreator.setFont(new Font("Comic Sans MS", Font.PLAIN, 16));
-		btnBattleCreator.setBounds(231, 238, 144, 36);
+		btnBattleCreator.setBounds(230, 204, 144, 36);
 		contentPane.add(btnBattleCreator);
 	}
 }

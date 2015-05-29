@@ -68,8 +68,10 @@ public class FrameCharacterInfo extends JInternalFrame {
 		lblCrystals.setText("Crystals: " + String.valueOf(character.getCrystals()));
 		
 		//if (character != CharacterPlayer.instance)
+		if (CharacterPlayer.instance != null){
 			lblAccuracy.setText("Accuracy: " + Utility.format(CharacterPlayer.instance.getAccuracy(character)*100) + "%");
 			lblCrit.setText("Critical: " + Utility.format(CharacterPlayer.instance.getCritical(character)*100) + "%");
+		}
 		
 		if (character == CharacterPlayer.instance)
 			lblCp.setText("CP: " + character.getCP());
@@ -187,6 +189,7 @@ public class FrameCharacterInfo extends JInternalFrame {
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 688, 525);
 		Point pt = FrameGame.getInstance().getMousePos();
+		if (pt != null)
 		setLocation(pt.x - getWidth()/2, pt.y - getHeight());
 		if (getX() < 0)
 			setLocation(0, getY());

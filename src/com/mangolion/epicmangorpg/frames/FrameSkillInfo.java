@@ -38,7 +38,8 @@ public class FrameSkillInfo extends JInternalFrame {
 		this.skill = skill;
 		setSize(346, 456);
 		Point pt = FrameGame.getInstance().getMousePos();
-		setLocation(pt.x - getWidth()/2, pt.y - getHeight()/2);
+		if (pt != null)
+			setLocation(pt.x - getWidth()/2, pt.y - getHeight()/2);
 		getContentPane().setLayout(null);
 		
 		lblDesc = new 	JTextArea("Desc:");

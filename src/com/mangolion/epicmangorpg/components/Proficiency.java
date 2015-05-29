@@ -20,6 +20,12 @@ public class Proficiency {
 	private void calculate(Character source2, Character target2) {
 		this.source = source2;
 		this.target = target2;
+		if (source2 == null || target2 == null){
+			str = "N/A";
+			type = NORMAL;
+			return;
+		}
+		
 		float cpS = source.getCP(),
 				cpT = target.getCP();
 		if (cpT < cpS*0.2){

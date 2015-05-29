@@ -951,6 +951,8 @@ public class FrameGame extends JFrame {
 	}
 	
 	public Point getMousePos(){
+		if (!isVisible())
+			return null;
 		Point pt = MouseInfo.getPointerInfo().getLocation(),
 		pt2 = getLocationOnScreen();
 		return new Point(pt.x - pt2.x, pt.y - pt2.y);
