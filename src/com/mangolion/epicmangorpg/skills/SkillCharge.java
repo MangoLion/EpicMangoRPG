@@ -46,4 +46,10 @@ public void execute(Character target, float time) {
 	}.setStatus(new StatusStun(null, 0.7f), 0.8f)
 	.setCost(10, 0, 40, 0));
 	}
+	
+	@Override
+	public boolean checkCompatability(Character target) {
+		// TODO Auto-generated method stub
+		return !target.isAirborne();
+	}
 }

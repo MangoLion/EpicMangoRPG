@@ -27,6 +27,8 @@ import com.mangolion.epicmangorpg.daybreak.Pascal;
 import com.mangolion.epicmangorpg.daybreak.Reynald;
 import com.mangolion.epicmangorpg.daybreak.SpellSniper;
 import com.mangolion.epicmangorpg.game.Terrain;
+import com.mangolion.epicmangorpg.grave.Lute;
+import com.mangolion.epicmangorpg.grave.Theodore;
 
 public class FloorDayBreak extends Floor {
 
@@ -34,6 +36,8 @@ public class FloorDayBreak extends Floor {
 		terrains.add(Terrain.Plain);
 		terrains.add(Terrain.Taiga);
 
+		addSpawn(Theodore.class, 0.2f);
+		addSpawn(Lute.class, 0.2f);
 		addSpawn(Kaede.class, 0.2f);
 		addSpawn(Ariadne.class, 0.2f);
 		addSpawn(Parzifal.class, 0.2f);

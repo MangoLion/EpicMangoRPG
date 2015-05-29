@@ -36,6 +36,15 @@ public abstract class StepMeleeSlash extends Step {
 		setMessages(new MsgSlashLoad(), null, new MsgBasicCD(), new MsgSlashExecute());
 	}
 	
+	@Override
+	public boolean checkCompatability(Character target) {
+		if (target.isAirborne()){
+			System.out.println("NOPEEEEE");
+			return false;
+		}
+		return super.checkCompatability(target);
+	}
+	
 	/*@Override
 	public void execute(Character target, float time) {
 		if (isCharged&& getCharacter().skillCharged != parent){

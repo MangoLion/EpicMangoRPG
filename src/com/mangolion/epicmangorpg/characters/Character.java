@@ -376,6 +376,7 @@ public class Character implements Cloneable{
 				result.add(skill);		
 		return result;
 	}
+
 	
 	public Skill getSkill(String name){
 		for (Skill skill: skills){
@@ -383,6 +384,14 @@ public class Character implements Cloneable{
 				return skill;
 		}
 		return null;
+	}
+	
+	public LinkedList<Skill> getSkill (GeneralType type){
+		LinkedList<Skill> result = new LinkedList<Skill>();
+		for (Skill skill :skills)
+			if (skill.type.getGeneralType() == type)
+				result.add(skill);		
+		return result;
 	}
 	
 	public LinkedList<Skill> getSkill (ActionType type){

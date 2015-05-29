@@ -63,7 +63,10 @@ public class Skill implements StatBuff {
 		this.type = type;
 	}
 	
-	public boolean checkCompatability (Skill skill){
+	public boolean checkCompatability (Character target){
+		Step step = getCurrentStep();
+		if (!step.checkCompatability(target))
+			return false;
 		return true;
 	}
 	

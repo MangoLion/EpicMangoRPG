@@ -50,7 +50,10 @@ public void execute(Character target, float time) {
 	}
 	
 	@Override
-	public boolean checkCompatability(Skill skill) {
+	public boolean checkCompatability(Character target) {
+		Skill skill = target.skillCurrent;
+		if (skill == null)
+			return true;
 		Step step = skill.steps.getFirst();
 		return step.chanceBlock > 0;
 	}

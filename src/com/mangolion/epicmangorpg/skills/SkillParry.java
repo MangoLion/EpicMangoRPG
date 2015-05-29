@@ -2,6 +2,7 @@ package com.mangolion.epicmangorpg.skills;
 
 import java.util.LinkedList;
 
+import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.components.ActionType;
 import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.messages.MsgBasicCD;
@@ -56,7 +57,10 @@ public class SkillParry extends Skill{
 	}
 	
 	@Override
-	public boolean checkCompatability(Skill skill) {
+	public boolean checkCompatability(Character target) {
+		Skill skill = target.skillCurrent;
+		if (skill == null)
+			return true;
 		Step step = skill.steps.getFirst();
 		return step.chanceParry > 0;
 	}

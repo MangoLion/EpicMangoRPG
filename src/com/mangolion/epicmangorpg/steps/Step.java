@@ -244,8 +244,8 @@ public abstract class Step implements Cloneable, StatBuff {
 				&& target.isAirborne()) {
 			getCharacter().changeStyle(-0.5f);
 			StylePainter.append(new Msg(
-					"$name cannot reach $targetname because $p is airborne!")
-					.getMessage(getCharacter(), target, 0), Style.getSegments(
+					"$name cannot reach $targetname because $tp is airborne!")
+					.getMessage(false, getCharacter(), target, 0), Style.getSegments(
 					-0.5f, getCharacter()));
 			return false;
 		}
@@ -306,7 +306,7 @@ public abstract class Step implements Cloneable, StatBuff {
 
 		if (calculateChanceMelee(target))
 			return false;
-
+		boolean blocked = (subtractDamage > 0);
 		// get damage thats subtracted
 		dmg = getDamage();
 		float crit = getCharacter().getCritical(target) + critBase;
@@ -321,6 +321,10 @@ public abstract class Step implements Cloneable, StatBuff {
 
 		Damage damage = new Damage(getCharacter(), dmg, type).setStatuses(
 				statuses).setBuffs(buffs);
+		if (blocked){
+			damage.statuses.clear();
+			damage.buffs.clear();
+		}
 		damage.elements.addAll(getDmgElements());
 		if (type == Damage.MELEE)
 			damage.barrierNegation = getCharacter().getBarrierNegate();
@@ -546,7 +550,7 @@ public abstract class Step implements Cloneable, StatBuff {
 		if (skill != null) {
 			Tick t = Game.getInstance().findTick(target);
 			float time = 0, tick = (t != null) ? t.time : 0;
-			for (Step step : skill.steps)
+			Step step = skill.steps.getFirst();
 				if (step.timeExecute >= 0)
 					time += tick + step.getExecutionTime()
 							+ step.getEventTime();
@@ -870,7 +874,7 @@ public abstract class Step implements Cloneable, StatBuff {
 		if (step.type == ActionType.MeleeBlock && skill.isExecuting
 				&& chanceBlock > 0) {
 			StylePainter.append(new Msg(
-					"$name's $skill is blocked by $targetname's $targetskill")
+					"$name's " + name + "  is blocked by $targetname's $targetskill")
 					.getMessage(getCharacter(), target, 0));
 			subtractDamage = step.value;
 			System.out.println(target.name + " defense value: "
@@ -885,7 +889,7 @@ public abstract class Step implements Cloneable, StatBuff {
 					/ getCharacter().weapon.sizeModifier) {
 				StylePainter
 						.append(new Msg(
-								"$name's $skill is blocked by $targetname's $targetskill")
+								"$name's " + name +  "  is blocked by $targetname's $targetskill")
 								.getMessage(getCharacter(), target, 0));
 				subtractDamage = Math.abs(step.getDamage() / 2);
 				return false;
@@ -894,7 +898,7 @@ public abstract class Step implements Cloneable, StatBuff {
 							/ getCharacter().weapon.sizeModifier) {
 				StylePainter
 						.append(new Msg(
-								"$name's $skill is parried by $targetname's $targetskill")
+								"$name's " + name +  "  is parried by $targetname's $targetskill")
 								.getMessage(getCharacter(), target, 0));
 				step.addProf(new Proficiency(target, getCharacter()));
 				// aoeExceptions.add(target);
@@ -910,6 +914,11 @@ public abstract class Step implements Cloneable, StatBuff {
 	public Step setBuff(Buff... buffs) {
 		this.buffs.addAll(Arrays.asList(buffs));
 		return this;
+	}
+
+	public boolean checkCompatability(Character target) {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 }

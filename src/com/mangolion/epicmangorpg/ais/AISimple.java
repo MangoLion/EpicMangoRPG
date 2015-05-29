@@ -47,13 +47,23 @@ public class AISimple extends AI {
 				if (!checkBuff())
 					if (!checkRecovery())
 						if (!checkWeapon())
-							if (!executeSkill(GeneralType.Attack))
+							if (!checkAttack())
 								if (!executeSkill(GeneralType.Defend)) {
 
 									// Utility.narrate(character.name
 									// + " decided to stay idle this turn");
 									super.nextAction();
 								}
+	}
+	
+	public boolean checkAttack(){
+		Character target = character.getTarget();
+		LinkedList<Skill> skills = character.getSkill(GeneralType.Attack);
+		Collections.shuffle(skills);
+		for (Skill skill: skills)
+			if (skill.checkCondition() && (skill.checkCompatability(target)))
+				return skill.execute();
+		return false;
 	}
 
 	public boolean checkBarrier() {
@@ -126,7 +136,7 @@ public class AISimple extends AI {
 
 		// check if there are projectiles heading to character
 		for (Event e : Game.getInstance().events)
-			if (e.target == character || e.step.isAOE) {
+			if (e.target == character || (e.step.isAOE && e.source.isAllied != character.isAllied)) {
 				damage = e.step.parent.getTotalDamage() / character.getHp();
 				check = true;
 				event = e;
@@ -198,8 +208,8 @@ public class AISimple extends AI {
 			if ((type != null && skill.type == type)
 					|| (typeGen != null && skill.type.getGeneralType() == typeGen)) {
 				Step s = skill.steps.getFirst();
-				float sExecute = s.getExecutionTime() + s.getLoadTime();
-				if (s.getLoadTime() < load && sExecute > load)
+				float sExecute = s.getExecutionTime() + s.getLoadTime() + s.getEventTime();
+				if (s.getLoadTime() + s.getEventTime() < load && sExecute > load)
 					applicable.add(skill);
 				else if (s.getLoadTime() < load)
 					tooFast.add(skill);
@@ -208,7 +218,7 @@ public class AISimple extends AI {
 		if (applicable.size() > 0) {
 			Collections.shuffle(applicable);
 			for (Skill skill : applicable)
-				if (skill.checkCompatability(event.step.parent)
+				if (skill.checkCompatability(event.step.getCharacter())
 						&& skill.checkCondition())
 					return skill.execute();
 		}
@@ -216,11 +226,11 @@ public class AISimple extends AI {
 			Collections.shuffle(tooFast);
 			for (Skill skill : tooFast) {
 				float wait = load - skill.steps.getFirst().getLoadTime()
-						- skill.steps.getFirst().getExecutionTime() / 2;
+						- skill.steps.getFirst().getExecutionTime()  - skill.steps.getFirst().getEventTime();
 				System.out.println("wait " + wait + " load " + load + " skill "
 						+ skill.steps.getFirst().getLoadTime());
 				skill = character.getSkill("Wait");
-				if (skill.checkCompatability(event.step.parent)
+				if (skill.checkCompatability(event.step.getCharacter())
 						&& skill.checkCondition())
 					return skill.execute(character.getTarget(), wait);
 			}
@@ -249,8 +259,8 @@ public class AISimple extends AI {
 			if ((type != null && skill.type == type)
 					|| (typeGen != null && skill.type.getGeneralType() == typeGen)) {
 				Step s = skill.steps.getFirst();
-				float sExecute = s.getExecutionTime() + s.getLoadTime();
-				if (s.getLoadTime() < load && sExecute > load)
+				float sExecute = s.getExecutionTime() + s.getLoadTime() +s.getEventTime();
+				if (s.getLoadTime() + s.getEventTime()< load && sExecute > load)
 					applicable.add(skill);
 				else if (s.getLoadTime() < load)
 					tooFast.add(skill);
@@ -259,7 +269,7 @@ public class AISimple extends AI {
 		if (applicable.size() > 0) {
 			Collections.shuffle(applicable);
 			for (Skill skill : applicable)
-				if (skill.checkCompatability(target.skillCurrent)
+				if (skill.checkCompatability(target)
 						&& skill.checkCondition())
 					return skill.execute();
 		}
@@ -267,11 +277,11 @@ public class AISimple extends AI {
 			Collections.shuffle(tooFast);
 			for (Skill skill : tooFast) {
 				float wait = load - skill.steps.getFirst().getLoadTime()
-						- skill.steps.getFirst().getExecutionTime() / 2;
+						- skill.steps.getFirst().getExecutionTime()  -  skill.steps.getFirst().getEventTime();
 				System.out.println("wait " + wait + " load " + load + " skill "
 						+ skill.steps.getFirst().getLoadTime());
 				skill = character.getSkill("Wait");
-				if (skill.checkCompatability(target.skillCurrent)
+				if (skill.checkCompatability(target)
 						&& skill.checkCondition())
 					return skill.execute(target, wait);
 			}

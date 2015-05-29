@@ -27,14 +27,11 @@ public class SkillIgnitionDispel extends Skill {
 			intBased = false;
 			dmgBase = 0;
 			mpCost = 20;
+			setEvents(new EventFireBolt(0.2f, getCharacter(), null, 20, this));
 			setMessages(null, new Msg("$name reached $p3  right hand out, a wooden grenade zoomed from a belt pouch into $p3 palm before $p hurled it towards the keep, followed closely by a shouted 'Ignition Dispel!''"), null);
 				super.init();
 			}
-			@Override
-			public void execute(Character target) {
-					Event.addEvent(new EventFireBolt(0.2f, getCharacter(), target, 20, this));
-				super.execute(character);
-			}			
+	
 			
 			@Override
 			public float getIntBuff() {
