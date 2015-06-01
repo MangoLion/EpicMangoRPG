@@ -121,7 +121,7 @@ public class FrameGame extends JFrame {
 	}
 	public static FrameGame getInstance() {
 		if (instance == null)
-			instance = new FrameGame();
+			instance = new FrameGame(); 
 		return instance;
 	}
 	static Game game;

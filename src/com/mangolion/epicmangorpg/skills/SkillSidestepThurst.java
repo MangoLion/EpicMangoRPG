@@ -37,7 +37,7 @@ public class SkillSidestepThurst extends Skill {
 		}
 		
 		public void execute(Character target, float time, String aug) {
-			getCharacter().applyBuff(new Buff("Evasion", getCharacter().getDex()*1.5f, getExecutionTime(), GenType.positive, Buff.Type.dex));
+			getCharacter().applyBuff(new Buff("Evasion", getExecutionTime(), GenType.positive, false, Buff.Type.agi).setValue(2));
 			super.execute(target, time, aug);
 		};
 		

@@ -10,6 +10,7 @@ public class Buff {
 	public String name;
 	public float time, value[] = new float[1];
 	public Type types[] = new Type[1];
+	public boolean notify = true;
 	
 	public GenType genType;
 	public Element element;
@@ -27,6 +28,14 @@ public class Buff {
 		this.types = type;
 		this.time = time;
 		this.genType = genType;
+	}
+	
+	public Buff(String name, float time, GenType genType, boolean notify_, Type ... type) {
+		this.name = name;
+		this.types = type;
+		this.time = time;
+		this.genType = genType;
+		notify = notify_;
 	}
 	
 	public Buff setValue (float ... values){

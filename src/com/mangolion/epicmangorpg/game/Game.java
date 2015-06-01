@@ -1,27 +1,30 @@
 package com.mangolion.epicmangorpg.game;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.JInternalFrame;
 import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 
 import com.mangolion.epicmangorpg.characters.Character;
 import com.mangolion.epicmangorpg.characters.CharacterPlayer;
-import com.mangolion.epicmangorpg.characters.GolemEarth;
 import com.mangolion.epicmangorpg.commands.CmdUser;
 import com.mangolion.epicmangorpg.components.ConcurrentDoublyLinkedList;
 import com.mangolion.epicmangorpg.components.Themes;
 import com.mangolion.epicmangorpg.components.Tick;
 import com.mangolion.epicmangorpg.events.Event;
 import com.mangolion.epicmangorpg.floors.Floor;
-import com.mangolion.epicmangorpg.floors.FloorTrainning;
 import com.mangolion.epicmangorpg.floors.Floor.Spawn;
 import com.mangolion.epicmangorpg.floors.Floor0;
+import com.mangolion.epicmangorpg.floors.FloorTrainning;
 import com.mangolion.epicmangorpg.frames.FrameBattleCreate;
 import com.mangolion.epicmangorpg.frames.FrameCharacterInfo;
 import com.mangolion.epicmangorpg.frames.FrameGame;
@@ -341,6 +344,20 @@ public class Game {
 		 */
 	}
 
+	public static BufferedImage getScreenShot(Component component) {
+
+		BufferedImage image = new BufferedImage(component.getWidth(),
+				component.getHeight(), BufferedImage.TYPE_INT_RGB);
+		// call the Component's paint method, using
+		// the Graphics object of the image.
+		component.paint(image.getGraphics()); // alternately use .printAll(..)
+
+
+		return image;
+	}
+	
+	
+
 	public void updateAll(float deltaTime, Character exception,
 			boolean executeTick) {
 		if (getInstance() != this) {
@@ -423,19 +440,19 @@ public class Game {
 		toAdd.clear();
 
 		if (Game.getInstance().charsAllies.size() == 0
-				|| Game.getInstance().charsEnemies.size() == 0) 
-		if (!createMode){
-			if (endCounter == 0)
-				Utility.narrate("A new battle will start in 2 seconds");
-			endCounter += 0.01;
-			if (endCounter > 2) {
-				begin();
-				return;
+				|| Game.getInstance().charsEnemies.size() == 0)
+			if (!createMode) {
+				if (endCounter == 0)
+					Utility.narrate("A new battle will start in 2 seconds");
+				endCounter += 0.01;
+				if (endCounter > 2) {
+					begin();
+					return;
+				}
+			} else {
+				Utility.narrate("The battle is over! Select reset battle to start a new one");
+				timer.stop();
 			}
-		}else{
-			Utility.narrate("The battle is over! Select reset battle to start a new one");
-			timer.stop();
-		}
 
 		SwingUtilities.invokeLater(new Runnable() {
 
@@ -443,6 +460,21 @@ public class Game {
 			public void run() {
 				FrameGame.instance.updateCharacterList();
 				FrameGame.instance.updateEventList();
+				
+				/*if (timePassed*100 % 8 == 0){
+					File file = new File(System.getProperty("user.dir") + "\\\\" + "screens");
+					System.out.println("screened");
+					if (!file.exists())
+						file.mkdirs();
+				File outputfile = new File(file,"image"+ (int) timePassed*100 + ".jpg");
+				try {
+					ImageIO.write(getScreenShot(FrameGame.getInstance()), "jpg", outputfile);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				}*/
+
 			}
 		});
 

@@ -102,6 +102,7 @@ public class StylePainter {
 		}
 	}
 
+	@SafeVarargs
 	public static void append(LinkedList<StyleSegment> ... message){
 		if (FrameGame.getInstance().viewMode)
 			return;

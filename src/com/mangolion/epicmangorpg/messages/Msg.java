@@ -28,20 +28,36 @@ public class Msg {
 	}
 	
 	public LinkedList<StyleSegment>getMessage(boolean nextLine, Character character,
-			Character target, float damage){
+			Character target, float damage, String ... str){
 		nextline = nextLine;
-		return getMessage(character, target, damage);
+		return getMessage(character, target, damage, str);
 	}
 	
 
 	public LinkedList<StyleSegment>getMessage(Character character,
-			Character target, float damage){
-		LinkedList<StyleSegment> result = new LinkedList<StyleSegment>();
-		String[] words;
+			Character target, float damage, String ... str){
+		String msg;
 		if (msgs.size() > 1)
-			words = msgs.get(rand.nextInt(msgs.size() - 1)).split(" ");
+			msg = msgs.get(rand.nextInt(msgs.size() - 1));
 		else 
-			words = msgs.getFirst().split(" ");
+			msg = msgs.getFirst();
+		
+		LinkedList<StyleSegment> result = new LinkedList<StyleSegment>();
+		
+		if (str != null)
+		for (int i = 0; i < str.length; i ++){
+			String s = str[i],
+					replace = "$str" + i;
+			if (i == 0)
+				replace = "$str";
+			msg.replaceAll(replace, s);
+		}
+		
+		String[] words;
+
+			words = msg.split(" ");
+
+
 		StyleSegment segment = new StyleSegment(StylePainter.NORMAL, "");
 		for (String word: words){
 			boolean foundToken = false;

@@ -3,9 +3,11 @@ package com.mangolion.epicmangorpg.skills;
 import java.util.LinkedList;
 
 import com.mangolion.epicmangorpg.characters.Character;
+import com.mangolion.epicmangorpg.characters.CharacterPlayer;
 import com.mangolion.epicmangorpg.components.ActionType;
 import com.mangolion.epicmangorpg.components.GeneralType;
 import com.mangolion.epicmangorpg.components.Proficiency;
+import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.messages.Msg;
 import com.mangolion.epicmangorpg.messages.MsgBasicCD;
 import com.mangolion.epicmangorpg.messages.MsgDodgeExecute;
@@ -32,7 +34,14 @@ public class SkillMeditate extends Skill{
 				float timeLoad, float timeExecute, float timeCooldown) {
 			super(parent, "Meditate", "",ActionType.RecoverMP, timeLoad, timeExecute, timeCooldown, 0);
 			setMessages(new Msg("$name relaxes $p3 body and recover $p3 energy"), null, new MsgBasicCD(), null);
+
 		}
+		@Override
+		public void init() {
+			setBuff(new Buff("Meditate",3, customTime, GenType.neutral, Buff.Type.mpRegen));
+			super.init();
+		}
+		
 		public float getMPBuff() {
 			// TODO Auto-generated method stub
 			return prof * 15;
@@ -62,11 +71,20 @@ public class SkillMeditate extends Skill{
 			return true;
 		}
 		
+		public boolean checkConndition() {
+			for (Buff buff: getCharacter().buffs)
+				if (buff.name.equals(name)){
+					if (getCharacter() == CharacterPlayer.instance)
+						Utility.narrate("You can only have one buff of the same type");
+					return false;
+				}
+			return super.checkConndition();
+		};
+		
 		@Override
 		public void execute(Character target, float time) {
 			//System.out.println("" + -getCharacter().str*0.7f);
 			addProf(new Proficiency(getCharacter(), getCharacter()));
-			getCharacter().applyBuff(new Buff("Meditate", getCharacter().getMpRegen()*3*(prof + 1), customTime, GenType.neutral, Buff.Type.mpRegen));
 			getCharacter().applyBuff(new Buff("Meditate Debuff", -getCharacter().getInt()*0.7f*(1 - prof ) , customTime, GenType.negative, Buff.Type.inte));
 			super.execute(target, time);
 		}

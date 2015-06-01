@@ -43,11 +43,10 @@ public class SkillSidestepShoot extends Skill {
 			super.init();
 		}
 		
-		@Override
-		public void execute(Character target) {
-			getCharacter().applyBuff(new Buff("Evasion", getCharacter().getDex()*1.5f, getExecutionTime(), GenType.positive, Buff.Type.dex));
-			super.execute(target);
-		}		
+		public void execute(Character target, float time, String aug) {
+			getCharacter().applyBuff(new Buff("Evasion", getExecutionTime(), GenType.positive, false, Buff.Type.agi).setValue(2));
+			super.execute(target, time, aug);
+		};
 		
 		@Override
 		public float getAgiBuff() {

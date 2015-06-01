@@ -33,7 +33,7 @@ public class SkillSideStep extends Skill{
 			}
 			
 			public void execute(Character target, float time, String aug) {
-				getCharacter().applyBuff(new Buff("Evasion", getCharacter().getAgi()*1.5f, getExecutionTime(), GenType.positive, Buff.Type.agi));
+				getCharacter().applyBuff(new Buff("Evasion", getExecutionTime(), GenType.positive, false, Buff.Type.agi).setValue(2));
 				super.execute(target, time, aug);
 			};
 		}.setCost(15, 0, 8, 0));

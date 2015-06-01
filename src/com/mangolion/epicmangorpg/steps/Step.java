@@ -26,6 +26,7 @@ import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.items.Inventory;
 import com.mangolion.epicmangorpg.items.Item;
 import com.mangolion.epicmangorpg.messages.Msg;
+import com.mangolion.epicmangorpg.messages.MsgMissLuck;
 import com.mangolion.epicmangorpg.messages.MsgParrySuccess;
 import com.mangolion.epicmangorpg.messages.MsgSkillInterrupt;
 import com.mangolion.epicmangorpg.messages.MsgSkillInterruptFail;
@@ -273,34 +274,48 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 
 	public boolean damageSingle(Character target, boolean checkMiss) {
-		float dmg;
 		// used for showing the miss message, style is calculated based on the
 		// damage of the missed skill, thats why the msg needs to be shown only
 		// after the damage is calculated
-		boolean hasMissed = false;
-		float miss = (chanceMiss) + (1 - getCharacter().getAccuracy(target));
+		boolean hasMissed = false, missedSkill = false;
+		float miss =( (chanceMiss) + (1 - getCharacter().getAccuracy(target))),
+				gaze = 0,
+				dmg = getDamage();
 		if (getCharacter().weapon.isAutomatic)
 			miss *= 1.2f;
 		System.out.println("miss: " + miss);
-		if (rand.nextFloat() <= miss && checkMiss) {
+		float num = rand.nextFloat();
+		if (num<= miss && checkMiss) {
+			if (num <= miss/2){
 			hasMissed = true;
 			if (target.skillCurrent != null
 					&& target.skillCurrent.type == ActionType.Dodge) {
 				target.skillCurrent.steps.get(target.skillCurrent.stepCurrent)
 						.addProf(new Proficiency(target, getCharacter()));
+				missedSkill = true;
+			}
+			}else {
+				gaze = Utility.format(rand.nextFloat()*0.75f);
+				StylePainter.append(new Msg("$name's " + name
+						+ " has gazed $targetname ! (" + gaze*100 + "%)")
+						.getMessage( getCharacter(), target, 0));
+				if (target.skillCurrent != null
+						&& target.skillCurrent.type == ActionType.Dodge) {
+					Proficiency prof = new Proficiency(target, getCharacter());
+					prof.type /= 2f;
+					target.skillCurrent.steps.get(target.skillCurrent.stepCurrent).addProf(prof);		
+				}
 			}
 		}
-
-		// need to call damage here to determine style points
-		dmg = getDamage();
+			
 
 		if (hasMissed) {
 			float change = Style.positive(getCharacter(), target, Style.miss,
 					1 - miss, dmg);
-			StylePainter.append(new Msg("$name's " + name
-					+ " slice the air in a wide arc, missing its target.")
-					.getMessage(false, getCharacter(), target, 0), Style
-					.getSegments(change, getCharacter()));
+			if (missedSkill){
+				StylePainter.append(new Msg("$targetname has stylishly $targetskill  $name's $skill").getMessage(false, getCharacter(), target, 0), Style.getSegments(1 - change, target));
+			}else
+				StylePainter.append(new MsgMissLuck().getMessage(false, getCharacter(), target, 0, name), Style.getSegments(1 - change, target));
 			return false;
 		}
 
@@ -309,6 +324,10 @@ public abstract class Step implements Cloneable, StatBuff {
 		boolean blocked = (subtractDamage > 0);
 		// get damage thats subtracted
 		dmg = getDamage();
+		if (gaze > 0)
+			dmg = getDamage()*gaze;
+		System.out.println("Damage: " + dmg);
+		
 		float crit = getCharacter().getCritical(target) + critBase;
 		System.out.println("crit: " + crit);
 		if (rand.nextFloat() <= crit) {
@@ -547,13 +566,11 @@ public abstract class Step implements Cloneable, StatBuff {
 		Character target = parent.character.getTarget();
 		Skill skill = (getCharacter().getTarget() != null && getCharacter()
 				.getTarget() != getCharacter()) ? target.skillCurrent : null;
-		if (skill != null) {
+		if (skill != null && !skill.steps.getFirst().isCustomTime()) {
 			Tick t = Game.getInstance().findTick(target);
 			float time = 0, tick = (t != null) ? t.time : 0;
 			Step step = skill.steps.getFirst();
-				if (step.timeExecute >= 0)
-					time += tick + step.getExecutionTime()
-							+ step.getEventTime();
+					time += tick	+ step.getEventTime() + step.getExecutionTime()/2;
 			if (time > 1)
 				time = 1;
 			return time;

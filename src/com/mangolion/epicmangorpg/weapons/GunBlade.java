@@ -8,8 +8,8 @@ public class GunBlade extends Weapon{
 		setReload(6, 0.5f, 2, 0.08f);
 		isAutomatic = true;
 		canToggleAutomatic = false;
-		gunDamage = 25;
-		launcherDamage  = 55;
+		gunDamage = 35;
+		launcherDamage  =65;
 		price = 30;
 	}
 

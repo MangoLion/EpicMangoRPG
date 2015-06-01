@@ -9,6 +9,8 @@ import com.mangolion.epicmangorpg.events.EventArrow;
 import com.mangolion.epicmangorpg.frames.FrameGame;
 import com.mangolion.epicmangorpg.game.Utility;
 import com.mangolion.epicmangorpg.items.Items;
+import com.mangolion.epicmangorpg.statuses.Buff;
+import com.mangolion.epicmangorpg.statuses.Buff.GenType;
 import com.mangolion.epicmangorpg.steps.Step;
 import com.mangolion.epicmangorpg.steps.StepMeleeSlash;
 import com.mangolion.epicmangorpg.weapons.Weapons;
@@ -23,7 +25,10 @@ public class SkillArrowSideStep extends Skill {
 		shopPrice = 40;
 		addSteps(new StepShootDodge(this, "Sidestep Arrow", "",0.3f,
 				0.4f, 0.2f, 0.6f) {
-
+			public void execute(Character target, float time, String aug) {
+				getCharacter().applyBuff(new Buff("Evasion", getExecutionTime(), GenType.positive, false, Buff.Type.agi).setValue(2));
+				super.execute(target, time, aug);
+			};
 		}.setCost(20, 0, 8, 0));
 		setObservable(true, 0.5f);
 	}

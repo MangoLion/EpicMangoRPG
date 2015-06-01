@@ -99,7 +99,7 @@ public class Character implements Cloneable{
 		this.name = name;
 		maxHP = hp;
 		maxMP = mp;
-		maxSP = stam*2;
+		maxSP = stam;
 		maxBal = bal;
 		this.hp = maxHP;
 		this.mp = maxMP;
@@ -323,7 +323,8 @@ public class Character implements Cloneable{
 			Buff buff = it.next();
 			buff.time -=  deltaTime;
 			if (buff.time <= 0){
-				StylePainter.append(new Msg("$name's " + buff.name + " buff has disapeared").getMessage(this, null, 0));
+				if (buff.notify)
+					StylePainter.append(new Msg("$name's " + buff.name + " buff has disapeared").getMessage(this, null, 0));
 				it.remove();
 			}
 		}
@@ -498,7 +499,7 @@ public class Character implements Cloneable{
 		LogMsg.addLog(source + " dealt " + String.valueOf(cdmg) + " damage to " + name);
 		hp -= cdmg;
 		if (bal > 0 && cdmg > 1)
-			bal -=cdmg/2;
+			bal -=cdmg;
 		if (hp <= 0){
 			Utility.narrate(name + " has been defeated by " + source.name + "\n");
 			Game.getInstance().removeChar(this);

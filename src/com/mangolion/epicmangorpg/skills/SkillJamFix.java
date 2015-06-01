@@ -22,7 +22,7 @@ public class SkillJamFix extends Skill {
 				0f, 0) {
 			
 			public void init() {
-				value = 0.6f;
+				value = 0.9f;
 			};
 			public void execute(Character target, float time) {
 				super.execute(target, time);

@@ -136,8 +136,17 @@ public class FrameBattleCreate extends JInternalFrame {
 			public void actionPerformed(ActionEvent e) {
 				//Character character = Characters.getCharacter(((Character)cbAlly.getSelectedItem()).name);
 				for(Character character: listAll.getSelectedValuesList())
-				if (character != null)
-					mLAlly.addElement(Characters.getCharacter(character.name));
+					if (character != null)
+						if (!(character instanceof CharacterPlayer))
+							mLAlly.addElement(Characters.getCharacter(character.name));
+						else{
+							character  = new CharacterPlayer("Player");
+							 ((CharacterPlayer) character).init();
+							character.ai = new AISimple(character);
+							character.isPlayer = false;
+							character.scale(2);
+							mLAlly.addElement(character);
+						}
 			}
 		});
 		

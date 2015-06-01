@@ -24,11 +24,11 @@ import com.mangolion.epicmangorpg.weapons.Weapons;
 
 public class Skill implements StatBuff {
 
-	public Random rand = new Random();
+	protected Random rand = new Random();
 	public Character character;
 	public String name, desc;
 	public LinkedList<Step> steps = new LinkedList<Step>();
-	public boolean isExecuting, isCooldown, isLoading, isObservable = false, isTwoHanded = true, hasTarget = true, customTime = false, hasArg = false, requireAllType = false;;
+	public boolean isExecuting, isCooldown, isLoading, isObservable = false, isTwoHanded = true, hasTarget = true, customTime = false, hasArg = false, requireAllType = false;
 	public int stepCurrent;
 	public LinkedList<Weapons> weapons = new LinkedList<Weapons>();
 	public ActionType type;

@@ -48,15 +48,19 @@ public class AISimple extends AI {
 					if (!checkRecovery())
 						if (!checkWeapon())
 							if (!checkAttack())
-								if (!executeSkill(GeneralType.Defend)) {
+								super.nextAction();
+								/*if (!executeSkill(GeneralType.Defend)) {
 
 									// Utility.narrate(character.name
 									// + " decided to stay idle this turn");
-									super.nextAction();
-								}
+		
+								}*/
 	}
 	
 	public boolean checkAttack(){
+		if (character.getSp()/character.getMaxSP() < 0.3f)
+			return false;
+		
 		Character target = character.getTarget();
 		LinkedList<Skill> skills = character.getSkill(GeneralType.Attack);
 		Collections.shuffle(skills);
@@ -165,8 +169,8 @@ public class AISimple extends AI {
 					type = ActionType.DefendMelee;
 				if (step.getType() == Damage.MAGIC)
 					type = ActionType.DefendMagic;
-				if (step.getType() == Damage.MELEE)
-					type = ActionType.DefendMelee;
+				if (step.getType() == Damage.RANGE)
+					type = ActionType.DefendRange;
 
 				if (type != null)
 					if (event == null) {
