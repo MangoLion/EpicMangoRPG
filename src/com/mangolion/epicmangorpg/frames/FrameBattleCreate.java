@@ -297,7 +297,6 @@ public class FrameBattleCreate extends JInternalFrame {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						game.ticks.clear();
 						game.charsAllies.clear();
 						game.charsEnemies.clear();
 						if (player != null)

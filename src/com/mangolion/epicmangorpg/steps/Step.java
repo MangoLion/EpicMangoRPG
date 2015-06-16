@@ -16,7 +16,6 @@ import com.mangolion.epicmangorpg.components.LogMsg;
 import com.mangolion.epicmangorpg.components.Proficiency;
 import com.mangolion.epicmangorpg.components.StatBuff;
 import com.mangolion.epicmangorpg.components.Style;
-import com.mangolion.epicmangorpg.components.Tick;
 import com.mangolion.epicmangorpg.events.Event;
 import com.mangolion.epicmangorpg.frames.FrameGame;
 import com.mangolion.epicmangorpg.game.Game;
@@ -202,6 +201,7 @@ public abstract class Step implements Cloneable, StatBuff {
 	}
 
 	public void addProf(Proficiency p) {
+		Game.getInstance().floorPercent += p.type/2f;
 		float gained = p.type / 100f * (2f - prof) / 2;
 		if (p.target.isDead) {
 			gained *= 2;
@@ -252,6 +252,7 @@ public abstract class Step implements Cloneable, StatBuff {
 		}
 
 		if (!isAOE) {
+			addProf(new Proficiency(getCharacter(), target));
 			return damageSingle(target, checkMiss);
 		} else
 			for (Character character : Game.getInstance().getEnemies(
@@ -348,6 +349,8 @@ public abstract class Step implements Cloneable, StatBuff {
 		if (type == Damage.MELEE)
 			damage.barrierNegation = getCharacter().getBarrierNegate();
 		target.setDamage(damage);
+		//if (target.isDead)
+			//Game.game.floorPercent += 
 		return true;
 	}
 
@@ -567,8 +570,7 @@ public abstract class Step implements Cloneable, StatBuff {
 		Skill skill = (getCharacter().getTarget() != null && getCharacter()
 				.getTarget() != getCharacter()) ? target.skillCurrent : null;
 		if (skill != null && !skill.steps.getFirst().isCustomTime()) {
-			Tick t = Game.getInstance().findTick(target);
-			float time = 0, tick = (t != null) ? t.time : 0;
+			float time = 0, tick = (skill != null) ? skill.tick : 0;
 			Step step = skill.steps.getFirst();
 					time += tick	+ step.getEventTime() + step.getExecutionTime()/2;
 			if (time > 1)
@@ -601,7 +603,7 @@ public abstract class Step implements Cloneable, StatBuff {
 		// " is cancelled");
 		LogMsg.addLog(parent.character.name + "'s " + name + " is cancelled");
 		parent.isExecuting = true;
-		Game.getInstance().updateTick(parent.character, 0, Tick.SKILL);
+		parent.tick = 0;
 	}
 
 	public Step setMessages(Msg load, Msg execute, Msg cooldown) {

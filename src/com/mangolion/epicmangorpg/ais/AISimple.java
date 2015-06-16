@@ -9,7 +9,6 @@ import com.mangolion.epicmangorpg.components.ActionType;
 import com.mangolion.epicmangorpg.components.Barrier;
 import com.mangolion.epicmangorpg.components.Damage;
 import com.mangolion.epicmangorpg.components.GeneralType;
-import com.mangolion.epicmangorpg.components.Tick;
 import com.mangolion.epicmangorpg.events.Event;
 import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.skills.Skill;
@@ -252,11 +251,8 @@ public class AISimple extends AI {
 		LinkedList<Skill> applicable = new LinkedList<Skill>();
 		LinkedList<Skill> tooFast = new LinkedList<Skill>();
 
-		Tick t = Game.getInstance().findTick(target);
-		if (t == null)
-			return false;
 		Step step = target.skillCurrent.getCurrentStep();
-		float tick = t.time, load = tick + step.getEventTime(), execute = step
+		float tick = (character.skillCurrent != null)? character.skillCurrent.tick: 0, load = tick + step.getEventTime(), execute = step
 				.getExecutionTime() + tick;
 
 		for (Skill skill : character.skills)

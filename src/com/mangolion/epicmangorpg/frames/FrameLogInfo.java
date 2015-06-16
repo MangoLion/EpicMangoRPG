@@ -25,6 +25,7 @@ public class FrameLogInfo extends JInternalFrame {
 	 */
 	public FrameLogInfo(LogMsg msg) {
 		super("", true, true, true, true);
+		FrameGame.getInstance().addFrame(this);
 		this.msg = msg;
 		setBounds(100, 100, 399, 205);
 		contentPane = new JPanel();

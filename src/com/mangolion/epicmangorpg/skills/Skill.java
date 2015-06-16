@@ -10,7 +10,6 @@ import com.mangolion.epicmangorpg.components.ActionType;
 import com.mangolion.epicmangorpg.components.GeneralType;
 import com.mangolion.epicmangorpg.components.LogMsg;
 import com.mangolion.epicmangorpg.components.StatBuff;
-import com.mangolion.epicmangorpg.components.Tick;
 import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.game.StylePainter;
 import com.mangolion.epicmangorpg.game.StyleSegment;
@@ -32,7 +31,7 @@ public class Skill implements StatBuff {
 	public int stepCurrent;
 	public LinkedList<Weapons> weapons = new LinkedList<Weapons>();
 	public ActionType type;
-	public float chanceObserve = 0, prof = 0, dmgBoost = 1, shopPrice = 0;
+	public float chanceObserve = 0, prof = 0, dmgBoost = 1, shopPrice = 0, tick;
 	public String aug = "";
 	LinkedList<String>arguments = new LinkedList<String>();
 	
@@ -90,7 +89,7 @@ public class Skill implements StatBuff {
 	public void cancel() {
 		LogMsg.addLog(character.name + "'s " + name + " is cancelled");
 		reset();
-		Game.getInstance().removeTick(character);
+		tick = 0;
 	}
 
 	public void complete() {
@@ -147,7 +146,7 @@ public class Skill implements StatBuff {
 			isExecuting = false;
 			isCooldown = true;
 			time = step.getCooldownTime();
-			Game.getInstance().addTick(character, time, Tick.SKILL);
+			tick = time;
 
 			step.cooldown();
 		} else if (isLoading) {
@@ -156,12 +155,12 @@ public class Skill implements StatBuff {
 			Game.getInstance().checkforObservation(character);
 			time = step.getExecutionTime();
 			if (step.isCustomTime() && step.customExecutionTime != -1){
-				Game.getInstance().addTick(character, step.customExecutionTime, Tick.SKILL);
+				tick =  step.customExecutionTime;
 				step.execute(target, step.customExecutionTime);
 				step.customExecutionTime = -1;
 			}
 			else{
-				Game.getInstance().addTick(character, time, Tick.SKILL);
+				tick = time;
 				if (this.aug.equals(""))
 					step.execute(target);
 				else
@@ -196,7 +195,7 @@ public class Skill implements StatBuff {
 			character.skillsRecent.add(this);
 			isLoading = true;
 			time = step.getLoadTime();
-			Game.getInstance().addTick(character, time, Tick.SKILL);
+			tick = time;
 			if (custime != -1 && step.isCustomTime())
 				step.customExecutionTime = custime;
 			step.load();

@@ -1,0 +1,152 @@
+[general info]
+Name = Ellowy
+Gender = male
+hp = 60.0
+mp = 60.0
+sp = 80.0
+bal = 60.0
+str = 40.0
+dex = 10.0
+int = 20.0
+agi = 10.0
+def = 0.0
+prot = 0.0
+crystal = 26.5
+skills = Block|Basic Kick|Barrel Roll|Slash|Parry|Stab|Wait|Fire Coat|Side Step|Respite|Charge|Jump Back|Use Item|Respite|Wait|Combat Mastery|Sword Mastery|Spinning Slash|Basic Sword Combo|Sidestep Slash|Jump Attack|IceBolt|Side Jump|Roar|Body Slam|Hard Aim|Sidestep Shoot|Quick Shot|Reload|Toggle Automatic|Jam Fix|Gun Mastery|Launch Grenade|
+
+[Inventory]
+Consumables = Portal Stone|6|Small Potion|3|Arrow|100|Bullet|88|Earth Crystal|50|Fire Crystal|50|Water Crystal|50|Wind Crystal|50|Refile Grenade|50|Ant Shell|4|Large Manastone|1|Hard Scale|1|Manastone|8|Feather|1|Slime|1|
+ItemCustoms = Long Sword|Sniper Rifle|
+
+[Long Sword]
+durability = 10.0
+isEquipted = true
+
+[Sniper Rifle]
+durability = 7.0
+isEquipted = false
+
+[Block]
+prof = 0.0
+Step 0 = 0.0
+
+[Basic Kick]
+prof = 0.0
+Step 0 = 0.02
+
+[Barrel Roll]
+prof = 0.0
+Step 0 = 0.0
+
+[Slash]
+prof = 0.0
+Step 0 = 0.34020874
+
+[Parry]
+prof = 0.0
+Step 0 = 0.0
+
+[Stab]
+prof = 0.0
+Step 0 = 0.67658734
+
+[Wait]
+prof = 0.0
+Step 0 = 0.0
+
+[Fire Coat]
+prof = 0.0
+Step 0 = 0.0398
+
+[Side Step]
+prof = 0.0
+Step 0 = 0.03985
+
+[Respite]
+prof = 0.0
+Step 0 = 0.0
+
+[Charge]
+prof = 0.0
+Step 0 = 0.0398
+Step 1 = 0.1729655
+
+[Jump Back]
+prof = 0.0
+Step 0 = 0.02
+
+[Use Item]
+prof = 0.0
+Step 0 = 0.0
+
+[Combat Mastery]
+prof = 1.8280735
+
+[Sword Mastery]
+prof = 1.6721041
+
+[Spinning Slash]
+prof = 0.0
+Step 0 = 0.5540419
+
+[Basic Sword Combo]
+prof = 0.0
+Step 0 = -0.1
+Step 1 = -0.1
+Step 2 = -0.1
+
+[Sidestep Slash]
+prof = 0.0
+Step 0 = 0.44710582
+
+[Jump Attack]
+prof = 0.0
+Step 0 = -0.1
+
+[IceBolt]
+prof = 0.0
+Step 0 = 0.10079763
+
+[Side Jump]
+prof = 0.0
+Step 0 = -0.079
+
+[Roar]
+prof = 0.0
+Step 0 = 0.21675928
+
+[Body Slam]
+prof = 0.0
+Step 0 = -0.1
+
+[Hard Aim]
+prof = 0.0
+Step 0 = 0.22981927
+
+[Sidestep Shoot]
+prof = 0.0
+Step 0 = -0.1
+
+[Quick Shot]
+prof = 0.0
+Step 0 = 0.0
+
+[Reload]
+prof = 0.0
+Step 0 = 0.0
+
+[Toggle Automatic]
+prof = 0.0
+Step 0 = 0.0
+
+[Jam Fix]
+prof = 0.0
+Step 0 = 0.0
+
+[Gun Mastery]
+prof = 0.018152442
+
+[Launch Grenade]
+prof = 0.0
+Step 0 = -0.1
+

@@ -72,7 +72,7 @@ public class Msg {
 						inStr = target.name;
 					if (token == Token.skill)
 						inStr = (character.getCurrentStep()!= null)?character.getCurrentStep().name:"none";
-					if (token == Token.targetSkill)
+					if (token == Token.targetSkill && target.getCurrentStep() != null)
 						inStr = target.getCurrentStep().name;
 					if (token == Token.weapon)
 						inStr = character.weapon.name;

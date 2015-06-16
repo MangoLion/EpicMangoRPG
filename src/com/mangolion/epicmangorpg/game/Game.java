@@ -19,7 +19,6 @@ import com.mangolion.epicmangorpg.characters.CharacterPlayer;
 import com.mangolion.epicmangorpg.commands.CmdUser;
 import com.mangolion.epicmangorpg.components.ConcurrentDoublyLinkedList;
 import com.mangolion.epicmangorpg.components.Themes;
-import com.mangolion.epicmangorpg.components.Tick;
 import com.mangolion.epicmangorpg.events.Event;
 import com.mangolion.epicmangorpg.floors.Floor;
 import com.mangolion.epicmangorpg.floors.Floor.Spawn;
@@ -38,7 +37,6 @@ public class Game {
 	public String playerName = "";
 	public LinkedList<Character> charsAllies = new LinkedList<Character>();
 	public LinkedList<Character> charsEnemies = new LinkedList<Character>();
-	public ConcurrentDoublyLinkedList<Tick> ticks = new ConcurrentDoublyLinkedList<Tick>();
 	public ConcurrentDoublyLinkedList<Event> events = new ConcurrentDoublyLinkedList<Event>();
 	public LinkedList<Floor> floors = new LinkedList<Floor>();
 	public int currentFloor = 0;
@@ -129,7 +127,6 @@ public class Game {
 			timer.stop();
 
 		timePassed = 0;
-		ticks.clear();
 		charsAllies.clear();
 		charsEnemies.clear();
 		events.clear();
@@ -215,12 +212,7 @@ public class Game {
 						charsEnemies.add(Utility.getInstance(spawn.character));
 					}
 				}
-				// frame.updateInfoTab();
 
-				LinkedList<Character> allChars = getAllChars();
-				for (Character character : allChars) {
-					addTick(character, rand.nextFloat(), Tick.ACTION);
-				}
 				frame.updateInfoTab();
 				/*
 				 * for (Character character : charsEnemies) { addTick(character,
@@ -253,66 +245,9 @@ public class Game {
 	public void update() {
 		timePassed = (float) (Math.round((timePassed + 0.01) * 100d) / 100d);
 		updateAll(0.01f, null, true);
-		for (Tick tick : ticks)
-			if (tick.time < 0)
-				System.out.println("out of sync");
 	}
 
-	public void updateTick(Character character, float time, int type) {
-		for (Tick tick : ticks)
-			if (tick.character == character) {
-				tick.time = time;
-				tick.type = type;
-			}
-	}
-
-	public void addTick(Character character, float time, int type) {
-		ticks.add(new Tick(character, time, type));
-	}
-
-	public void nextTick(boolean update) {
-
-		Tick next = ticks.getFirst();
-		for (Tick tick : ticks) {
-			if (tick.time < next.time)
-				next = tick;
-		}
-		ticks.remove(next);
-		timePassed = Math.round((timePassed + next.time) * 100f) / 100;
-
-		if (update)
-			updateAll(next.time, next.character, false);
-
-		tick(next);
-
-		if (timePassed - lastWeatherTick > 5) {
-			weather.change();
-			FrameGame.instance.updateWeather(weather);
-			lastWeatherTick = timePassed;
-		}
-
-		if (next.character != CharacterPlayer.instance
-				|| (next.character == CharacterPlayer.instance && next.character.skillCurrent != null))
-			nextTick(true);
-		else
-			timer.stop();
-	}
-
-	public Tick findTick(Character character) {
-		for (Tick tick : ticks)
-			if (tick.character == character)
-				return tick;
-		return null;
-	}
-
-	public void removeTick(Character character) {
-		Iterator<Tick> iterator = ticks.iterator();
-		while (iterator.hasNext())
-			if (iterator.next().character == character)
-				;
-	}
-
-	public void tick(Tick tick) {
+	/*public void tick2(Tick tick) {
 		if (tick.character.isStunned()) {
 			// addTick(tick.character, 0.1f, Tick.ACTION);
 			if (tick.character.skillCurrent != null)
@@ -338,12 +273,9 @@ public class Game {
 			default:
 				break;
 			}
-		/*
-		 * if (tick.character == CharacterPlayer.instance &&
-		 * tick.character.skillCurrent == null) timer.stop();
-		 */
-	}
 
+	}
+*/
 	public static BufferedImage getScreenShot(Component component) {
 
 		BufferedImage image = new BufferedImage(component.getWidth(),
@@ -375,22 +307,9 @@ public class Game {
 			return;
 		}
 
-		LinkedList<Tick> toExecute = new LinkedList<>();
 		timeSinceTick = Math.round((timeSinceTick + deltaTime) * 100f) / 100f;
 		FrameGame.instance.lblTimePassed.setText("Time passed: " + timePassed
 				+ " seconds");
-		Iterator<Tick> it = ticks.iterator();
-		while (it.hasNext()) {
-			Tick tick = it.next();
-			tick.time = (float) (Math.round((tick.time - deltaTime) * 100d) / 100d);
-			if (executeTick && tick.time <= 0) {
-				toExecute.add(tick);
-				it.remove();
-			}
-		}
-		for (Tick tick : toExecute) {
-			tick(tick);
-		}
 
 		LinkedList<Event> evtoExecute = new LinkedList<>();
 		Iterator<Event> it1 = events.iterator();

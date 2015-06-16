@@ -21,6 +21,7 @@ public class SkillSlashSpin extends Skill {
 		addSteps(new StepMeleeSlash(this, "Spinning Slash","", 0.8f,
 				0.6f, 0.3f, 2f) {
 		}.setAOE(true).setCost(40, 0, 15, 0));
+		setObservable(true, 1);
 	}
 	
 }

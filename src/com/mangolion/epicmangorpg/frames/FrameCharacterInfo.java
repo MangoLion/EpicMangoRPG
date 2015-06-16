@@ -138,8 +138,6 @@ public class FrameCharacterInfo extends JInternalFrame {
 		}*/
 		
 		//update current skill
-		if (Game.getInstance().findTick(character) == null)
-			return;
 		tfCurrent.setText("");
 		
 
@@ -156,7 +154,7 @@ public class FrameCharacterInfo extends JInternalFrame {
 				str += "Executing";
 			if (skill.isCooldown)
 				str += "Cooldown";
-			str += " for " + Game.getInstance().findTick(character).time + " seconds";
+			str += " for " + character.skillCurrent.tick + " seconds";
 			tfCurrent.setText(str);		
 		}
 		

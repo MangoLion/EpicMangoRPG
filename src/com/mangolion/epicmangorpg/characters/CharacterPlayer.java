@@ -62,9 +62,9 @@ public class CharacterPlayer extends Character {
 	}
 	
 	public void init(){
-		for (Skill skill:Skills.all)
-			addSkills(skill);
-		changeCrystal(50);
+		//for (Skill skill:Skills.all)
+		//	addSkills(skill);
+		changeCrystal(60);
 		inventory.addItem(Items.potionSmall, 5);
 		inventory.addItem(Items.arrow, 100);
 		inventory.addItem(Items.bullet, 100);
@@ -77,9 +77,9 @@ public class CharacterPlayer extends Character {
 		inventory.addItem(Items.portalStone, 2);
 		//inventory.addItem(new CopperDagger());
 		//inventory.addItem(new WandPine());
-		for (ItemCustom item: Items.customs)
+		/*for (ItemCustom item: Items.customs)
 			if (!(item instanceof ItemPortalStoneSaved))
-				inventory.addItem(item);
+				inventory.addItem(item);*/
 	}
 
 	

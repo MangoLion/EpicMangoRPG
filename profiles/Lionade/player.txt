@@ -1,0 +1,89 @@
+[general info]
+Name = Lionade
+Gender = male
+hp = 60.0
+mp = 60.0
+sp = 80.0
+bal = 60.0
+str = 40.0
+dex = 10.0
+int = 20.0
+agi = 10.0
+def = 0.0
+prot = 0.0
+crystal = 30.0
+skills = Block|Basic Kick|Barrel Roll|Slash|Parry|Stab|Wait|Fire Coat|Side Step|Respite|Charge|Jump Back|Use Item|Respite|Wait|Combat Mastery|Sword Mastery|Basic Sword Combo|
+
+[Inventory]
+Consumables = Portal Stone|4|Small Potion|5|Arrow|100|Bullet|100|Earth Crystal|50|Fire Crystal|50|Water Crystal|50|Wind Crystal|50|Refile Grenade|50|
+ItemCustoms = Long Sword|
+
+[Long Sword]
+durability = 10.0
+isEquipted = true
+
+[Block]
+prof = 0.0
+Step 0 = 0.0
+
+[Basic Kick]
+prof = 0.0
+Step 0 = 0.0
+
+[Barrel Roll]
+prof = 0.0
+Step 0 = 0.0
+
+[Slash]
+prof = 0.0
+Step 0 = 0.0
+
+[Parry]
+prof = 0.0
+Step 0 = 0.0
+
+[Stab]
+prof = 0.0
+Step 0 = 0.0
+
+[Wait]
+prof = 0.0
+Step 0 = 0.0
+
+[Fire Coat]
+prof = 0.0
+Step 0 = 0.0
+
+[Side Step]
+prof = 0.0
+Step 0 = 0.0
+
+[Respite]
+prof = 0.0
+Step 0 = 0.0
+
+[Charge]
+prof = 0.0
+Step 0 = 0.0
+Step 1 = 0.0
+
+[Jump Back]
+prof = 0.0
+Step 0 = 0.0
+
+[Use Item]
+prof = 0.0
+Step 0 = 0.0
+
+[Combat Mastery]
+prof = 0.01
+
+[Sword Mastery]
+prof = 0.01
+
+[Basic Sword Combo]
+prof = 0.0
+Step 0 = -0.1
+Step 1 = -0.1
+Step 2 = -0.1
+

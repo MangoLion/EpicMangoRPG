@@ -31,6 +31,7 @@ public class SkillSlashPrecise extends Skill {
 				super.execute(target, time, aug);
 			};
 		}.setCost(15, 0, 3, 0));
+		setObservable(true, 1);
 	}
 	
 }

@@ -58,7 +58,6 @@ import com.mangolion.epicmangorpg.components.MenuHelp;
 import com.mangolion.epicmangorpg.components.MenuSetting;
 import com.mangolion.epicmangorpg.components.TextPaneMango;
 import com.mangolion.epicmangorpg.components.Themes;
-import com.mangolion.epicmangorpg.components.Tick;
 import com.mangolion.epicmangorpg.events.Event;
 import com.mangolion.epicmangorpg.game.Game;
 import com.mangolion.epicmangorpg.game.StylePainter;
@@ -876,11 +875,8 @@ public class FrameGame extends JFrame {
 			if (skill.isCooldown)
 				str += "Cooldown";
 			
-			Tick tick = Game.getInstance().findTick(character);
-			if (tick == null)
-				return;
 			
-			str += " for " + tick.time + " seconds";
+			str += " for " + character.skillCurrent.tick + " seconds";
 			tfSkill.setText(str);		
 		}else
 			tfSkill.setText("Idling");
@@ -916,7 +912,7 @@ public class FrameGame extends JFrame {
 		lblBuffs2.setText(str);
 		
 		tfSkill2.setText("");
-		if (character.skillCurrent != null && game.findTick(character) != null){
+		if (character.skillCurrent != null){
 			Skill skill = character.skillCurrent;
 			 str = skill.name;
 			if (skill.steps.size() > 1)
@@ -929,7 +925,7 @@ public class FrameGame extends JFrame {
 				str += "Executing";
 			if (skill.isCooldown)
 				str += "Cooldown";
-			str += " for " + Game.getInstance().findTick(character).time + " seconds";
+			str += " for " + character.skillCurrent.tick + " seconds";
 			tfSkill2.setText(str);		
 		}else
 			tfSkill2.setText("Idling");
