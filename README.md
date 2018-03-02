@@ -1,18 +1,18 @@
 This game was inspired by Iyouboushi's mIRC BattleArena bot - https://github.com/Iyouboushi/mIRC-BattleArena
 
-###Overview
+### Overview
 Its more or less a dungeon crawling game, you fight monsters and procceeds to the lower floors.
 
-###Combat System
+### Combat System
 The combat system is much more dynamic than the traditional turn-based game. Instead of having each side takes turn one after another, Mango RPG uses a continuous timeline. For example, in 2 seconds, one character can use 3 fast skills where areas another can use 1 slow skill.
 
-###[Skill](https://github.com/MangoLion/EpicMangoRPG/wiki/Skill)
+### [Skill](https://github.com/MangoLion/EpicMangoRPG/wiki/Skill)
 Skills are what the character use mainly in battle, even normal attacks are skills. A skill is composed of one or many steps, each step is independent and can be cancelled/interupted at anytime.
 
-###[Event](https://github.com/MangoLion/EpicMangoRPG/wiki/Event)
+### [Event](https://github.com/MangoLion/EpicMangoRPG/wiki/Event)
 While most skill's execution is instant, blade slicing through flesh, biting teeth, some skill does not show its effects at its execution, such as firing an arrow or throwing a grenade. When a character fired an arrow, he is free to do his own action while the arrow is still flying through the air, the arrow here would be an event.
 
-###[Stats](https://github.com/MangoLion/EpicMangoRPG/wiki/Stats)
+### [Stats](https://github.com/MangoLion/EpicMangoRPG/wiki/Stats)
 hp - your health  
 mp - mana  
 sp - stamina  
